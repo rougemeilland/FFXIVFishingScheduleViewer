@@ -1,0 +1,210 @@
+﻿<UserControl x:Class="FishingScheduler.WeathersOfAreaGroupUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FishingScheduler"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Expander Header="{Binding Path=AreaGroupName}" IsExpanded="{Binding Path=IsExpanded, Mode=TwoWay}">
+        <DataGrid
+            ItemsSource="{Binding Path=WeatherList}"
+            AutoGenerateColumns="False"
+            IsReadOnly="True"
+            CanUserAddRows="False"
+            CanUserSortColumns="False"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Focusable="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn  Width="Auto" Binding="{Binding Path=AreaName}" Header="エリア名" CanUserSort="False"/>
+                <DataGridTextColumn  Width="Auto" Binding="{Binding Path=Weathers[0].Text}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=DataContext.ColumnHeaders[0], RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Background" Value="{Binding Path=Weathers[0].Background}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=Weathers[0].Foreground}"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Path=Weathers[1].Text}">
+                    <DataGridTextColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" >
+                            <Setter Property="Background" Value="#ADC679"/>
+                        </Style>
+                    </DataGridTextColumn.HeaderStyle>
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=DataContext.ColumnHeaders[1], RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" FontWeight="Heavy"/>
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Background" Value="{Binding Path=Weathers[1].Background}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=Weathers[1].Foreground}"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="FontWeight" Value="Heavy" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Width="Auto" Binding="{Binding Path=Weathers[2].Text}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=DataContext.ColumnHeaders[2], RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Background" Value="{Binding Path=Weathers[2].Background}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=Weathers[2].Foreground}"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Width="Auto" Binding="{Binding Path=Weathers[3].Text}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=DataContext.ColumnHeaders[3], RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Background" Value="{Binding Path=Weathers[3].Background}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=Weathers[3].Foreground}"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Width="Auto" Binding="{Binding Path=Weathers[4].Text}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=DataContext.ColumnHeaders[4], RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Background" Value="{Binding Path=Weathers[4].Background}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=Weathers[4].Foreground}"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Width="Auto" Binding="{Binding Path=Weathers[5].Text}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=DataContext.ColumnHeaders[5], RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Background" Value="{Binding Path=Weathers[5].Background}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=Weathers[5].Foreground}"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Width="Auto" Binding="{Binding Path=Weathers[6].Text}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=DataContext.ColumnHeaders[6], RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Background" Value="{Binding Path=Weathers[6].Background}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=Weathers[6].Foreground}"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Width="Auto" Binding="{Binding Path=Weathers[7].Text}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=DataContext.ColumnHeaders[7], RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Background" Value="{Binding Path=Weathers[7].Background}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=Weathers[7].Foreground}"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Width="Auto" Binding="{Binding Path=Weathers[8].Text}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=DataContext.ColumnHeaders[8], RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Background" Value="{Binding Path=Weathers[8].Background}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=Weathers[8].Foreground}"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Width="Auto" Binding="{Binding Path=Weathers[9].Text}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=DataContext.ColumnHeaders[9], RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Setter Property="Background" Value="{Binding Path=Weathers[9].Background}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=Weathers[9].Foreground}"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Expander>
+</UserControl>
