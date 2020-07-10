@@ -31,17 +31,17 @@ namespace FishingScheduler
             switch (symbol)
             {
                 case DifficultySymbol.E:
-                    return "極めて容易";
+                    return "ありふれている";
                 case DifficultySymbol.D:
-                    return "容易";
-                case DifficultySymbol.C:
                     return "普通";
+                case DifficultySymbol.C:
+                    return "やや稀";
                 case DifficultySymbol.B:
-                    return "やや困難";
+                    return "稀";
                 case DifficultySymbol.A:
-                    return "困難";
+                    return "非常に稀";
                 case DifficultySymbol.S:
-                    return "極めて困難";
+                    return "極めて稀";
                 default:
                     throw new ArgumentException();
             }

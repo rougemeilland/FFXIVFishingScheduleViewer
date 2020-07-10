@@ -15,7 +15,7 @@
             </MenuItem>
         </Menu>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="5">
-            <TextBlock Text="現在時刻:" Margin="0,0,5,0"/>
+            <TextBlock Text="Current time:" Margin="0,0,5,0"/>
             <TextBlock Text="ET "/>
             <TextBlock Name="CurrentEorzeaDateTime" Margin="0,0,5,0"/>
             <TextBlock Text="( LT "/>
@@ -23,7 +23,7 @@
             <TextBlock Text=" )"/>
         </StackPanel>
         <TabControl>
-            <TabItem Header="天気予報" IsSelected="{Binding Path=IsSelectedForecastWeatherTab, Mode=TwoWay}">
+            <TabItem Header="Forecast weather" IsSelected="{Binding Path=IsSelectedForecastWeatherTab, Mode=TwoWay}">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <StackPanel Orientation="Vertical">
                         <local:WeathersOfAreaGroupUserControl Margin="10" DataContext="{Binding Path=WeatherListOfLaNoscea}"/>
@@ -40,7 +40,7 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="ヌシのチャンス" IsSelected="{Binding Path=IsSelectedChanceTab, Mode=TwoWay}">
+            <TabItem Header="Fishing chances" IsSelected="{Binding Path=IsSelectedChanceTab, Mode=TwoWay}">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Grid Name="FishChanceGrid"/>

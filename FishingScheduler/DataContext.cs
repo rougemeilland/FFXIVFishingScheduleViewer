@@ -233,14 +233,14 @@ namespace FishingScheduler
         public void UpdateFishChanceList(KeyValueCollection<string, AreaGroup> areaGroups, KeyValueCollection<string, Fish> fishes, EorzeaDateTime eorzeaNow)
         {
             // 開始時刻の8時間前から、開始時刻の[Properties.Settings.Default.DaysOfForecast]日後まで
-            var WholePeriod = new EorzeaDateTimeHourRegions(new[]
+            var wholePeriod = new EorzeaDateTimeHourRegions(new[]
             {
                 new EorzeaDateTimeRegion(
                     eorzeaNow - EorzeaTimeSpan.FromHours(8),
                     eorzeaNow + EorzeaTimeSpan.FromDays(Properties.Settings.Default.DaysOfForecast)
                 )
             });
-            var ForecastPeriod = new EorzeaDateTimeHourRegions(new[]
+            var worecastPeriod = new EorzeaDateTimeHourRegions(new[]
             {
                 new EorzeaDateTimeRegion(
                     eorzeaNow,
@@ -251,8 +251,8 @@ namespace FishingScheduler
                 fishes
                 .Where(fish => _settingProvider.GetIsEnabledFishFilter(fish.Name))
                 .OrderByDescending(fish => fish.DifficultyValue)
-                .Select(fish => fish.GetFishingChance(areaGroups, WholePeriod, eorzeaNow))
-                .Where(result => result != null && !result.Regions.Intersect(ForecastPeriod).IsEmpty)
+                .Select(fish => fish.GetFishingChance(areaGroups, wholePeriod, eorzeaNow))
+                .Where(result => result != null && !result.Regions.Intersect(worecastPeriod).IsEmpty)
                 .ToArray();
             var comparer = new FishChanceTimeRegionsComparer();
             FishChanceTimeList =

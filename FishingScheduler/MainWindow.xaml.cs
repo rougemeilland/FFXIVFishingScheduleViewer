@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -15,12 +16,13 @@ namespace FishingScheduler
     public partial class MainWindow
         : Window, ISettingProvider
     {
+        private ISettingProvider _settingProvider;
+        private DataContext _dataContext;
         private KeyValueCollection<string, AreaGroup> _areaGroups;
         private KeyValueCollection<string, Area> _areas;
         private KeyValueCollection<string, FishingGround> _fishGrounds;
         private KeyValueCollection<string, FishingBait> _fishingBates;
         private KeyValueCollection<string, Fish> _fishes;
-        private DataContext _dataContext;
         private Grid _currentTimeIndicatorGrid;
         private IDictionary<string, string> _filteredfishNames;
         private IDictionary<string, string> _expandedAreaGroupNames;
@@ -33,7 +35,8 @@ namespace FishingScheduler
 
             InitializeData();
 
-            _dataContext = new DataContext(this);
+            _settingProvider = this;
+            _dataContext = new DataContext(_settingProvider);
             DataContext = _dataContext;
             _currentTimeIndicatorGrid = null;
             _filteredfishNames =
@@ -198,7 +201,6 @@ namespace FishingScheduler
             FishChanceGrid.RowDefinitions.Add(new RowDefinition());
             {
                 {
-                    // 魚の名前
                     var c = new Border
                     {
                         Child = new TextBlock()
@@ -222,7 +224,6 @@ namespace FishingScheduler
                     FishChanceGrid.Children.Add(c);
                 }
                 {
-                    // 釣り場
                     var c = new Border
                     {
                         Child = new TextBlock()
@@ -244,7 +245,6 @@ namespace FishingScheduler
                     FishChanceGrid.Children.Add(c);
                 }
                 {
-                    // 餌
                     var c = new Border
                     {
                         Child = new TextBlock()
@@ -321,15 +321,24 @@ namespace FishingScheduler
                     currentCulumnIndex += 1;
                 }
             }
+            Action<string> removeFilterAction = (fishName) =>
+            {
+                _settingProvider.SetIsEnabledFishFilter(fishName, false);
+            };
             var currentRowIndex = 2;
             foreach (var chance in _dataContext.FishChanceList)
             {
+                var contextMenu = new ContextMenu();
+                var removeFilterMenuItem = new MenuItem { Header = string.Format("Don't display '{0}'", chance.Fish.Name) };
+                contextMenu.Items.Add(removeFilterMenuItem);
+                removeFilterMenuItem.Click += (s, e) =>
+                {
+                    removeFilterAction(chance.Fish.Name);
+                };
                 var backgroundColorOfFish = chance.Fish.DifficultySymbol.GetBackgroundColor();
                 FishChanceGrid.RowDefinitions.Add(new RowDefinition());
                 FishChanceGrid.RowDefinitions.Add(new RowDefinition());
                 {
-                    // 魚の名前
-
                     var stack = new StackPanel()
                     {
                         Orientation = Orientation.Vertical,
@@ -337,18 +346,6 @@ namespace FishingScheduler
                         VerticalAlignment = VerticalAlignment.Center,
                         Margin = new Thickness(5),
                     };
-                    stack.Children.Add(new TextBlock()
-                    {
-                        Text = string.Format("{0}", chance.Fish.Name),
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        VerticalAlignment = VerticalAlignment.Center,
-                    });
-                    stack.Children.Add(new TextBlock()
-                    {
-                        Text = string.Format("遭遇: {0}", chance.Fish.DifficultySymbol.GetText()),
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        VerticalAlignment = VerticalAlignment.Center,
-                    });
                     var c = new Border
                     {
                         Child = stack,
@@ -357,14 +354,28 @@ namespace FishingScheduler
                         BorderBrush = borderColor,
                         BorderThickness = new Thickness(2, 0, 1, 2),
                         Background = backgroundColorOfFish,
+                        ContextMenu = contextMenu,
                     };
                     Grid.SetColumn(c, 0);
                     Grid.SetRow(c, currentRowIndex);
                     Grid.SetRowSpan(c, 2);
                     FishChanceGrid.Children.Add(c);
+                    stack.Children.Add(new TextBlock()
+                    {
+                        Text = string.Format("{0}", chance.Fish.Name),
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        ToolTip = "魚の名前です。",
+                    });
+                    stack.Children.Add(new TextBlock()
+                    {
+                        Text = string.Format("遭遇頻度: {0}", chance.Fish.DifficultySymbol.GetText()),
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        ToolTip = "その魚を釣るための時刻・天候の条件がどれだけ起こりやすいか、の目安です。\n必ずしも釣り自体の難易度とは一致していません。",
+                    });
                 }
                 {
-                    // 釣り場
                     var c = new Border
                     {
                         Child = new TextBlock()
@@ -376,24 +387,25 @@ namespace FishingScheduler
                             HorizontalAlignment = HorizontalAlignment.Left,
                             VerticalAlignment = VerticalAlignment.Center,
                             Margin = new Thickness(5),
+                            ToolTip = "魚を釣るための釣り場です。",
                         },
                         HorizontalAlignment = HorizontalAlignment.Stretch,
                         VerticalAlignment = VerticalAlignment.Stretch,
                         BorderBrush = borderColor,
                         BorderThickness = new Thickness(0, 0, 1, 1),
                         Background = backgroundColorOfFish,
+                        ContextMenu = contextMenu,
                     };
                     Grid.SetColumn(c, 1);
                     Grid.SetRow(c, currentRowIndex);
                     FishChanceGrid.Children.Add(c);
                 }
                 {
-                    // 餌
                     var c = new Border
                     {
                         Child = new TextBlock()
                         {
-                            Text = string.Join(", ",  chance.Fish.FishingBaits.Select(fishingBait => fishingBait.Name)),
+                            Text = string.Join(", ", chance.Fish.FishingBaits.Select(fishingBait => fishingBait.Name)),
                             HorizontalAlignment = HorizontalAlignment.Left,
                             VerticalAlignment = VerticalAlignment.Center,
                             Margin = new Thickness(5),
@@ -403,6 +415,8 @@ namespace FishingScheduler
                         BorderBrush = borderColor,
                         BorderThickness = new Thickness(0, 0, 1, 2),
                         Background = backgroundColorOfFish,
+                        ContextMenu = contextMenu,
+                        ToolTip = "魚を釣るために用意すべき釣り餌の例です。\n漁師の直感のための前提となる魚を釣るために複数の釣り餌が必要になる場合もあります。",
                     };
                     Grid.SetColumn(c, 1);
                     Grid.SetRow(c, currentRowIndex + 1);
@@ -411,19 +425,29 @@ namespace FishingScheduler
                 var currentCulumnIndex = 2;
                 foreach (var time in _dataContext.FishChanceTimeList)
                 {
-                    var backgroundColor = chance.Regions.Contains(time) ? backgroundColorOfFish : GetBackgroundColorOfTime(converter, time);
+                    UIElement c;
+                    if (chance.Regions.Contains(time))
                     {
-                        var c = new Border
+                        c = new Border
                         {
                             BorderBrush = borderColor,
                             BorderThickness = new Thickness(0, 0, 0, 0),
-                            Background = backgroundColor,
+                            Background = backgroundColorOfFish,
                         };
-                        Grid.SetColumn(c, currentCulumnIndex);
-                        Grid.SetRow(c, currentRowIndex);
-                        Grid.SetRowSpan(c, 2);
-                        FishChanceGrid.Children.Add(c);
                     }
+                    else
+                    {
+                        c = new Border
+                        {
+                            BorderBrush = borderColor,
+                            BorderThickness = new Thickness(0, 0, 0, 0),
+                            Background = GetBackgroundColorOfTime(converter, time),
+                        };
+                    }
+                    Grid.SetColumn(c, currentCulumnIndex);
+                    Grid.SetRow(c, currentRowIndex);
+                    Grid.SetRowSpan(c, 2);
+                    FishChanceGrid.Children.Add(c);
                     currentCulumnIndex += 1;
                 }
                 currentRowIndex += 2;
@@ -459,31 +483,30 @@ namespace FishingScheduler
             currentRowIndex = 2;
             foreach (var chance in _dataContext.FishChanceList)
             {
-                var region = chance.Regions.DateTimeRegions.First();
-                var begin = region.Begin;
-                var end = region.End - EorzeaTimeSpan.FromSeconds(1);
-                var beginOnEarth = region.Begin.ToEarthDateTime().ToLocalTime();
-                var endOnEarth = region.End.ToEarthDateTime().AddSeconds(-1).ToLocalTime();
+                var contextMenu = new ContextMenu();
+                var removeFilterMenuItem = new MenuItem { Header = string.Format("Don't display '{0}'", chance.Fish.Name) };
+                contextMenu.Items.Add(removeFilterMenuItem);
+                removeFilterMenuItem.Click += (s, e) =>
+                {
+                    removeFilterAction(chance.Fish.Name);
+                };
+                var now = _dataContext.FishChanceTimeList.Skip(8).First();
+                var forecastWeatherRegion = new EorzeaDateTimeRegion(now, EorzeaTimeSpan.FromDays(Properties.Settings.Default.DaysOfForecast));
+                var firstRegionOfChance =
+                    chance.Regions
+                        .Intersect(new EorzeaDateTimeHourRegions(new[] { forecastWeatherRegion }))
+                        .DateTimeRegions
+                        .First();
                 var conditionText = string.Join(", ", chance.FishingCondition.Desctriptions);
                 var c = new Border
                 {
                     Child = new TextBlock
                     {
-                        Text = string.Format(
-                                begin == _dataContext.FishChanceTimeList.First() ?
-                                    "ET ～{2:D02}:{3:D02} ( LT ～{7:D02}:{8:D02}:{9:D02} )\n条件: [{10}]{11}"
-                                    :
-                                    "ET {0:D02}:{1:D02}～{2:D02}:{3:D02} ( LT {4:D02}:{5:D02}:{6:D02}～{7:D02}:{8:D02}:{9:D02} )\n条件: [{10}]{11}",
-                                begin.Hour,
-                                begin.Minute,
-                                end.Hour,
-                                end.Minute,
-                                beginOnEarth.Hour,
-                                beginOnEarth.Minute,
-                                beginOnEarth.Second,
-                                endOnEarth.Hour,
-                                endOnEarth.Minute,
-                                endOnEarth.Second,
+                        Text =
+                            string.Format(
+                                "ET {0} ( LT {1} )\n条件: [{2}]{3}",
+                                firstRegionOfChance.FormatEorzeaTimeRegion(forecastWeatherRegion),
+                                firstRegionOfChance.FormatLocalTimeRegion(forecastWeatherRegion),
                                 string.IsNullOrEmpty(conditionText) ? "なし" : conditionText,
                                 string.IsNullOrEmpty(chance.Fish.Memo) ? "" :
                                     string.Format("\n【メモ】\n{0}",
@@ -502,6 +525,7 @@ namespace FishingScheduler
                     BorderBrush = borderColor,
                     BorderThickness = new Thickness(0, 0, 2, 2),
                     Background = transparentBrush,
+                    ContextMenu = contextMenu,
                 };
                 Grid.SetColumn(c, 2);
                 Grid.SetRow(c, currentRowIndex);
@@ -514,21 +538,41 @@ namespace FishingScheduler
             foreach (var chance in _dataContext.FishChanceList)
             {
                 var contextMenu = new ContextMenu();
-                var removeFilterMenuItem = new MenuItem { Header = string.Format("Not display '{0}'", chance.Fish.Name) };
+                var removeFilterMenuItem = new MenuItem { Header = string.Format("Don't display '{0}'", chance.Fish.Name) };
                 contextMenu.Items.Add(removeFilterMenuItem);
                 removeFilterMenuItem.Click += (s, e) =>
                 {
-                    //???
+                    removeFilterAction(chance.Fish.Name);
                 };
-                var c = new Border
+                var backgroundColorOfFish = chance.Fish.DifficultySymbol.GetBackgroundColor();
+                var wholeRegion =
+                    new EorzeaDateTimeRegion(
+                        _dataContext.FishChanceTimeList.First(),
+                        EorzeaTimeSpan.FromDays(Properties.Settings.Default.DaysOfForecast));
+                foreach (var region in chance.Regions.DateTimeRegions)
                 {
-                    ContextMenu = contextMenu
-                };
-                Grid.SetColumn(c, 0);
-                Grid.SetRow(c, currentRowIndex);
-                Grid.SetColumnSpan(c, dataColumnCount + 2);
-                Grid.SetRowSpan(c, 2);
-                FishChanceGrid.Children.Add(c);
+                    var startColumnIndex = (int)(region.Begin - wholeRegion.Begin).EorzeaTimeHours + 2;
+                    var columnSpan = (int)region.Span.EorzeaTimeHours;
+                    var toolTipText =
+                        string.Format(
+                            "{0}\nET {1}\nLT {2}",
+                            chance.Fish.Name,
+                            region.FormatEorzeaTimeRegion(wholeRegion),
+                            region.FormatLocalTimeRegion(wholeRegion));
+                    var c = new Border
+                    {
+                        ToolTip = toolTipText,
+                        BorderBrush = transparentBrush,
+                        BorderThickness = new Thickness(0, 0, 0, 0),
+                        Background = transparentBrush,
+                        ContextMenu = contextMenu,
+                    };
+                    Grid.SetColumn(c, startColumnIndex);
+                    Grid.SetColumnSpan(c, columnSpan);
+                    Grid.SetRow(c, currentRowIndex);
+                    Grid.SetRowSpan(c, 2);
+                    FishChanceGrid.Children.Add(c);
+                }
                 currentRowIndex += 2;
             }
         }
@@ -1373,13 +1417,6 @@ namespace FishingScheduler
             _fishes = new KeyValueCollection<string, Fish>();
             foreach (var fish in new[]
             {
-                /*
-                 【データの裏取り】
-                ・釣り手帳で天候/時間帯の条件がついている魚が全部登録されているかを確認する
-                ・https://jp.finalfantasyxiv.com/lodestone/character/433058/blog/3938927/ この人の記事で、フィッシュアイや直感、天候のうつろいなど特殊条件がある魚に漏れがないか確認する
-                ・釣り餌を複数書けるようにする
-                 */
-
                 // リムサ・ロミンサ
                 new Fish("ゴールデンフィン", _fishGrounds["リムサ・ロミンサ：上甲板層"], _fishingBates["ピルバグ"], 9, 14),
                 new Fish("メガオクトパス", _fishGrounds["リムサ・ロミンサ：下甲板層"], _fishingBates["ピルバグ"], 9, 17, "ピルバグ⇒(プレ)メルトールゴビー/ハーバーへリングHQ⇒(スト)"),
@@ -1674,54 +1711,68 @@ namespace FishingScheduler
                 // モードゥナ
                 new Fish("ヘリオバティス", _fishGrounds["銀泪湖北岸"], _fishingBates["カディスラーヴァ"], 17, 9),
                 new Fish("エーテルラウス", _fishGrounds["銀泪湖北岸"], _fishingBates["グロウワーム"], 3, 13, WeatherType.妖霧),
-
-
-
-
-
-/****************************/
-
-
-
-
-
-
-                new Fish("ヴォイドバス", _fishGrounds["早霜峠"], _fishingBates["グロウワーム"], WeatherType.快晴 | WeatherType.晴れ, WeatherType.妖霧),
-                new Fish("ニンジャベタ", _fishGrounds["タングル湿林"], _fishingBates["ユスリカ"], 18, 9, WeatherType.妖霧, "ユスリカ⇒(プレ)グラディエーターベタHQ⇒(スト)アサシンベタHQ⇒(スト)"),
                 new Fish("インフェルノホーン", _fishGrounds["タングル湿林源流"], _fishingBates["グロウワーム"], WeatherType.妖霧, WeatherType.晴れ | WeatherType.快晴),
                 new Fish("血紅龍", _fishGrounds["唄う裂谷"], _fishingBates["ハニーワーム"], 4, 12, WeatherType.快晴 | WeatherType.晴れ, WeatherType.霧, "ハニーワーム⇒(プレ)銀魚HQ⇒(スト)"),
+                new Fish("ヴォイドバス", _fishGrounds["早霜峠"], _fishingBates["グロウワーム"], WeatherType.快晴 | WeatherType.晴れ, WeatherType.妖霧),
+                new Fish("腐魚", _fishGrounds["タングル湿林"], _fishingBates["レインボースプーン"], WeatherType.妖霧),
+                new Fish("ニンジャベタ", _fishGrounds["タングル湿林"], _fishingBates["ユスリカ"], 18, 9, WeatherType.妖霧, "ユスリカ⇒(プレ)グラディエーターベタHQ⇒(スト)アサシンベタHQ⇒(スト)"),
                 new Fish("ジャノ", _fishGrounds["唄う裂谷北部"], _fishingBates["ハニーワーム"], 8, 18, WeatherType.妖霧, "ハニーワーム⇒(プレ)銀魚HQ⇒(プレ)金魚HQ⇒(スト)"),
-                new Fish("クノ・ザ・キラー", _fishGrounds["唄う裂谷北部"], _fishingBates["ハニーワーム"], WeatherType.妖霧, "(要ジャノ) ハニーワーム⇒銀魚HQ⇒アサシンベタHQ⇒"),
+                new Fish("クノ・ザ・キラー", _fishGrounds["唄う裂谷北部"], _fishingBates["ハニーワーム"], WeatherType.妖霧, "(要ジャノ×1) ハニーワーム⇒銀魚HQ⇒アサシンベタHQ⇒"),
 
                 // アバラシア雲海
+                new Fish("出目金", _fishGrounds["ヴール・シアンシラン"], _fishingBates["ブルートリーチ"], 9, 15),
+                new Fish("カイマン", new[]{ _fishGrounds["ヴール・シアンシラン"], _fishGrounds["餌食の台地"] }, _fishingBates["ブレーデッドジグ"], 18, 21, "ブレーデッドジグ⇒ブルフロッグHQ⇒"),
                 new Fish("水墨魚", _fishGrounds["ヴール・シアンシラン"], _fishingBates["ブルートリーチ"], 14, 16, WeatherType.快晴 | WeatherType.晴れ),
+                new Fish("バヌバヌヘッド", _fishGrounds["雲溜まり"], _fishingBates["ブレーデッドジグ"], WeatherType.晴れ | WeatherType.快晴),
+                new Fish("ゲイラキラー", _fishGrounds["雲溜まり"], _fishingBates["ブルートリーチ"], WeatherType.晴れ | WeatherType.快晴),
                 new Fish("パイッサキラー", _fishGrounds["雲溜まり"], _fishingBates["ブレーデッドジグ"], 8, 12, WeatherType.霧, WeatherType.快晴, "ブレーデッドジグ⇒ブルフロッグHQ⇒"),
+                new Fish("スターフラワー", new [] { _fishGrounds["クラウドトップ"], _fishGrounds["モック・ウーグル島"] },_fishingBates["レッドバルーン"], WeatherType.快晴 | WeatherType.晴れ),
+                new Fish("フリーシーモトロ", _fishGrounds["クラウドトップ"], _fishingBates["ジャンボガガンボ"], WeatherType.快晴 | WeatherType.晴れ),
                 new Fish("シーロストラタスモトロ", _fishGrounds["クラウドトップ"], _fishingBates["ジャンボガガンボ"], 10, 13, WeatherType.快晴 | WeatherType.晴れ),
+                new Fish("ストームコア", _fishGrounds["ブルーウィンドウ"], _fishingBates["レッドバルーン"], WeatherType.風 | WeatherType.曇り | WeatherType.霧),
                 new Fish("ザ・セカンドワン", _fishGrounds["ブルーウィンドウ"], _fishingBates["ジャンボガガンボ"], WeatherType.風),
+                new Fish("天空珊瑚", _fishGrounds["モック・ウーグル島"], _fishingBates["ジャンボガガンボ"], 0, 6, WeatherType.快晴 | WeatherType.晴れ, "(要引っ掛け釣り)"),
                 new Fish("バスキングシャーク", _fishGrounds["モック・ウーグル島"], _fishingBates["ジャンボガガンボ"], WeatherType.霧, WeatherType.快晴, "ジャンボガガンボ⇒スカイフェアリー・セレネHQ⇒"),
                 new Fish("クラウドバタフライ", _fishGrounds["モック・ウーグル島"], new[]{ _fishingBates["ジャンボガガンボ"], _fishingBates["レッドバルーン"] }, 5, 7, WeatherType.快晴, "(要スコーピオンフライ×3) ジャンボガガンボ⇒\n(スカイフェアリーセレネ×3) レッドバルーン⇒\nジャンボガガンボ⇒(プレ)"),
 
                 // アジス・ラー
+                new Fish("ブラッドスキッパー", new[]{ _fishGrounds["アルファ管区"], _fishGrounds["廃液溜まり"] }, _fishingBates["バイオレットワーム"], WeatherType.雷),
                 new Fish("ハイアラガンクラブ改", _fishGrounds["アルファ管区"], _fishingBates["バイオレットワーム"], "バイオレットワーム⇒白金魚HQ⇒"),
                 new Fish("魔科学物質666", _fishGrounds["廃液溜まり"], _fishingBates["バイオレットワーム"], WeatherType.晴れ | WeatherType.曇り | WeatherType.雷, "(要フィッシュアイ)バイオレットワーム⇒白金魚HQ⇒(プレ)"),
-                new Fish("セティ", _fishGrounds["超星間交信塔"], _fishingBates["バイオレットワーム"], 18, 22, WeatherType.曇り, WeatherType.雷),
+                new Fish("オイルイール", new []{ _fishGrounds["超星間交信塔"], _fishGrounds["アジス・ラー旗艦島"] }, _fishingBates["バイオレットワーム"], WeatherType.雷, "バイオレットワーム⇒白金魚HQ⇒"),
+                new Fish("オリファントノーズ", _fishGrounds["超星間交信塔"], _fishingBates["バイオレットワーム"], 18, 0, WeatherType.雷),
+                new Fish("セティ", _fishGrounds["超星間交信塔"], _fishingBates["バイオレットワーム"], 18, 22, WeatherType.曇り, WeatherType.雷, "(要フィッシュアイ)"),
+                new Fish("バイオピラルク", _fishGrounds["デルタ管区"], _fishingBates["ブルートリーチ"], 18, 3, WeatherType.曇り),
                 new Fish("バイオガピラルク", _fishGrounds["デルタ管区"], _fishingBates["ツチグモ"], 21, 2, WeatherType.曇り, "ツチグモ⇒(プレ)エーテルアイHQ⇒(スト)"),
+                new Fish("プチアクソロトル", _fishGrounds["パプスの大樹"], _fishingBates["ブルートリーチ"], 21, 0),
+                new Fish("肺魚", _fishGrounds["パプスの大樹"], _fishingBates["ブルートリーチ"], WeatherType.曇り),
                 new Fish("ハンドレッドアイ", _fishGrounds["パプスの大樹"], _fishingBates["ツチグモ"], 6, 10, WeatherType.晴れ | WeatherType.曇り | WeatherType.雷, "ツチグモ⇒エーテルアイHQ⇒(プレ)"),
+                new Fish("トゥプクスアラ", _fishGrounds["ハビスフィア"], _fishingBates["ジャンボガガンボ"], 15, 18, "ジャンボガガンボ⇒スカイハイフィッシュHQ⇒"),
+                new Fish("スチュペンデミス", _fishGrounds["ハビスフィア"], _fishingBates["ジャンボガガンボ"], WeatherType.晴れ | WeatherType.曇り | WeatherType.雷),
                 new Fish("クリスタルピジョン", _fishGrounds["ハビスフィア"], _fishingBates["ジャンボガガンボ"], WeatherType.晴れ, WeatherType.雷, "(要フィッシュアイ)ジャンボガガンボ⇒スカイハイフィッシュHQ⇒"),
+                new Fish("ジュエリージェリー", _fishGrounds["アジス・ラー旗艦島"], _fishingBates["バイオレットワーム"], 20, 3),
+                new Fish("バレルアイ", _fishGrounds["アジス・ラー旗艦島"], _fishingBates["バイオレットワーム"],  WeatherType.雷, "(要フィッシュアイ)バイオレットワーム⇒白金魚HQ⇒"),
+                new Fish("オプロプケン", _fishGrounds["アジス・ラー旗艦島"], _fishingBates["バイオレットワーム"],  WeatherType.雷, "バイオレットワーム⇒白金魚HQ⇒"),
                 new Fish("アラガンブレード・シャーク", _fishGrounds["アジス・ラー旗艦島"], _fishingBates["バイオレットワーム"], WeatherType.曇り, WeatherType.雷, "バイオレットワーム⇒白金魚HQ⇒"),
                 new Fish("オパビニア", _fishGrounds["アジス・ラー旗艦島"], _fishingBates["バイオレットワーム"], WeatherType.雷, "(要 オプロプケン×3、要フィッシュアイ) バイオレットワーム⇒\nバイオレットワーム⇒オプロプケンHQ⇒白金魚HQ⇒"),
 
                 // 高地ドラヴァニア
+                new Fish("ピピラ・ピラ", new[]{ _fishGrounds["悲嘆の飛泉"], _fishGrounds["ウィロームリバー"],_fishGrounds["餌食の台地"] }, _fishingBates["ゴブリンジグ"], WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧),
+                new Fish("草魚", _fishGrounds["悲嘆の飛泉"], _fishingBates["ゴブリンジグ"], WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧),
+                new Fish("アカザ", new[]{ _fishGrounds["悲嘆の飛泉"], _fishGrounds["ウィロームリバー"], _fishGrounds["スモーキングウェイスト"] }, _fishingBates["ブルートリーチ"], WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧),
                 new Fish("スケイルリッパー", _fishGrounds["悲嘆の飛泉"], _fishingBates["ブルートリーチ"], WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧),
+                new Fish("ドラヴァニアンバス", _fishGrounds["ウィロームリバー"], _fishingBates["ブルートリーチ"], 0, 6, WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧),
                 new Fish("フォークタン", _fishGrounds["ウィロームリバー"], _fishingBates["ブルートリーチ"], 12, 16, WeatherType.砂塵 | WeatherType.曇り, WeatherType.快晴),
+                new Fish("ポリプテルス", _fishGrounds["スモーキングウェイスト"], _fishingBates["ブルートリーチ"], 21, 3),
                 new Fish("アクムノタネ", _fishGrounds["スモーキングウェイスト"], _fishingBates["ブルートリーチ"], 22, 2, WeatherType.砂塵 | WeatherType.霧 | WeatherType.曇り),
+                new Fish("サンダーボルト", _fishGrounds["餌食の台地"], _fishingBates["ブレーデッドジグ"], 22, 4),
                 new Fish("サンダースケイル", _fishGrounds["餌食の台地"], _fishingBates["ストーンラーヴァ"], 6, 8, WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, WeatherType.雷, "ストーンラーヴァ⇒マクロブラキウムHQ⇒"),
-                new Fish("ヨウガンナマズ", _fishGrounds["モーン大岩窟"], _fishingBates["マグマワーム"], "マグマワーム⇒グラナイトクラブHQ⇒"),
+                new Fish("アンバーサラマンダー", _fishGrounds["餌食の台地"], _fishingBates["ブルートリーチ"], 6, 12),
                 new Fish("メテオトータス", _fishGrounds["モーン大岩窟"], _fishingBates["マグマワーム"], WeatherType.快晴 | WeatherType.晴れ, "マグマワーム⇒グラナイトクラブHQ⇒"),
-                new Fish("聖竜の涙", _fishGrounds["モーン大岩窟西"], _fishingBates["マグマワーム"], 2, 6),
+                new Fish("聖竜の涙", _fishGrounds["モーン大岩窟西"], _fishingBates["マグマワーム"], 2, 6, "(要フィッシュアイ)"),
                 new Fish("マグマラウス", _fishGrounds["アネス・ソー"], _fishingBates["マグマワーム"], 18, 6, "マグマワーム⇒グラナイトクラブHQ⇒"),
                 new Fish("リドル", _fishGrounds["アネス・ソー"], _fishingBates["マグマワーム"], 8, 16, WeatherType.快晴 | WeatherType.晴れ, WeatherType.快晴, "(要フィッシュアイ) マグマワーム⇒グラナイトクラブHQ⇒"),
-                new Fish("フォッシルアロワナ", _fishGrounds["光輪の祭壇"], _fishingBates["マグマワーム"], "(要フィッシュアイ)"),
+                new Fish("ラーヴァスネイル", _fishGrounds["光輪の祭壇"], _fishingBates["マグマワーム"], WeatherType.快晴 | WeatherType.晴れ),
                 new Fish("溶岩王", _fishGrounds["光輪の祭壇"], _fishingBates["マグマワーム"], 10, 17, WeatherType.快晴 | WeatherType.晴れ, "(要フィッシュアイ)マグマワーム⇒グラナイトクラブHQ⇒"),
                 new Fish("溶岩帝王", _fishGrounds["光輪の祭壇"], _fishingBates["マグマワーム"], 8, 16, WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, WeatherType.快晴 | WeatherType.晴れ, "(要フィッシュアイ)マグマワーム⇒グラナイトクラブHQ⇒(スト)"),
                 new Fish("プロブレマティカス", _fishGrounds["光輪の祭壇"], _fishingBates["マグマワーム"], 10, 15, WeatherType.快晴 | WeatherType.晴れ, "(要フォッシルアロワナ×3、要フィッシュアイ、時間帯不問) マグマワーム⇒グラナイトクラブHQ⇒\n(要グラナイトクラブ×5) マグマワーム⇒\nマグマワーム⇒グラナイトクラブHQ⇒"),
@@ -1729,52 +1780,88 @@ namespace FishingScheduler
                 // 低地ドラヴァニア
                 new Fish("水瓶王", _fishGrounds["サリャク河"], _fishingBates["ブレーデッドジグ"], "ブレーデッドジグ⇒香魚HQ⇒"),
                 new Fish("マダムバタフライ", _fishGrounds["クイックスピル・デルタ"], _fishingBates["ツチグモ"], 21, 2, WeatherType.快晴, "ツチグモ⇒グリロタルパHQ⇒"),
+                new Fish("フィロソファーアロワナ", _fishGrounds["サリャク河上流"], _fishingBates["ブルートリーチ"], 13, 20, WeatherType.快晴 | WeatherType.晴れ),
+                new Fish("アブトアード", _fishGrounds["サリャク河上流"], _fishingBates["ブルートリーチ"], WeatherType.霧 | WeatherType.曇り),
                 new Fish("スピーカー", _fishGrounds["サリャク河上流"], _fishingBates["ストーンラーヴァ"], 16, 8, WeatherType.曇り | WeatherType.霧, WeatherType.暴雨, "ストーンラーヴァ⇒グリロタルパHQ"),
                 new Fish("鎧魚", _fishGrounds["サリャク河上流"], _fishingBates["ストーンラーヴァ"], 1, 4, WeatherType.快晴, "(要グリロタルパ×6、天候/時間帯不問) ストーンラーヴァ⇒(プレ)\nストーンラーヴァ⇒(プレ)グリロタルパHQ⇒(プレ)"),
-                new Fish("万能のゴブリバス", _fishGrounds["サリャク河中州"], _fishingBates["ゴブリンジグ"], 2, 6, WeatherType.雨, WeatherType.暴雨, "ゴブリンジグ⇒香魚HQ⇒"),
+                new Fish("サリャクカイマン", _fishGrounds["サリャク河中州"], _fishingBates["ブレーデッドジグ"], 15, 18, "ブレーデッドジグ⇒ブルフロッグHQ⇒"),
+                new Fish("バーサーカーベタ", _fishGrounds["サリャク河中州"], _fishingBates["ブルートリーチ"], WeatherType.快晴 | WeatherType.晴れ),
+                new Fish("ゴブリバス", _fishGrounds["サリャク河中州"], _fishingBates["ブルートリーチ"], 0, 6, WeatherType.曇り, WeatherType.霧),
+                new Fish("万能のゴブリバス", _fishGrounds["サリャク河中州"], _fishingBates["ブルートリーチ"], 2, 6, WeatherType.雨, WeatherType.暴雨, "ブルートリーチ⇒香魚HQ⇒"),
 
                 // ドラヴァニア雲海
+                new Fish("キッシング・グラミー", _fishGrounds["エイル・トーム"], _fishingBates["ストーンラーヴァ"], 9, 0),
                 new Fish("ヴィゾーヴニル", _fishGrounds["エイル・トーム"], _fishingBates["ブルートリーチ"], 8, 9),
                 new Fish("モグルグポンポン", _fishGrounds["グリーンスウォード島"], _fishingBates["ブルートリーチ"], 10, 13, WeatherType.暴風, WeatherType.快晴, "※ポンポンポンが釣れたらトレードリリース"),
+                new Fish("サカサナマズ", _fishGrounds["ウェストン・ウォーター"], _fishingBates["ストーンラーヴァ"], 16, 19),
+                new Fish("アミア・カルヴァ", _fishGrounds["ウェストン・ウォーター"], _fishingBates["ブルートリーチ"], 8, 12),
                 new Fish("ボサボサ", _fishGrounds["ウェストン・ウォーター"], _fishingBates["ブルートリーチ"], WeatherType.曇り, WeatherType.暴風, "(要フィッシュアイ)"),
+                new Fish("サンセットセイル", _fishGrounds["ランドロード遺構"], _fishingBates["ジャンボガガンボ"], 15, 17, WeatherType.快晴 | WeatherType.晴れ),
                 new Fish("ラタトスクソウル", _fishGrounds["ランドロード遺構"], _fishingBates["ジャンボガガンボ"], 4, 6, WeatherType.快晴 | WeatherType.晴れ),
+                new Fish("プテラノドン", _fishGrounds["ソーム・アル笠雲"], _fishingBates["ジャンボガガンボ"], 9, 17),
                 new Fish("ディモルフォドン", _fishGrounds["ソーム・アル笠雲"], _fishingBates["ジャンボガガンボ"], WeatherType.快晴, WeatherType.暴風, "(要フィッシュアイ)ジャンボガガンボ⇒(スト)スカイハイフィッシュHQ⇒(スト)"),
+                new Fish("マナセイル", _fishGrounds["サルウーム・カシュ"], _fishingBates["ジャンボガガンボ"], 10, 14, WeatherType.快晴 | WeatherType.晴れ, "ジャンボガガンボ⇒スカイフェアリー・セレネHQ⇒"),
+                new Fish("ブラウンブーメラン", _fishGrounds["サルウーム・カシュ"], _fishingBates["レッドバルーン"], WeatherType.曇り),
                 new Fish("ストームブラッドライダー", _fishGrounds["サルウーム・カシュ"], _fishingBates["ジャンボガガンボ"], WeatherType.快晴, WeatherType.暴風, "(要フィッシュアイ)"),
                 new Fish("ランデロプテルス", _fishGrounds["サルウーム・カシュ"], _fishingBates["ジャンボガガンボ"], 5, 8, WeatherType.暴風, "(要スカイハイフィッシュ×5) ジャンボガガンボ⇒\nジャンボガガンボ⇒スカイハイフィッシュHQ⇒"),
 
                 // ラールガーズリーチ
+                new Fish("ミューヌフィッシュ", new []{ _fishGrounds["ミラージュクリーク上流"], _fishGrounds["ティモン川"], _fishGrounds["夜の森"] }, _fishingBates["赤虫"], WeatherType.曇り | WeatherType.霧, "赤虫⇒ギラバニアントラウトHQ⇒"),
                 new Fish("フックスティーラー", _fishGrounds["ミラージュクリーク上流"], _fishingBates["赤虫"], "赤虫⇒ギラバニアントラウトHQ⇒"),
                 new Fish("シデンナマズ", _fishGrounds["ラールガーズリーチ"], _fishingBates["赤虫"], WeatherType.雷, "赤虫⇒ギアラバニアントラウトHQ⇒"),
+                new Fish("レッドテイル", _fishGrounds["星導山寺院入口"], _fishingBates["ドバミミズ"], WeatherType.曇り | WeatherType.霧, "ドバミミズ⇒バルーンフロッグHQ⇒(スト)"),
                 new Fish("レッドテイルゾンビー", _fishGrounds["星導山寺院入口"], _fishingBates["ドバミミズ"], 8, 12, WeatherType.曇り, "ドバミミズ⇒バルーンフロッグHQ⇒(スト)"),
 
                 // ギラバニア辺境地帯
                 new Fish("サーメットヘッド", _fishGrounds["ティモン川"], _fishingBates["ザザムシ"], 16, 20),
                 new Fish("クセナカンサス", _fishGrounds["ティモン川"], _fishingBates["ザザムシ"], 16, 20, "ザザムシ⇒サーメットヘッドHQ"),
+                new Fish("レイスフィッシュ", _fishGrounds["夜の森"], _fishingBates["ザザムシ"], 0, 4, WeatherType.霧),
                 new Fish("サファイアファン", _fishGrounds["夜の森"], _fishingBates["ザザムシ"], WeatherType.雷),
+                new Fish("小流星", _fishGrounds["流星の尾"], _fishingBates["サスペンドミノー"], WeatherType.霧 | WeatherType.曇り),
+                new Fish("ハンテンナマズ", _fishGrounds["流星の尾"], _fishingBates["イクラ"], 16, 19),
+                new Fish("ニルヴァーナクラブ", _fishGrounds["流星の尾"], _fishingBates["サスペンドミノー"], WeatherType.霧 | WeatherType.曇り),
+                new Fish("カーディナルフィッシュ", _fishGrounds["流星の尾"], _fishingBates["サスペンドミノー"], 19, 23, WeatherType.霧 | WeatherType.曇り),
                 new Fish("アークビショップフィッシュ", _fishGrounds["流星の尾"], _fishingBates["サスペンドミノー"], 12, 16),
                 new Fish("タニクダリ", _fishGrounds["ベロジナ川"], _fishingBates["ザザムシ"], WeatherType.霧),
+                new Fish("ミラージュマヒ", _fishGrounds["ミラージュクリーク"], _fishingBates["サスペンドミノー"], 4, 8, WeatherType.晴れ | WeatherType.快晴),
                 new Fish("コープスチャブ", _fishGrounds["ミラージュクリーク"], _fishingBates["サスペンドミノー"], 20, 0, WeatherType.快晴),
+
 
                 // ギラバニア山岳地帯
                 new Fish("ボンドスプリッター", _fishGrounds["夫婦池"], _fishingBates["サスペンドミノー"], WeatherType.砂塵),
                 new Fish("ドレパナスピス", _fishGrounds["夫婦池"], _fishingBates["サスペンドミノー"], WeatherType.砂塵, "(要ボンドスプリッター×2) サスペンドミノー⇒\nサスペンドミノー⇒(スト)"),
                 new Fish("ナガレクダリ", _fishGrounds["スロウウォッシュ"], _fishingBates["赤虫"], 8, 12, "赤虫⇒ギラバニアントラウトHQ"),
+                new Fish("スティールシャーク", _fishGrounds["ヒース滝"], _fishingBates["ザザムシ"], WeatherType.快晴),
                 new Fish("ラストティアー", _fishGrounds["ヒース滝"], _fishingBates["イクラ"], WeatherType.霧, WeatherType.晴れ),
+
+                new Fish("瞑想魚", new [] { _fishGrounds["裁定者の像"], _fishGrounds["ブルズバス"] }, _fishingBates["ザザムシ"], WeatherType.曇り | WeatherType.風 | WeatherType.霧 | WeatherType.砂塵),
+                new Fish("裁定魚", _fishGrounds["裁定者の像"], _fishingBates["ザザムシ"], WeatherType.風),
                 new Fish("解脱魚", _fishGrounds["裁定者の像"], _fishingBates["サスペンドミノー"], WeatherType.曇り | WeatherType.風 | WeatherType.霧 | WeatherType.砂塵, WeatherType.快晴),
+                new Fish("ブルズバイト", _fishGrounds["ブルズバス"], _fishingBates["サスペンドミノー"], WeatherType.曇り | WeatherType.風 | WeatherType.霧 | WeatherType.砂塵),
+                new Fish("ワニガメ", _fishGrounds["ブルズバス"], _fishingBates["サスペンドミノー"], WeatherType.晴れ | WeatherType.快晴),
                 new Fish("ヘモン", _fishGrounds["ブルズバス"], _fishingBates["サスペンドミノー"], 16, 20, WeatherType.曇り),
+                new Fish("イースタンパイク", _fishGrounds["アームズ・オブ・ミード"], _fishingBates["活海老"], WeatherType.晴れ | WeatherType.快晴),
+                new Fish("ロックフィッシュ", _fishGrounds["アームズ・オブ・ミード"], _fishingBates["サスペンドミノー"], 12, 16, WeatherType.曇り | WeatherType.風 | WeatherType.霧 | WeatherType.砂塵),
                 new Fish("アラミガンベール", _fishGrounds["アームズ・オブ・ミード"], _fishingBates["サスペンドミノー"], WeatherType.快晴, WeatherType.晴れ),
 
                 // ギラバニア湖畔地帯
+                new Fish("ソルトミル", _fishGrounds["ロッホ・セル湖"], _fishingBates["蚕蛹"], WeatherType.曇り | WeatherType.霧, "蚕蛹⇒ロックソルトフィッシュHQ⇒"),
+                new Fish("スカルプター", _fishGrounds["ロッホ・セル湖"], _fishingBates["蚕蛹"], 12, 18, WeatherType.雷雨, "蚕蛹⇒ロックソルトフィッシュHQ⇒"),
                 new Fish("ダイヤモンドアイ", _fishGrounds["ロッホ・セル湖"], _fishingBates["蚕蛹"], WeatherType.快晴, "(要フィッシュアイ)蚕蛹⇒ロックソルトフィッシュHQ⇒"),
                 new Fish("ステタカントゥス", _fishGrounds["ロッホ・セル湖"], _fishingBates["蚕蛹"], 16, 18, WeatherType.雷雨, "(要スカルプター×2、要フィッシュアイ) 蚕蛹⇒ロックソルトフィッシュHQ⇒\n(天候不問、ET16～18、フィッシュアイ不要)蚕蛹⇒ロックソルトフィッシュHQ⇒"),
 
                 // 紅玉海
                 new Fish("クアル", _fishGrounds["紅玉台場近海"], _fishingBates["アオイソメ"], 0, 8, WeatherType.雷, WeatherType.曇り),
                 new Fish("紅龍", _fishGrounds["紅玉台場近海"], _fishingBates["アオイソメ"], 4, 8, WeatherType.雷, WeatherType.曇り, "アオイソメ⇒クアルHQ⇒(スト)"),
+                new Fish("鰭竜", _fishGrounds["獄之蓋近海"], _fishingBates["活海老"], WeatherType.雷, "活海老⇒紅玉海老HQ⇒"),
+                new Fish("ウキキ", _fishGrounds["獄之蓋近海"], _fishingBates["アオイソメ"], 8, 12, WeatherType.風),
                 new Fish("菜食王", _fishGrounds["獄之蓋近海"], _fishingBates["活海老"], 20, 0, WeatherType.雷, "活海老⇒紅玉海老HQ⇒(スト)"),
+                new Fish("オオテンジクザメ", _fishGrounds["ベッコウ島近海"], _fishingBates["アオイソメ"], 10, 18, WeatherType.快晴),
                 new Fish("ナナツボシ", _fishGrounds["ベッコウ島近海"], _fishingBates["アオイソメ"], 10, 18, WeatherType.雷, WeatherType.晴れ),
                 new Fish("春不知", _fishGrounds["沖之岩近海"], _fishingBates["アオイソメ"], 16, 20),
+                new Fish("メカジキ", _fishGrounds["オノコロ島近海"], _fishingBates["アオイソメ"], 8, 12, WeatherType.風 | WeatherType.曇り, "(要フィッシュアイ)"),
                 new Fish("ウミダイジャ", _fishGrounds["オノコロ島近海"], _fishingBates["活海老"], WeatherType.風, "活海老⇒紅玉海老HQ"),
+                new Fish("ギマ", _fishGrounds["イサリ村沿岸"], _fishingBates["アオイソメ"], 5, 7),
                 new Fish("バリマンボン", _fishGrounds["イサリ村沿岸"], _fishingBates["活海老"], 16, 0, WeatherType.快晴 | WeatherType.晴れ, WeatherType.雷),
                 new Fish("ソクシツキ", _fishGrounds["ゼッキ島近海"], _fishingBates["活海老"], WeatherType.雷, "活海老⇒紅玉海老HQ"),
 
@@ -1782,19 +1869,34 @@ namespace FishingScheduler
                 new Fish("ザクロウミ", _fishGrounds["アオサギ池"], _fishingBates["ドバミミズ"], WeatherType.雨),
                 new Fish("オニニラミ", _fishGrounds["アオサギ川"], _fishingBates["サスペンドミノー"], WeatherType.晴れ, WeatherType.快晴),
                 new Fish("仙寿の翁", _fishGrounds["ナマイ村溜池"], _fishingBates["ザザムシ"], 20, 0, WeatherType.快晴, "※ノゴイが釣れたらトレードリリース"),
-                new Fish("七彩天主", _fishGrounds["七彩溝"], _fishingBates["ザザムシ"], 0, 16, WeatherType.晴れ, WeatherType.晴れ | WeatherType.快晴, "(要 藍彩魚×3、ET 00:00～03:59) ザザムシ⇒紫彩魚HQ⇒藍彩魚\n(要 橙彩魚×3, ET 4:00-7:59) ザザムシ⇒赤彩魚HQ⇒橙彩魚\n(要 緑彩魚×5、ET 00:00～15:59、晴れ⇒晴れ/快晴) ザザムシ⇒緑彩魚\n(天候/時間 制限なし) ザザムシ⇒七彩天主"),
-                new Fish("ニジノヒトスジ", _fishGrounds["七彩渓谷"], _fishingBates["サスペンドミノー"], 12, 16, WeatherType.霧),
-                new Fish("ボクデン", _fishGrounds["ドマ城前"], _fishingBates["ザザムシ"], 12, 14),
-                new Fish("水天一碧", _fishGrounds["城下船場"], _fishingBates["ザザムシ"], 16, 0, WeatherType.暴雨),
                 new Fish("シャジクノミ", _fishGrounds["無二江東"], _fishingBates["ザザムシ"], 0, 6, WeatherType.曇り, WeatherType.晴れ),
+                new Fish("天女魚", _fishGrounds["無二江西"], _fishingBates["ザザムシ"], 16, 0),
                 new Fish("羽衣美女", _fishGrounds["無二江西"], _fishingBates["ザザムシ"], WeatherType.曇り, WeatherType.快晴 | WeatherType.晴れ),
+                new Fish("パンダ蝶尾", _fishGrounds["梅泉郷"], _fishingBates["赤虫"], 10, 18, "(要フィッシュアイ)"),
+                new Fish("絹鯉", _fishGrounds["梅泉郷"], _fishingBates["ザザムシ"], 4, 8, WeatherType.雨, "(要フィッシュアイ)"),
                 new Fish("羽衣鯉", _fishGrounds["梅泉郷"], _fishingBates["ザザムシ"], WeatherType.霧, "(要フィッシュアイ)"),
+                new Fish("ドマウナギ", _fishGrounds["七彩渓谷"], _fishingBates["赤虫"], 17, 10),
+                new Fish("ニジノヒトスジ", _fishGrounds["七彩渓谷"], _fishingBates["サスペンドミノー"], 12, 16, WeatherType.霧),
+                new Fish("紫彩魚", _fishGrounds["七彩溝"], _fishingBates["ザザムシ"], 0, 4),
+                new Fish("赤彩魚", _fishGrounds["七彩溝"], _fishingBates["ザザムシ"], 4, 8),
+                new Fish("橙彩魚", _fishGrounds["七彩溝"], _fishingBates["ザザムシ"], 4, 8, "ザザムシ⇒赤彩魚HQ⇒"),
+                new Fish("藍彩魚", _fishGrounds["七彩溝"], _fishingBates["ザザムシ"], 0, 4, "ザザムシ⇒紫彩魚HQ⇒"),
+                new Fish("緑彩魚", _fishGrounds["七彩溝"], _fishingBates["ザザムシ"], 0, 16, WeatherType.晴れ, WeatherType.晴れ | WeatherType.快晴),
+                new Fish("七彩天主", _fishGrounds["七彩溝"], _fishingBates["ザザムシ"], 0, 16, WeatherType.晴れ, WeatherType.晴れ | WeatherType.快晴, "(要 藍彩魚×3、ET 00:00～03:59) ザザムシ⇒紫彩魚HQ⇒藍彩魚\n(要 橙彩魚×3, ET 4:00-7:59) ザザムシ⇒赤彩魚HQ⇒橙彩魚\n(要 緑彩魚×5、ET 00:00～15:59、晴れ⇒晴れ/快晴) ザザムシ⇒緑彩魚\n(天候/時間 制限なし) ザザムシ⇒七彩天主\n※ET 00時から藍彩魚・橙彩魚・緑彩魚を釣っておく"),
+                new Fish("無二草魚", _fishGrounds["城下船場"], _fishingBates["赤虫"], 20, 4),
+                new Fish("水天一碧", _fishGrounds["城下船場"], _fishingBates["ザザムシ"], 16, 0, WeatherType.暴雨),
+                new Fish("雷遁魚", _fishGrounds["ドマ城前"], _fishingBates["ザザムシ"], WeatherType.雨 | WeatherType.暴雨),
+                new Fish("ボクデン", _fishGrounds["ドマ城前"], _fishingBates["ザザムシ"], 12, 14),
 
                 // アジムステップ
+                new Fish("メダカ", new[]{ _fishGrounds["ネム・カール"], _fishGrounds["シロガネ水路"] }, _fishingBates["ザザムシ"], WeatherType.快晴),
                 new Fish("ベジースキッパー", _fishGrounds["ネム・カール"], _fishingBates["赤虫"], 8, 12, WeatherType.晴れ, WeatherType.快晴, "(プレ)"),
+                new Fish("ハクビターリング", _fishGrounds["ハク・カール"], _fishingBates["ザザムシ"], 0, 4, WeatherType.雨),
                 new Fish("明けの旗魚", _fishGrounds["ハク・カール"], _fishingBates["ドバミミズ"], 0, 8, WeatherType.晴れ, WeatherType.霧, "ドバミミズ⇒ザガスHQ⇒(スト)"),
                 new Fish("ブレードスキッパー", _fishGrounds["ヤト・カール上流"], _fishingBates["サスペンドミノー"], 4, 8, WeatherType.霧),
+                new Fish("グッピー", _fishGrounds["アジム・カート"], _fishingBates["ザザムシ"], 16, 20, WeatherType.晴れ, WeatherType.快晴),
                 new Fish("暮れの魚", _fishGrounds["アジム・カート"], _fishingBates["ドバミミズ"], 8, 16, WeatherType.雨 | WeatherType.暴風, WeatherType.曇り, "ドバミミズ⇒ザガスHQ⇒"),
+                new Fish("川の長老", _fishGrounds["タオ・カール"], _fishingBates["ドバミミズ"], WeatherType.曇り, WeatherType.風 | WeatherType.霧, "ドバミミス⇒ザガスHQ⇒"),
                 new Fish("シンタクヤブリ", _fishGrounds["タオ・カール"], _fishingBates["ザザムシ"], 20, 0),
                 new Fish("ヤトカガン", _fishGrounds["ヤト・カール下流"], _fishingBates["ザザムシ"], WeatherType.風),
                 new Fish("ナーマの愛籠", _fishGrounds["ドタール・カー"], _fishingBates["サスペンドミノー"], 4, 8, WeatherType.雨, WeatherType.晴れ | WeatherType.快晴),
@@ -1814,27 +1916,35 @@ namespace FishingScheduler
                 new Fish("グランドデイムバタフライ", _fishGrounds["廃船街"], _fishingBates["イカの切り身"], 12, 19, WeatherType.快晴),
 
                 // レイクランド
+                new Fish("プラチナグッピー", _fishGrounds["錆ついた貯水池"], _fishingBates["蟲箱"], WeatherType.快晴),
                 new Fish("アンフォーギブン・クラブ", _fishGrounds["始まりの湖"], _fishingBates["蟲箱"], WeatherType.霧),
                 new Fish("イモータルジョー", _fishGrounds["ケンの島 (釣り)"], _fishingBates["蟲箱"], 16, 0, WeatherType.晴れ | WeatherType.快晴, WeatherType.曇り | WeatherType.霧),
 
                 // コルシア島
                 new Fish("ホワイトロンゾ", _fishGrounds["ワッツリバー下流"], _fishingBates["蟲箱"], 0, 2, "プレ"),
                 new Fish("ブロンズソール", _fishGrounds["シャープタンの泉"], _fishingBates["マーブルラーヴァ"], WeatherType.雨),
+                new Fish("ヘノドゥス", _fishGrounds["コルシア島沿岸東"], _fishingBates["ショートビルミノー"], 16, 0, WeatherType.曇り | WeatherType.霧, "ショートビルミノー⇒スピアヘッドHQ⇒プレ"),
 
                 // アム・アレーン
                 new Fish("カンムリカブリ", _fishGrounds["砂の川"], _fishingBates["オヴィムジャーキー"], 0, 6, WeatherType.砂塵, "オヴィムジャーキー⇒ツノカブリHQ"),
+                new Fish("トゲトカゲ", _fishGrounds["アンバーヒル"], _fishingBates["オヴィムジャーキー"], 10, 18, WeatherType.晴れ | WeatherType.快晴 | WeatherType.灼熱波, "デザートフロッグ⇒ミズカキスナヤモリHQ"),
                 new Fish("クギトカゲ", _fishGrounds["アンバーヒル"], _fishingBates["デザートフロッグ"], 12, 16, WeatherType.快晴, "デザートフロッグ⇒ミズカキスナヤモリHQ"),
 
                 // イル・メグ
                 new Fish("フューリィベタ", _fishGrounds["姿見の湖"], _fishingBates["蟲箱"], 20, 0, WeatherType.快晴 | WeatherType.晴れ),
                 new Fish("ピクシーレインボー", _fishGrounds["中の子らの流れ"], _fishingBates["マーブルラーヴァ"], WeatherType.晴れ | WeatherType.快晴, WeatherType.霧, "(プレ)"),
+                new Fish("水泡眼", _fishGrounds["コラードの排水溝"], _fishingBates["蟲箱"], WeatherType.快晴),
 
                 // ラケティカ大森林
                 new Fish("ロックワの衛士", _fishGrounds["トゥシ・メキタ湖"], _fishingBates["ロバーボール"], 10, 12, "ロバーボール⇒クラウンテトラHQ⇒エリオプスHQ⇒"),
+                new Fish("ダイヤモンドピピラ", _fishGrounds["血の酒坏"], _fishingBates["ロバーボール"], 12, 20),
                 new Fish("ブラックジェットストリーム", _fishGrounds["ロツァトル川"], _fishingBates["ロバーボール"], 2, 12, WeatherType.曇り, WeatherType.晴れ, "(プレ)"),
+                new Fish("常闇魚", _fishGrounds["ウォーヴンオウス"], _fishingBates["ロバーボール"], 0, 8, "(要フィッシュアイ)"),
 
                 // テンペスト
                 new Fish("オンドの溜息", _fishGrounds["フラウンダーの穴蔵"], _fishingBates["イカの切り身"], 12, 14, WeatherType.快晴 | WeatherType.晴れ),
+                new Fish("アーポアク", _fishGrounds["キャリバンの古巣穴西"], _fishingBates["イカの切り身"], 12, 16, WeatherType.快晴, "(要フィッシュアイ)イカの切り身⇒エンシェントシュリンプHQ⇒(プレ)"),
+                new Fish("フードウィンカー", new[] { _fishGrounds["キャリバン海底谷北西"], _fishGrounds["キャリバンの古巣穴東"] }, _fishingBates["ショートビルミノー"], WeatherType.晴れ),
                 new Fish("スターチェイサー", _fishGrounds["プルプラ洞"], _fishingBates["イカの切り身"], 6, 10, WeatherType.曇り, "(要フィッシュアイ)"),
             })
             {

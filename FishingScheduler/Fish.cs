@@ -130,6 +130,8 @@ namespace FishingScheduler
 
         private Fish(string fishName, IEnumerable<FishingBait> fishingBaits, string memo, IEnumerable<FishingCondition> conditions)
         {
+            if (fishName.Trim() != fishName)
+                throw new ArgumentException();
             Name = fishName;
             FishingGrounds = conditions.Select(c => c.FishingGround).ToArray();
             FishingBaits = fishingBaits.ToArray();
