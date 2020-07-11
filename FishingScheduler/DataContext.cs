@@ -116,9 +116,8 @@ namespace FishingScheduler
         public void UpdateWeatherList(KeyValueCollection<string, AreaGroup> areaGroups, KeyValueCollection<string, Fish> fishes)
         {
             UpdatedDateTime = DateTime.UtcNow;
-            var eorzeaNow = UpdatedDateTime.ToEorzeaDateTime();
-            eorzeaNow -= EorzeaTimeSpan.FromSeconds(eorzeaNow.EpochSeconds % (60 * 60 * 8));
-            var timeList = Enumerable.Range(-1, 23)
+            var eorzeaNow = UpdatedDateTime.ToEorzeaDateTime().GetStartOf8Hour();
+            var timeList = Enumerable.Range(-1, Properties.Settings.Default.DaysOfForecast * 3 + 2)
                                 .Select(index =>
                                 {
                                     var startTime = eorzeaNow + EorzeaTimeSpan.FromHours(index * 8);
@@ -232,6 +231,7 @@ namespace FishingScheduler
 
         public void UpdateFishChanceList(KeyValueCollection<string, AreaGroup> areaGroups, KeyValueCollection<string, Fish> fishes, EorzeaDateTime eorzeaNow)
         {
+            eorzeaNow = eorzeaNow.GetStartOf8Hour();
             // 開始時刻の8時間前から、開始時刻の[Properties.Settings.Default.DaysOfForecast]日後まで
             var wholePeriod = new EorzeaDateTimeHourRegions(new[]
             {

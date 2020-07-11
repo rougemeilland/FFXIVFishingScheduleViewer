@@ -84,7 +84,26 @@ namespace FishingScheduler
 
         public EorzeaDateTime GetStartOfDay()
         {
-            return new EorzeaDateTime(EpochSeconds - ((Hour * 60) + Minute) * Second);
+            var x = 24 * 60 * 60;
+            return new EorzeaDateTime(EpochSeconds / x * x);
+        }
+
+        public EorzeaDateTime GetStartOf8Hour()
+        {
+            var x = 8 * 60 * 60;
+            return new EorzeaDateTime(EpochSeconds / x * x);
+        }
+
+        public EorzeaDateTime GetStartOfHour()
+        {
+            var x = 60 * 60;
+            return new EorzeaDateTime(EpochSeconds / x * x);
+        }
+
+        public EorzeaDateTime GetStartOfMinute()
+        {
+            var x = 60;
+            return new EorzeaDateTime(EpochSeconds / x * x);
         }
 
         public EorzeaDateTime Add(EorzeaTimeSpan span)

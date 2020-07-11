@@ -35,6 +35,38 @@ namespace FishingScheduler
             InitializeComponent();
 
             _areaGroups = areaGroups;
+
+            {
+                var forecastPeriodSelectionItems = new[]
+                {
+                    new { Text = "ET one day (LT 1:10)", Value = 1 },
+                    new { Text = "ET 3 days (LT 3:30)", Value = 3 },
+                    new { Text = "ET 7 days (LT 8:10)", Value = 7 },
+                };
+
+                ForecastPeriodDays.ItemsSource = forecastPeriodSelectionItems;
+                ForecastPeriodDays.DisplayMemberPath = "Text";
+                ForecastPeriodDays.SelectedValuePath = "Value";
+                var found =
+                    Enumerable.Range(0, forecastPeriodSelectionItems.Length)
+                        .Select(index => new { index, text_value = forecastPeriodSelectionItems[index] })
+                        .Where(item => item.text_value.Value == settingProvider.GetForecastWeatherDays())
+                        .SingleOrDefault();
+                ForecastPeriodDays.SelectedIndex = found == null ? 0 : found.index;
+                ForecastPeriodDays.SelectionChanged += (s, e) =>
+                {
+                    try
+                    {
+                        settingProvider.SetForecastWeatherDays(forecastPeriodSelectionItems[ForecastPeriodDays.SelectedIndex].Value);
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        ForecastPeriodDays.SelectedIndex = 0;
+                        settingProvider.SetForecastWeatherDays(0);
+                    }
+                };
+            }
+
             _fishes = fishes;
             _settingProvider = settingProvider;
 
@@ -113,7 +145,8 @@ namespace FishingScheduler
                     fishingGround = g.Key,
                     fishes = g
                         .Select(item => item.fish)
-                        .OrderBy(item => item.Name)
+                        .OrderBy(item => item.DifficultyValue)
+                        .ThenBy(item => item.Name)
                         .ToArray()
                 })
                 .ToDictionary(item => item.fishingGround, item => item.fishes);

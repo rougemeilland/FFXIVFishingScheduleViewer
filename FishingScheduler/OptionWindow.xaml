@@ -15,6 +15,10 @@
         <Button Width="100" Margin="5" Click="CloseButton_Click" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
             <AccessText>_Close</AccessText>
         </Button>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <TextBlock Text="Forecast period:" Margin="5" VerticalAlignment="Center"/>
+            <ComboBox Name="ForecastPeriodDays" Margin="5" VerticalAlignment="Center"/>
+        </StackPanel>
         <TabControl Name="FishListContainer"/>
     </DockPanel>
 </Window>

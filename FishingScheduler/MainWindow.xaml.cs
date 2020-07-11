@@ -85,6 +85,9 @@ namespace FishingScheduler
                             });
                         });
                         break;
+                    case nameof(Properties.Settings.Default.DaysOfForecast):
+                        UpdateView();
+                        break;
                     default:
                         break;
                 }
@@ -293,10 +296,14 @@ namespace FishingScheduler
                 {
                     Brush backgroundColor = GetBackgroundColorOfTime(converter, time);
                     {
+                        var borderThickness =
+                            currentCulumnIndex == FishChanceGrid.ColumnDefinitions.Count - 1
+                                ? new Thickness(0, 0, 1, 2)
+                                : new Thickness(0, 0, 0, 2);
                         var c = new Border
                         {
                             BorderBrush = borderColor,
-                            BorderThickness = new Thickness(0, 0, 0, 2),
+                            BorderThickness = borderThickness,
                             HorizontalAlignment = HorizontalAlignment.Stretch,
                             VerticalAlignment = VerticalAlignment.Stretch,
                             Background = backgroundColor,
@@ -305,20 +312,44 @@ namespace FishingScheduler
                         Grid.SetRow(c, 1);
                         FishChanceGrid.Children.Add(c);
                     }
+                    if (time.Hour % 4 == 0)
                     {
                         var c = new TextBlock()
                         {
-                            Text = time.Hour % 4 == 0 ? time.Hour.ToString() : "",
-                            HorizontalAlignment = HorizontalAlignment.Left,
+                            Text = time.Hour.ToString(),
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
                             VerticalAlignment = VerticalAlignment.Center,
                             TextAlignment = TextAlignment.Center,
                             Background = transparentBrush,
                         };
-                        Grid.SetColumn(c, currentCulumnIndex);
-                        Grid.SetRow(c, 1);
+                        if (currentCulumnIndex <= 2)
+                        {
+                            Grid.SetColumn(c, currentCulumnIndex);
+                            Grid.SetRow(c, 1);
+                        }
+                        else
+                        {
+                            Grid.SetColumn(c, currentCulumnIndex - 1);
+                            Grid.SetColumnSpan(c, 2);
+                            Grid.SetRow(c, 1);
+                        }
                         FishChanceGrid.Children.Add(c);
                     }
                     currentCulumnIndex += 1;
+                }
+                {
+                    var time = _dataContext.FishChanceTimeList.Last() + EorzeaTimeSpan.FromHours(1);
+                    var c = new TextBlock()
+                    {
+                        Text = time.Hour.ToString(),
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        TextAlignment = TextAlignment.Center,
+                        Background = transparentBrush,
+                    };
+                    Grid.SetColumn(c, currentCulumnIndex - 1);
+                    Grid.SetRow(c, 1);
+                    FishChanceGrid.Children.Add(c);
                 }
             }
             Action<string> removeFilterAction = (fishName) =>
@@ -453,11 +484,12 @@ namespace FishingScheduler
                 currentRowIndex += 2;
             }
             {
-                _currentTimeIndicatorGrid = new Grid()
+                _currentTimeIndicatorGrid = new Grid
                 {
                     Background = transparentBrush,
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Stretch,
+                    Visibility = Visibility.Collapsed,
                 };
                 _currentTimeIndicatorGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
                 _currentTimeIndicatorGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(3, GridUnitType.Pixel) });
@@ -476,7 +508,7 @@ namespace FishingScheduler
                 _currentTimeIndicatorGrid.Children.Add(c);
                 Grid.SetColumn(_currentTimeIndicatorGrid, 2);
                 Grid.SetRow(_currentTimeIndicatorGrid, 0);
-                Grid.SetColumnSpan(_currentTimeIndicatorGrid, FishChanceGrid.ColumnDefinitions.Count - 2);
+                //Grid.SetColumnSpan(_currentTimeIndicatorGrid, FishChanceGrid.ColumnDefinitions.Count - 2);
                 Grid.SetRowSpan(_currentTimeIndicatorGrid, FishChanceGrid.RowDefinitions.Count);
                 FishChanceGrid.Children.Add(_currentTimeIndicatorGrid);
             }
@@ -581,21 +613,31 @@ namespace FishingScheduler
         {
             while (true)
             {
-                var earthTimeNow = DateTime.UtcNow;
-                var localTimeNow = earthTimeNow.ToLocalTime();
-                var eorzeaTimeNow = earthTimeNow.ToEorzeaDateTime();
-                var leftWeight = (eorzeaTimeNow - _dataContext.FishChanceTimeList.First()).EorzeaTimeSeconds;
-                var rightWeight = (_dataContext.FishChanceTimeList.Last() + EorzeaTimeSpan.FromHours(1) - eorzeaTimeNow).EorzeaTimeSeconds;
-                var nextEorzeatime = eorzeaTimeNow + EorzeaTimeSpan.FromSeconds(60 - eorzeaTimeNow.Second);
                 await Dispatcher.InvokeAsync(() =>
                 {
+                    var earthTimeNow = DateTime.UtcNow;
+                    var localTimeNow = earthTimeNow.ToLocalTime();
+                    var eorzeaTimeNow = earthTimeNow.ToEorzeaDateTime();
+                    var firstTime = _dataContext.FishChanceTimeList.First();
+                    var startOfHour = eorzeaTimeNow.GetStartOfHour();
+                    var columnIndex = (int)(eorzeaTimeNow - firstTime).EorzeaTimeHours;
+                    var leftWeight = (eorzeaTimeNow - startOfHour).EorzeaTimeSeconds;
+                    var rightWeight = (startOfHour + EorzeaTimeSpan.FromHours(1) - eorzeaTimeNow).EorzeaTimeSeconds;
                     _currentTimeIndicatorGrid.ColumnDefinitions[0].Width = new GridLength(leftWeight, GridUnitType.Star);
                     _currentTimeIndicatorGrid.ColumnDefinitions[2].Width = new GridLength(rightWeight, GridUnitType.Star);
+                    Grid.SetColumn(_currentTimeIndicatorGrid, columnIndex + 2);
+                    Grid.SetRow(_currentTimeIndicatorGrid, 0);
+                    _currentTimeIndicatorGrid.Visibility = Visibility.Visible;
                     CurrentEorzeaDateTime.Text = string.Format("{0:D02}:{1:D02}", eorzeaTimeNow.Hour, eorzeaTimeNow.Minute);
                     CurrentEarthDateTime.Text = string.Format("{0:D02}:{1:D02}:{2:D02}", localTimeNow.Hour, localTimeNow.Minute, localTimeNow.Second);
                 });
-                var interval = nextEorzeatime.ToEarthDateTime() - earthTimeNow;
-                await Task.Delay(interval);
+                {
+                    var earthTimeNow = DateTime.UtcNow;
+                    var eorzeaTimeNow = earthTimeNow.ToEorzeaDateTime();
+                    var nextEorzeatime = eorzeaTimeNow.GetStartOfMinute() + EorzeaTimeSpan.FromMinutes(1);
+                    var interval = nextEorzeatime.ToEarthDateTime() - earthTimeNow;
+                    await Task.Delay(interval);
+                }
             }
         }
 
@@ -1566,7 +1608,7 @@ namespace FishingScheduler
 
                 // グリダニア
                 new Fish("雨乞魚", new[]{ _fishGrounds["グリダニア：翡翠湖畔"], _fishGrounds["グリダニア：囁きの渓谷"] }, _fishingBates["テッポウムシ"], 17, 2, WeatherType.雨),
-                new Fish("招嵐王", _fishGrounds["グリダニア：翡翠湖畔"], _fishingBates["テッポウムシ"], 17, 2, WeatherType.雨 | WeatherType.雪),
+                new Fish("招嵐王", _fishGrounds["グリダニア：翡翠湖畔"], _fishingBates["テッポウムシ"], 17, 2, WeatherType.雨),
                 new Fish("ブラッディブルワー", _fishGrounds["グリダニア：紅茶川水系下流"], _fishingBates["ザリガニボール"]),
                 new Fish("マトロンカープ", _fishGrounds["グリダニア：囁きの渓谷"], _fishingBates["ブラッドワーム"], 15, 21),
                 new Fish("意地ブナ", _fishGrounds["グリダニア：紅茶川水系上流"], _fishingBates["クロウフライ"], 9, 14, WeatherType.曇り | WeatherType.霧),
@@ -1608,8 +1650,8 @@ namespace FishingScheduler
                     _fishingBates["テッポウムシ"],
                     17,
                     10),
-                new Fish("マッシュルームクラブ", _fishGrounds["シルフランド渓谷"], _fishingBates["スピナーベイト"], WeatherType.曇り | WeatherType.霧, "スピナーベイト⇒スカルピンHQ⇒"),
-                new Fish("マジック・マッシュルームクラブ", _fishGrounds["シルフランド渓谷"], _fishingBates["スピナー"], WeatherType.雨 | WeatherType.雷, WeatherType.曇り | WeatherType.霧, "スピナーベイト⇒スカルピンHQ⇒"),
+                new Fish("マッシュルームクラブ", _fishGrounds["シルフランド渓谷"], _fishingBates["スピナー"], WeatherType.曇り | WeatherType.霧, "スピナー⇒スカルピンHQ⇒"),
+                new Fish("マジック・マッシュルームクラブ", _fishGrounds["シルフランド渓谷"], _fishingBates["スピナー"], WeatherType.雨 | WeatherType.雷, WeatherType.曇り | WeatherType.霧, "スピナー⇒スカルピンHQ⇒"),
 
                 // 南部森林
                 new Fish("ビッグバイパー", _fishGrounds["ハズーバ支流：上流"], _fishingBates["バターワーム"], 18, 19),
@@ -2076,6 +2118,20 @@ namespace FishingScheduler
             Properties.Settings.Default.FishMemoList = string.Join("\n", _fishMemoList.Select(item => string.Format("{0}\t{1}", item.Key.SimpleEncode(), item.Value.SimpleEncode())));
             Properties.Settings.Default.Save();
             return true;
+        }
+
+        int ISettingProvider.GetForecastWeatherDays()
+        {
+            return Properties.Settings.Default.DaysOfForecast;
+        }
+
+        void ISettingProvider.SetForecastWeatherDays(int days)
+        {
+            if (days != Properties.Settings.Default.DaysOfForecast)
+            {
+                Properties.Settings.Default.DaysOfForecast = days;
+                Properties.Settings.Default.Save();
+            }
         }
     }
 }

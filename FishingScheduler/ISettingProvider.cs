@@ -10,5 +10,7 @@
         bool SetIsSelectedMainWindowTab(MainWindowTabType tab, bool value);
         string GetFishMemo(string fishName);
         bool SetFishMemo(string fishName, string text);
+        int GetForecastWeatherDays();
+        void SetForecastWeatherDays(int days);
     }
 }
