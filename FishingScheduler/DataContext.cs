@@ -240,7 +240,7 @@ namespace FishingScheduler
                     eorzeaNow + EorzeaTimeSpan.FromDays(Properties.Settings.Default.DaysOfForecast)
                 )
             });
-            var worecastPeriod = new EorzeaDateTimeHourRegions(new[]
+            var forecastPeriod = new EorzeaDateTimeHourRegions(new[]
             {
                 new EorzeaDateTimeRegion(
                     eorzeaNow,
@@ -252,7 +252,7 @@ namespace FishingScheduler
                 .Where(fish => _settingProvider.GetIsEnabledFishFilter(fish.Name))
                 .OrderByDescending(fish => fish.DifficultyValue)
                 .Select(fish => fish.GetFishingChance(areaGroups, wholePeriod, eorzeaNow))
-                .Where(result => result != null && !result.Regions.Intersect(worecastPeriod).IsEmpty)
+                .Where(result => result != null && !result.Regions.Intersect(forecastPeriod).IsEmpty)
                 .ToArray();
             var comparer = new FishChanceTimeRegionsComparer();
             FishChanceTimeList =
@@ -270,8 +270,10 @@ namespace FishingScheduler
                     .FirstOrDefault())
                 .Where(result => result != null)
                 .Distinct(comparer)
-                .OrderBy(result => result.Regions.Begin)
-                .ThenBy(result => result.Regions.End)
+                .Select(result => new { result, firstRegion = result.Regions.Intersect(forecastPeriod).DateTimeRegions.First() })
+                .OrderBy(item => item.firstRegion.Begin)
+                .ThenBy(item => item.firstRegion.End)
+                .Select(item => item.result)
                 .ToArray();
         }
     }
