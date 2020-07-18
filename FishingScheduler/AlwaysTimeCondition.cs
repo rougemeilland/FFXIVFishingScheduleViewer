@@ -1,7 +1,7 @@
 ﻿namespace FishingScheduler
 {
     class AlwaysTimeCondition
-        : ITimeCondition
+        : ITimeFishingConditionElement
     {
         public double DifficultyValue => 1.0;
 

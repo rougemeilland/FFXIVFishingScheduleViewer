@@ -1,7 +1,7 @@
 ﻿namespace FishingScheduler
 {
     class AnyWeatherCondition
-        : IWeatherCondition
+        : IWeatherFishingConditionElement
     {
         public double DifficultyValue => 1.0;
 

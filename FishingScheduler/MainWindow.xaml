@@ -8,14 +8,14 @@
         Title="Fishing Scheduler">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="File(_F)">
-                <MenuItem Header="Option(_O)" Command="{Binding Path=OptionCommand}" />
+            <MenuItem Header="{Binding Path=GUIText[Menu.File]}">
+                <MenuItem Header="{Binding Path=GUIText[Menu.Option], Mode=OneWay}" Command="{Binding Path=OptionCommand}" />
                 <Separator/>
-                <MenuItem Header="Exit(_X)" InputGestureText="ALT+F4" Command="{Binding Path=ExitCommand}"/>
+                <MenuItem Header="{Binding Path=GUIText[Menu.Exit]}" InputGestureText="ALT+F4" Command="{Binding Path=ExitCommand}"/>
             </MenuItem>
         </Menu>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="5">
-            <TextBlock Text="Current time:" Margin="0,0,5,0"/>
+            <TextBlock Text="{Binding Path=GUIText[Label.CurrentTime], Mode=OneWay}" Margin="0,0,5,0"/>
             <TextBlock Text="ET "/>
             <TextBlock Name="CurrentEorzeaDateTime" Margin="0,0,5,0"/>
             <TextBlock Text="( LT "/>
@@ -23,7 +23,7 @@
             <TextBlock Text=" )"/>
         </StackPanel>
         <TabControl>
-            <TabItem Header="Forecast weather" IsSelected="{Binding Path=IsSelectedForecastWeatherTab, Mode=TwoWay}">
+            <TabItem Header="{Binding Path=GUIText[Label.ForecastWeather]}" IsSelected="{Binding Path=IsSelectedForecastWeatherTab, Mode=TwoWay}">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <StackPanel Orientation="Vertical">
                         <local:WeathersOfAreaGroupUserControl Margin="10" DataContext="{Binding Path=WeatherListOfLaNoscea}"/>
@@ -40,11 +40,9 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="Fishing chances" IsSelected="{Binding Path=IsSelectedChanceTab, Mode=TwoWay}">
+            <TabItem Header="{Binding Path=GUIText[Label.FishingChanceList]}" IsSelected="{Binding Path=IsSelectedChanceTab, Mode=TwoWay}">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <Grid Name="FishChanceGrid"/>
-                    </StackPanel>
+                    <local:FishChanceListUserControl x:Name="FishChanceGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </ScrollViewer>
             </TabItem>
         </TabControl>

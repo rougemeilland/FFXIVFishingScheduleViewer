@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="FishingScheduler.FishSettingOfAreaUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FishingScheduler"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <GroupBox Header="{Binding Path=AreaName}" BorderBrush="#222222">
+        <DockPanel Margin="25,5,5,5">
+            <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Right" Orientation="Vertical">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=HasManyFish}" Value="false">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=HasManyFish}" Value="true">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <Button Content="{Binding Path=CheckAllFishButtonLabel}" Command="{Binding Path=CheckAllFishCommand}" Margin="5" Padding="5" HorizontalContentAlignment="Stretch" />
+                <Button Content="{Binding Path=UncheckAllFishButtonLabel}" Command="{Binding Path=UncheckAllFishCommand}" Margin="5" Padding="5" HorizontalContentAlignment="Stretch" />
+            </StackPanel>
+            <ItemsControl ItemsSource="{Binding Path=FishingSpots}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:FishSettingOfFishingSpotUserControl Margin="5"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DockPanel>
+    </GroupBox>
+</UserControl>

@@ -46,7 +46,7 @@ namespace FishingScheduler
                 else
                 {
                     var end = region.End - EorzeaTimeSpan.FromSeconds(1);
-                    return string.Format("～{0:D02}:{1:D02}", end.Hour, end.Minute);
+                    return string.Format("- {0:D02}:{1:D02}", end.Hour, end.Minute);
                 }
             }
             else
@@ -54,13 +54,13 @@ namespace FishingScheduler
                 if (region.End >= wholeRegion.End)
                 {
                     var start = region.Begin;
-                    return string.Format("{0:D02}:{1:D02}～", start.Hour, start.Minute);
+                    return string.Format("{0:D02}:{1:D02} -", start.Hour, start.Minute);
                 }
                 else
                 {
                     var start = region.Begin;
                     var end = region.End - EorzeaTimeSpan.FromSeconds(1);
-                    return string.Format("{0:D02}:{1:D02}～{2:D02}:{3:D02}", start.Hour, start.Minute, end.Hour, end.Minute);
+                    return string.Format("{0:D02}:{1:D02} - {2:D02}:{3:D02}", start.Hour, start.Minute, end.Hour, end.Minute);
                 }
             }
         }
@@ -74,7 +74,7 @@ namespace FishingScheduler
                 else
                 {
                     var end = region.End.ToEarthDateTime().ToLocalTime() - TimeSpan.FromSeconds(1);
-                    return string.Format("～{0:D02}:{1:D02}:{2:D02}", end.Hour, end.Minute, end.Second);
+                    return string.Format("- {0:D02}:{1:D02}:{2:D02}", end.Hour, end.Minute, end.Second);
                 }
             }
             else
@@ -82,13 +82,13 @@ namespace FishingScheduler
                 if (region.End >= wholeRegion.End)
                 {
                     var start = region.Begin.ToEarthDateTime().ToLocalTime();
-                    return string.Format("{0:D02}:{1:D02}:{2:D02}～", start.Hour, start.Minute, start.Second);
+                    return string.Format("{0:D02}:{1:D02}:{2:D02} -", start.Hour, start.Minute, start.Second);
                 }
                 else
                 {
                     var start = region.Begin.ToEarthDateTime().ToLocalTime();
                     var end = region.End.ToEarthDateTime().ToLocalTime() - TimeSpan.FromSeconds(1);
-                    return string.Format("{0:D02}:{1:D02}:{2:D02}～{3:D02}:{4:D02}:{5:D02}", start.Hour, start.Minute, start.Second, end.Hour, end.Minute, end.Second);
+                    return string.Format("{0:D02}:{1:D02}:{2:D02} - {3:D02}:{4:D02}:{5:D02}", start.Hour, start.Minute, start.Second, end.Hour, end.Minute, end.Second);
                 }
             }
         }

@@ -3,39 +3,39 @@
 namespace FishingScheduler
 {
     class AreaGroup
+        : IGameDataObject
     {
         private static int _serialNumber = 0;
-        private KeyValueCollection<string, Area> _areas;
+        private TranslationTextId _nameId;
 
-        public AreaGroup(string name)
+        public AreaGroup(string areaGroupId)
         {
             Order = _serialNumber++;
-            AreaGroupName = name;
-            _areas = new KeyValueCollection<string, Area>();
+            Id = new GameDataObjectId(GameDataObjectCategory.AreaGroup, areaGroupId);
+            _nameId = new TranslationTextId(TranslationCategory.AreaGroup, areaGroupId);
+            Areas = new AreaCollection();
         }
 
         public int Order { get; }
+        public GameDataObjectId Id { get; }
+        public string Name => Translate.Instance[_nameId];
+        public AreaCollection Areas { get; }
 
-        public string AreaGroupName { get; }
-
-        public IKeyValueCollection<string, Area> Areas => _areas;
-
-        public void AddArea(Area area)
+        public IEnumerable<string> CheckTranslation()
         {
-            _areas.Add(area.AreaName, area);
+            return Translate.Instance.CheckTranslation(_nameId);
         }
 
         public override bool Equals(object o)
         {
             if (o == null || GetType() != o.GetType())
                 return false;
-            return AreaGroupName.Equals(((AreaGroup)o).AreaGroupName);
+            return Id.Equals(((AreaGroup)o).Id);
         }
 
         public override int GetHashCode()
         {
-            return AreaGroupName.GetHashCode();
+            return Id.GetHashCode();
         }
-
     }
 }

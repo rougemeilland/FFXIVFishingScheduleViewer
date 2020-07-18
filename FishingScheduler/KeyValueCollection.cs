@@ -3,21 +3,22 @@ using System.Collections.Generic;
 
 namespace FishingScheduler
 {
-    class KeyValueCollection<KEY_T, VALUE_T>
-        : IKeyValueCollection<KEY_T, VALUE_T>
+    class KeyValueCollection<VALUE_T>
+        : IKeyValueCollection<VALUE_T>
+        where VALUE_T: IGameDataObject
     {
         private ICollection<VALUE_T> _list;
-        private IDictionary<KEY_T, VALUE_T> _dic;
+        private IDictionary<GameDataObjectId, VALUE_T> _dic;
 
         public KeyValueCollection()
         {
             _list = new List<VALUE_T>();
-            _dic = new Dictionary<KEY_T, VALUE_T>();
+            _dic = new Dictionary<GameDataObjectId, VALUE_T>();
         }
 
-        public void Add(KEY_T key, VALUE_T value)
+        public void Add(VALUE_T value)
         {
-            _dic.Add(key, value);
+            _dic.Add(value.Id, value);
             _list.Add(value);
         }
 
@@ -31,7 +32,7 @@ namespace FishingScheduler
             return ((IEnumerable)_list).GetEnumerator();
         }
 
-        public VALUE_T this[KEY_T key]
+        public VALUE_T this[GameDataObjectId key]
         {
             get
             {

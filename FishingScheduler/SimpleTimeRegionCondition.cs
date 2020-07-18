@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace FishingScheduler
 {
     class SimpleTimeRegionCondition
-        : ITimeCondition
+        : ITimeFishingConditionElement
     {
         private int _hourOfStart;
         private int _hours;
@@ -20,12 +20,11 @@ namespace FishingScheduler
             if (_hours < 0)
                 _hours += 24;
             DifficultyValue = 24.0 / _hours;
-            Description = string.Format("ET {0:D02}:00～{1:D02}:59", _hourOfStart, (_hourOfStart + _hours - 1) % 24);
         }
 
         public double DifficultyValue { get; }
 
-        public string Description { get; }
+        public string Description => string.Format("ET {0:D02}:00 - {1:D02}:59", _hourOfStart, (_hourOfStart + _hours - 1) % 24);
 
         public EorzeaDateTimeHourRegions FindRegions(EorzeaDateTimeHourRegions wholeRange)
         {

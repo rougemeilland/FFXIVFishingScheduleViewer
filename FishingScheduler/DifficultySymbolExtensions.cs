@@ -26,27 +26,6 @@ namespace FishingScheduler
             }
         }
 
-        public static string GetText(this DifficultySymbol symbol)
-        {
-            switch (symbol)
-            {
-                case DifficultySymbol.E:
-                    return "ありふれている";
-                case DifficultySymbol.D:
-                    return "普通";
-                case DifficultySymbol.C:
-                    return "やや稀";
-                case DifficultySymbol.B:
-                    return "稀";
-                case DifficultySymbol.A:
-                    return "非常に稀";
-                case DifficultySymbol.S:
-                    return "極めて稀";
-                default:
-                    throw new ArgumentException();
-            }
-        }
-
         public static Brush GetBackgroundColor(this DifficultySymbol symbol)
         {
             var converter = new BrushConverter();

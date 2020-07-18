@@ -3,7 +3,7 @@
 namespace FishingScheduler
 {
     class SimpleWeatherCondition
-        : IWeatherCondition
+        : IWeatherFishingConditionElement
     {
         private Area _area;
         private WeatherType _weather;
@@ -13,12 +13,11 @@ namespace FishingScheduler
             _area = area;
             _weather = weather;
             DifficultyValue = 100.0 / _area.GetWeatherPercentage(weather);
-            Description = string.Format("{0}", _weather.GetText());
         }
 
         public double DifficultyValue { get; }
 
-        public string Description { get; }
+        public string Description => string.Format("{0}", _weather.GetText());
 
         public EorzeaDateTimeHourRegions FindRegions(EorzeaDateTimeHourRegions wholeRange)
         {

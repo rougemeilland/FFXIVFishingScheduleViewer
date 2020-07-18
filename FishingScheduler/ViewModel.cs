@@ -1,25 +1,50 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace FishingScheduler
 {
     public abstract class ViewModel
-        : INotifyPropertyChanged
+        : INotifyPropertyChanged, IDisposable
     {
+        private bool _isDisposed;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void UpdateProperty<T>(ref T OldValue, T NewValue, string PropertyName)
+
+        protected ViewModel()
         {
-            if (!OldValue.Equals(NewValue))
-            {
-                OldValue = NewValue;
-                RaisePropertyChangedEvent(PropertyName);
-            }
+
         }
 
         protected void RaisePropertyChangedEvent(string PropertyName)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
+            try
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
+
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_isDisposed)
+            {
+                if (disposing)
+                {
+                    // マネージドリソースの解放
+                }
+
+                // アンマネージドリソースの解放
+                _isDisposed = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

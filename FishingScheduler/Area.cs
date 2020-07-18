@@ -1,20 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FishingScheduler
 {
     class Area
+        : IGameDataObject
     {
         private static int _serialNumber = 0;
-        private KeyValueCollection<string, FishingGround> _fishingGrounds;
+        private TranslationTextId _nameId;
         private WeatherPercentageOfArea[] _percentageOfWeather;
 
-        public Area(AreaGroup areaGroup, string areaName, WeatherPercentageOfArea[] percentageOfWeather)
+        public Area(AreaGroup areaGroup, string areaId, WeatherPercentageOfArea[] percentageOfWeather)
         {
             Order = _serialNumber++;
             AreaGroup = areaGroup;
-            AreaName = areaName;
-            _fishingGrounds = new KeyValueCollection<string, FishingGround>();
+            Id = new GameDataObjectId(GameDataObjectCategory.Area, areaId);
+            _nameId = new TranslationTextId(TranslationCategory.Area, areaId);
+            FishingSpots = new FishingSpotCollection();
             _percentageOfWeather = percentageOfWeather.ToArray();
             if (_percentageOfWeather.Sum(item => item.Percentage) != 100)
                 throw new Exception();
@@ -24,14 +27,9 @@ namespace FishingScheduler
 
         public AreaGroup AreaGroup { get; }
 
-        public string AreaName { get; }
-
-        public IKeyValueCollection<string, FishingGround> FishingGrounds => _fishingGrounds;
-
-        public void AddFishingGroup(FishingGround fishingGround)
-        {
-            _fishingGrounds.Add(fishingGround.FishingGroundName, fishingGround);
-        }
+        public GameDataObjectId Id { get; }
+        public string Name => Translate.Instance[_nameId];
+        public FishingSpotCollection FishingSpots { get; }
 
         public WeatherType ForecastWeather(DateTime time)
         {
@@ -66,16 +64,21 @@ namespace FishingScheduler
             return _percentageOfWeather.Where(item => (item.Weather & weathers) != WeatherType.None).Sum(item => item.Percentage);
         }
 
+        public IEnumerable<string> CheckTranslation()
+        {
+            return Translate.Instance.CheckTranslation(_nameId);
+        }
+
         public override bool Equals(object o)
         {
             if (o == null || GetType() != o.GetType())
                 return false;
-            return AreaName.Equals(((Area)o).AreaName);
+            return Id.Equals(((Area)o).Id);
         }
 
         public override int GetHashCode()
         {
-            return AreaName.GetHashCode();
+            return Id.GetHashCode();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace FishingScheduler
 {
-    interface IWeatherCondition
+    interface IFishingConditionElement
     {
         double DifficultyValue { get; }
         string Description { get; }

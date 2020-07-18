@@ -2,9 +2,9 @@
 
 namespace FishingScheduler
 {
-    interface IKeyValueCollection<KEY_T, VALUE_T>
+    interface IKeyValueCollection<VALUE_T>
         : IEnumerable<VALUE_T>
     {
-        VALUE_T this[KEY_T key] { get; }
+        VALUE_T this[GameDataObjectId key] { get; }
     }
 }
