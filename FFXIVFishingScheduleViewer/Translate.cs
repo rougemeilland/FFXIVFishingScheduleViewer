@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace FFXIVFishingScheduleViewer
@@ -10139,18 +10138,7 @@ namespace FFXIVFishingScheduleViewer
                 throw new Exception(string.Format("duplicated: {0}", string.Join(", ", duplicated)));
 
             _translateTable = source.ToDictionary(item => item.id, item => item.text);
-            _lang = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
-            switch (_lang)
-            {
-                case "ja":
-                case "en":
-                case "fr":
-                case "de":
-                    break;
-                default:
-                    _lang = "en";
-                    break;
-            }
+            _lang = "en";
         }
 
         public static Translate Instance { get; }

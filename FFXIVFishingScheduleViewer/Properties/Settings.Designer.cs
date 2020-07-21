@@ -145,7 +145,7 @@ namespace FFXIVFishingScheduleViewer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("en")]
+        [global::System.Configuration.DefaultSettingValueAttribute("*")]
         public string UserLanguage {
             get {
                 return ((string)(this["UserLanguage"]));

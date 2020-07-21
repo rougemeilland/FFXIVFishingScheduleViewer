@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace FFXIVFishingScheduleViewer
@@ -49,6 +50,23 @@ namespace FFXIVFishingScheduleViewer
                 .Where(columns => columns.Length == 2)
                 .Select(columns => new { name = columns[0].SimpleDecode(), text = columns[1].SimpleDecode() })
                 .ToDictionary(item => item.name, item => item.text);
+            if (Properties.Settings.Default.UserLanguage == "*")
+            {
+                var lang = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
+                switch (lang)
+                {
+                    case "ja":
+                    case "en":
+                    case "fr":
+                    case "de":
+                        break;
+                    default:
+                        lang = "en";
+                        break;
+                }
+                Properties.Settings.Default.UserLanguage = lang;
+                Properties.Settings.Default.Save();
+            }
             Translate.Instance.SetLanguage(Properties.Settings.Default.UserLanguage);
         }
 
