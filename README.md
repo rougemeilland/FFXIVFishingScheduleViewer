@@ -1,4 +1,4 @@
-# Fishing Schedule Viewer
+# FFXIV Fishing Schedule Viewer
 
 Final Fantasy XIV でのゲーム内の天候の変化を予測し、天候や時間帯に依存する魚の出現時刻をわかりやすく表示します。
 
@@ -14,13 +14,16 @@ Final Fantasy XIV でのゲーム内の天候の変化を予測し、天候や時間帯に依存する魚の出
 
 ## 【主な機能】
 
-- 地域毎の天気予報の表示ができます。現在から一定期間(1日間/3日間/7日間のいずれかに設定可能)の天候が表示されます。更に、8時間前の天候も表示されます。
-- ユーザが指定した魚を釣ることができる時間帯と天候の条件がいつ成立するかを図で表示します。
+- 地域毎の天気予報が表示されます。表示する期間は現在から最大で7日(エオルゼア時間)で、更に8時間前の天候も表示されます。
+- ユーザが指定した魚を釣ることができる時間帯と天候の条件がいつ成立するかグラフで表示されます。
+- 本アプリケーションで対応している魚は以下の通りです。
+    -  Final Fantasy XIV patch 5.2 までで実装されており、かつ
+    -  天候または時間帯に条件のあるすべての魚。
 - 複数の言語に対応しています。現在対応済みの言語は、日本語/英語/フランス語/ドイツ語です。
 
 
 ## 【Final Fantasy XIV のバージョンについて】
-Final Fantasy XIV パッチ 5.2 に対応しています。
+Final Fantasy XIV patch 5.2 に対応しています。
 
 
 ## 【必要なもの】
@@ -29,16 +32,26 @@ Final Fantasy XIV パッチ 5.2 に対応しています。
 * .NET Framework 4.7.2
 
 
-## 【インストールの方法】
+## 【インストール/アンインストールについて】
 
-1. [Microsoftのサイト](https://github.com/rougemeilland/FishingScheduler/releases)より .NET Framework 4.7.2 をダウンロードしてインストールしてください。
-2. [本アプリケーションの公開場所](https://github.com/rougemeilland/FishingScheduler/releases)から最新版の.zipファイルをダウンロードして、解凍し、適当なフォルダにコピーしてください。
+### インストールの方法
+
+1. 以下の手順で`.NET Framework 4.7.2`をインストールしてください。
+    1. [Microsoftのサイト](https://dotnet.microsoft.com/download/dotnet-framework/net472)で`.NET Framework 4.7.2 Runtime`を選択してダウンロードをしてください。
+    2. ダウンロードしたファイルを実行してください。
+2. 以下の手順で`FFXIV Fishing Schedule Viewer`をインストールしてください。
+    1. [本アプリケーションの公開場所](https://github.com/rougemeilland/FFXIVFishingScheduleViewer/releases)から最新版の.zipファイルをダウンロードしてください。
+    2. ダウンロードした.zipファイルを解凍して、適当なフォルダにコピーしてください。
+
+### アンインストールの方法
+
+1. `FFXIV Fishing Schedule Viewer`をコピーしたフォルダを、配下のファイルごと削除してください。
 
 ## 【使い方】
 
 ### 起動方法
 
-.zipファイルを解凍したフォルダの FishingScheduleViewer.exe を起動します。
+.zipファイルを解凍したフォルダの FFXIVFishingScheduleViewer.exe を起動します。
 
 ### 起動した後に最初にすること
 
@@ -60,7 +73,13 @@ Final Fantasy XIV パッチ 5.2 に対応しています。
 - 魚の表示を右クリックすると、その魚のメモを編集したり、「釣りチャンス一覧」画面からその魚を表示しないようにしたりすることができます。
 
 ### メモの形式について
-メモはお好みで自由に書き換えてもらって構いませんが、最初に設定されている各魚のメモについてわかりにくい部分もあると思いますので、以下に説明します。
+それぞれの魚に最初に設定されているメモは表示内容のコンパクトさを重視して
+かなり省略した表記になっています。
+その中で特にわかりにくいと思われる部分の読み方を
+以下に説明します。
+
+なお、メモはユーザが自由に編集可能であり、必ずしもこれらの表記方法に従って編集する必要はありません。
+
 - ! (びっくりマーク/エクスクラメーションマーク)は、その魚の引きの強さです。魚がかかった時にプレイヤーキャラクターの頭上に表示されるやつです。
   -  ! は弱震 (弱い引き)
   -  !! は強震 (強い引き)
@@ -81,7 +100,7 @@ Final Fantasy XIV パッチ 5.2 に対応しています。
     激震がきたらメガオクトパスが釣れる(可能性がある)
 ```
 
-- ペーシェンスを使っている場合、特に断りがない限り、フッキングは基本的には以下のようにしてください。
+- ペーシェンスを使う場合のフッキングは、基本的に以下のものを想定しています。これ以外のフッキングが必要な場合はメモにその旨追記してあります。
   - ! (弱震) の場合はプレシジョンフッキング
   - !! (強震) の場合はストロングフッキング
   - !!! (激震) の場合はストロングフッキング
@@ -99,4 +118,4 @@ Final Fantasy XIV パッチ 5.2 に対応しています。
 
 ## 【ライセンス】
 
-"Fishing Schedule Viewer" is under [MIT license](https://raw.githubusercontent.com/rougemeilland/FishingScheduler/master/LICENSE).
+"FFXIV Fishing Schedule Viewer" is under [MIT license](https://raw.githubusercontent.com/rougemeilland/FFXIVFishingScheduleViewer/master/LICENSE).
