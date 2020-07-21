@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FishingScheduler"
         mc:Ignorable="d"
-        Title="Fishing Scheduler">
+        Title="Fishing Schedule Viewer">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="{Binding Path=GUIText[Menu.File]}">

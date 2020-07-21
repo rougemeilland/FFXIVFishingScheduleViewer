@@ -6,7 +6,7 @@
         ResizeMode="NoResize"
         xmlns:local="clr-namespace:FishingScheduler"
         mc:Ignorable="d"
-        Title="Option - Fishing Scheduler"
+        Title="Option - Fishing Schedule Viewer"
         WindowStartupLocation="CenterOwner"
         Width="640"
         Height="640"
