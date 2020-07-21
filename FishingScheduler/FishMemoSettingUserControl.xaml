@@ -25,9 +25,7 @@
                 <Button Content="{Binding Path=GUIText[Label.EditMemo]}" VerticalAlignment="Center" Command="{Binding Path=EditMemoCommand}" Margin="5" Padding="5" />
             </StackPanel>
             <Border BorderBrush="#222222" BorderThickness="1" Margin="15,5,5,5" HorizontalAlignment="Stretch" >
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
-                    <TextBlock Text="{Binding Path=Memo}" Margin="5"/>
-                </ScrollViewer>
+                <TextBlock Text="{Binding Path=Memo}" Margin="5" TextWrapping="Wrap"/>
             </Border>
         </DockPanel>
         <DockPanel>
@@ -51,9 +49,7 @@
                 </StackPanel>
             </StackPanel>
             <Border BorderBrush="#222222" BorderThickness="1" Margin="15,5,5,5" HorizontalAlignment="Stretch" >
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
-                    <TextBox Text="{Binding Path=EdittingMemo, Mode=TwoWay}" Margin="5" MinLines="5" />
-                </ScrollViewer>
+                <TextBox Text="{Binding Path=EdittingMemo, Mode=TwoWay}" Margin="5" MinLines="5" TextWrapping="NoWrap" />
             </Border>
         </DockPanel>
     </Grid>

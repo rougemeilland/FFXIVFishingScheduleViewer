@@ -42,7 +42,7 @@
             </TabItem>
             <TabItem Header="{Binding Path=GUIText[Label.FishingChanceList]}" IsSelected="{Binding Path=IsSelectedChanceTab, Mode=TwoWay}">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <local:FishChanceListUserControl x:Name="FishChanceGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <local:FishChanceListUserControl x:Name="FishChanceGrid" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
                 </ScrollViewer>
             </TabItem>
         </TabControl>

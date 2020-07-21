@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -62,6 +63,11 @@ namespace FishingScheduler
         public int GetWeatherPercentage(WeatherType weathers)
         {
             return _percentageOfWeather.Where(item => (item.Weather & weathers) != WeatherType.None).Sum(item => item.Percentage);
+        }
+
+        public bool ContainsWeather(WeatherType weather)
+        {
+            return _percentageOfWeather.Any(item => (item.Weather & weather) != WeatherType.None);
         }
 
         public IEnumerable<string> CheckTranslation()

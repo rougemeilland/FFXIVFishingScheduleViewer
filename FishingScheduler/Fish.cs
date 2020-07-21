@@ -19,135 +19,150 @@ namespace FishingScheduler
             public string RequiredFishName { get; set; }
         }
 
-        private static Regex _直釣り省略パターン = new Regex(@"^(\((?<requires>(要|天候不問|時間帯不問)[^\)]*)\)\s*)?(\((?<hooking>(スト|プレ))\))?$", RegexOptions.Compiled);
-        private static Regex _直釣りパターン = new Regex(@"^(\((?<requires>(要|天候不問|時間帯不問)[^\)]*)\)\s*)?(?<bait>[^\(\)⇒]+)⇒(\((?<hooking>(スト|プレ))\))?$", RegexOptions.Compiled);
-        private static Regex _泳がせ釣りパターン = new Regex(@"^(\((?<requires>(要|天候不問|時間帯不問)[^\)]*)\)\s*)?(?<bait1>[^\(\)⇒]+)⇒(\((?<hooking1>(スト|プレ))\))?(?<bait2>[^\(\)⇒]+)⇒(\((?<hooking2>(スト|プレ))\))?$", RegexOptions.Compiled);
-        private static Regex _2段泳がせ釣りパターン = new Regex(@"^(\((?<requires>(要|天候不問|時間帯不問)[^\)]*)\)\s*)?(?<bait1>[^\(\)⇒]+)⇒(\((?<hooking1>(スト|プレ))\))?(?<bait2>[^\(\)⇒]+)⇒(\((?<hooking2>(スト|プレ))\))?(?<bait3>[^\(\)⇒]+)⇒(\((?<hooking3>(スト|プレ))\))?$", RegexOptions.Compiled);
-        private static Regex _3段泳がせ釣りパターン = new Regex(@"^(\((?<requires>(要|天候不問|時間帯不問)[^\)]*)\)\s*)?(?<bait1>[^\(\)⇒]+)⇒(\((?<hooking1>(スト|プレ))\))?(?<bait2>[^\(\)⇒]+)⇒(\((?<hooking2>(スト|プレ))\))?(?<bait3>[^\(\)⇒]+)⇒(\((?<hooking3>(スト|プレ))\))?(?<bait4>[^\(\)⇒]+)⇒(\((?<hooking4>(スト|プレ))\))?$", RegexOptions.Compiled);
+        private class MemoLine
+        {
+            public MemoLine()
+            {
+                Text = null;
+                TranslationIdOfBait = null;
+            }
+            public string Text { get; set; }
+            public TranslationTextId TranslationIdOfBait { get; set; }
+        }
+
+        //private static Regex _直釣り省略パターン = new Regex(@"^(\((?<requires>(要|天候不問|時間帯不問)[^\)]*)\) *)?(\((?<atari>!{1,3})\))?$", RegexOptions.Compiled);
+        private static Regex _直釣りパターン = new Regex(@"^(\((?<requires>(要|天候不問|時間帯不問)[^\)]*)\) *)?(?<bait>[^\(\)⇒]+)⇒\((?<atari>!{1,3}) *(?<hooking>(スト|プレ))?\)$", RegexOptions.Compiled);
+        private static Regex _泳がせ釣りパターン = new Regex(@"^(\((?<requires>(要|天候不問|時間帯不問)[^\)]*)\) *)?(?<bait1>[^\(\)⇒]+)⇒\((?<atari1>!{1,3}) *(?<hooking1>(スト|プレ))\)(?<bait2>[^\(\)⇒]+)HQ⇒\((?<atari2>!{1,3}) *(?<hooking2>(スト|プレ))\)$", RegexOptions.Compiled);
+        private static Regex _2段泳がせ釣りパターン = new Regex(@"^(\((?<requires>(要|天候不問|時間帯不問)[^\)]*)\) *)?(?<bait1>[^\(\)⇒]+)⇒\((?<atari1>!{1,3}) *(?<hooking1>(スト|プレ))\)(?<bait2>[^\(\)⇒]+)HQ⇒\((?<atari2>!{1,3}) *(?<hooking2>(スト|プレ))\)(?<bait3>[^\(\)⇒]+)HQ⇒\((?<atari3>!{1,3}) *(?<hooking3>(スト|プレ))\)$", RegexOptions.Compiled);
+        private static Regex _3段泳がせ釣りパターン = new Regex(@"^(\((?<requires>(要|天候不問|時間帯不問)[^\)]*)\) *)?(?<bait1>[^\(\)⇒]+)⇒\((?<atari1>!{1,3}) *(?<hooking1>(スト|プレ))\)(?<bait2>[^\(\)⇒]+)HQ⇒\((?<atari2>!{1,3}) *(?<hooking2>(スト|プレ))\)(?<bait3>[^\(\)⇒]+)HQ⇒\((?<atari3>!{1,3}) *(?<hooking3>(スト|プレ))\)(?<bait4>[^\(\)⇒]+)HQ⇒\((?<atari4>!{1,3}) *(?<hooking4>(スト|プレ))\)?$", RegexOptions.Compiled);
         private static Regex _トレードリリース推奨パターン = new Regex(@"^※(?<fish>.*)が釣れたらトレードリリース$", RegexOptions.Compiled);
-        private static Regex _漁師の直感条件パターン = new Regex(@"^要\s*(?<fish>[^× ]+)×(?<count>[0-9]+)$", RegexOptions.Compiled);
+        private static Regex _漁師の直感条件パターン = new Regex(@"^要 *(?<fish>[^× ]+)×(?<count>[0-9]+)$", RegexOptions.Compiled);
         private static Regex _ET時間帯パターン = new Regex(@"^ET ?(?<fromhour>[0-9]+):(?<fromminute>[0-9]+) ?[-～] ?(?<tohour>[0-9]+):(?<tominute>[0-9]+)$", RegexOptions.Compiled);
         private static Regex _天候移ろいパターン = new Regex(@"^(?<before>[^/⇒]+(/[^/⇒]+)*)⇒(?<after>[^/⇒]+(/[^/⇒]+)*)$", RegexOptions.Compiled);
+        private static TranslationTextId _unknownBaitNameId = new TranslationTextId(TranslationCategory.FishingBait, "??unknown??");
+        private const string _hookingSymbol_弱震 = "!";
+        private const string _hookingSymbol_強震 = "!!";
+        private const string _hookingSymbol_激震 = "!!!";
         private TranslationTextId _nameId;
         private TranslationTextId _memoId;
         private string _memoSource;
 
-        public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, string memo = "")
+        public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, string memo)
             : this(fishId, new[] { fishingBait }, memo, new[] { new FishingCondition(fishingSpot) })
         {
         }
 
-        public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, WeatherType weather, string memo = "")
+        public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, WeatherType weather, string memo)
             : this(fishId, new[] { fishingBait }, memo, new[] { new FishingCondition(fishingSpot, weather) })
         {
         }
 
-        public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, WeatherType weatherBefore, WeatherType weatherAfter, string memo = "")
+        public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
             : this(fishId, new[] { fishingBait }, memo, new[] { new FishingCondition(fishingSpot, weatherBefore, weatherAfter) })
         {
         }
 
-        public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, int hourOfStart, int hourOfEnd, string memo = "")
+        public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, int hourOfStart, int hourOfEnd, string memo)
             : this(fishId, new[] { fishingBait }, memo, new[] { new FishingCondition(fishingSpot, hourOfStart, hourOfEnd) })
         {
         }
 
-        public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, int hourOfStart, int hourOfEnd, WeatherType weather, string memo = "")
+        public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, int hourOfStart, int hourOfEnd, WeatherType weather, string memo)
             : this(fishId, new[] { fishingBait }, memo, new[] { new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weather) })
         {
         }
 
-        public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, int hourOfStart, int hourOfEnd, WeatherType weatherBefore, WeatherType weatherAfter, string memo = "")
+        public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, int hourOfStart, int hourOfEnd, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
             : this(fishId, new[] { fishingBait }, memo, new[] { new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weatherBefore, weatherAfter) })
         {
         }
 
-        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, string memo = "")
+        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, string memo)
             : this(fishId, new[] { fishingBait }, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot)))
         {
         }
 
-        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, WeatherType weather, string memo = "")
+        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, WeatherType weather, string memo)
             : this(fishId, new[] { fishingBait }, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, weather)))
         {
         }
 
-        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, WeatherType weatherBefore, WeatherType weatherAfter, string memo = "")
+        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
             : this(fishId, new[] { fishingBait }, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, weatherBefore, weatherAfter)))
         {
         }
 
-        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, int hourOfStart, int hourOfEnd, string memo = "")
+        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, int hourOfStart, int hourOfEnd, string memo)
             : this(fishId, new[] { fishingBait }, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, hourOfStart, hourOfEnd)))
         {
         }
 
-        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, int hourOfStart, int hourOfEnd, WeatherType weather, string memo = "")
+        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, int hourOfStart, int hourOfEnd, WeatherType weather, string memo)
             : this(fishId, new[] { fishingBait }, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weather)))
         {
         }
 
-        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, int hourOfStart, int hourOfEnd, WeatherType weatherBefore, WeatherType weatherAfter, string memo = "")
+        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, int hourOfStart, int hourOfEnd, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
             : this(fishId, new[] { fishingBait }, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weatherBefore, weatherAfter)))
         {
         }
 
-        public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, string memo = "")
+        public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, string memo)
             : this(fishId, fishingBaits, memo, new[] { new FishingCondition(fishingSpot) })
         {
         }
 
-        public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, WeatherType weather, string memo = "")
+        public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, WeatherType weather, string memo)
             : this(fishId, fishingBaits, memo, new[] { new FishingCondition(fishingSpot, weather) })
         {
         }
 
-        public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, WeatherType weatherBefore, WeatherType weatherAfter, string memo = "")
+        public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
             : this(fishId, fishingBaits, memo, new[] { new FishingCondition(fishingSpot, weatherBefore, weatherAfter) })
         {
         }
 
-        public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, string memo = "")
+        public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, string memo)
             : this(fishId, fishingBaits, memo, new[] { new FishingCondition(fishingSpot, hourOfStart, hourOfEnd) })
         {
         }
 
-        public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, WeatherType weather, string memo = "")
+        public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, WeatherType weather, string memo)
             : this(fishId, fishingBaits, memo, new[] { new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weather) })
         {
         }
 
-        public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, WeatherType weatherBefore, WeatherType weatherAfter, string memo = "")
+        public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
             : this(fishId, fishingBaits, memo, new[] { new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weatherBefore, weatherAfter) })
         {
         }
 
-        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, string memo = "")
+        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, string memo)
             : this(fishId, fishingBaits, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot)))
         {
         }
 
-        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, WeatherType weather, string memo = "")
+        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, WeatherType weather, string memo)
             : this(fishId, fishingBaits, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, weather)))
         {
         }
 
-        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, WeatherType weatherBefore, WeatherType weatherAfter, string memo = "")
+        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
             : this(fishId, fishingBaits, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, weatherBefore, weatherAfter)))
         {
         }
 
-        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, string memo = "")
+        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, string memo)
             : this(fishId, fishingBaits, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, hourOfStart, hourOfEnd)))
         {
         }
 
-        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, WeatherType weather, string memo = "")
+        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, WeatherType weather, string memo)
             : this(fishId, fishingBaits, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weather)))
         {
         }
 
-        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, WeatherType weatherBefore, WeatherType weatherAfter, string memo = "")
+        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
             : this(fishId, fishingBaits, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weatherBefore, weatherAfter)))
         {
         }
@@ -160,13 +175,14 @@ namespace FishingScheduler
             _nameId = new TranslationTextId(TranslationCategory.Fish, fishId);
             _memoId = new TranslationTextId(TranslationCategory.FishMemo, fishId);
             FishingSpots = conditions.Select(c => c.FishingSpot).ToArray();
-            FishingBaits = fishingBaits.ToArray();
+            var baits = fishingBaits.ToArray();
+            FishingBaits = baits;
             _memoSource = memo;
             FishingConditions = conditions.ToArray();
             DifficultyValue = conditions.Min(item => item.DifficultyValue);
             DifficultySymbol = DifficultySymbol.None;
             foreach (var lang in Translate.SupportedLanguages)
-                TranslateMemo(lang);
+                TranslateMemo(baits.Length == 1 ? baits[0].NameId : _unknownBaitNameId, lang);
         }
 
         public GameDataObjectId Id { get; }
@@ -238,150 +254,262 @@ namespace FishingScheduler
             return Id.GetHashCode();
         }
 
-        private void TranslateMemo(string lang)
+        private void TranslateMemo(TranslationTextId defaultBaitId, string lang)
         {
+            var memoLines =
+                _memoSource
+                .Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+                .Select(text => TranslateMemoLine(text, defaultBaitId, lang))
+                .ToArray();
+#if DEBUG
+            if (memoLines.Any())
+            {
+                var baitIds = memoLines.Select(line => line.TranslationIdOfBait).Distinct().ToArray();
+                if (baitIds.Length == 1)
+                {
+                    if (FishingBaits.Count() != 1)
+                        throw new Exception();
+                    if (baitIds[0] == _unknownBaitNameId)
+                    {
+                        // NOP
+                    }
+                    else if (baitIds[0] == FishingBaits.Single().NameId)
+                    {
+                        // OK
+                    }
+                    else
+                    {
+                        throw new Exception(
+                            string.Format(
+                                "Bad baits: fish='{0}', baits=[{1}], baitsOfMemo=[{2}]",
+                                Name,
+                                string.Join(", ", FishingBaits.Select(bait => string.Format("'{0}'", bait.Name))),
+                                string.Join(", ", baitIds.Select(id => id.ToString()))));
+                    }
+                }
+                else
+                {
+                    baitIds = baitIds.Where(bait => bait != _unknownBaitNameId).ToArray();
+                    if (baitIds.Length != FishingBaits.Count())
+                    {
+                        throw new Exception(
+                            string.Format(
+                                "Bad baits: fish='{0}', baits=[{1}], baitsOfMemo=[{2}]",
+                                Name,
+                                string.Join(", ", FishingBaits.Select(bait => string.Format("'{0}'", bait.Name))),
+                                string.Join(", ", baitIds.Select(id => id.ToString()))));
+                    }
+                    else if (FishingBaits.Select(bait => bait.NameId).Except(baitIds).Any())
+                    {
+                        throw new Exception(
+                            string.Format(
+                                "Bad baits: fish='{0}', baits=[{1}], baitsOfMemo=[{2}]",
+                                Name,
+                                string.Join(", ", FishingBaits.Select(bait => string.Format("'{0}'", bait.Name))),
+                                string.Join(", ", baitIds.Select(id => id.ToString()))));
+                    }
+                    else
+                    {
+                        // OK
+                    }
+
+                }
+            }
+#endif
             var translatedMemo =
-                string.Join(
-                    "\n",
-                    _memoSource.Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
-                        .Select(s => TranslateMemoLine(s, lang)));
+                string.Join("\n", memoLines.Select(line => line.Text));
             Translate.Instance.Add(_memoId, lang, translatedMemo);
         }
 
-        private string TranslateMemoLine(string text, string lang)
+        private MemoLine TranslateMemoLine(string text, TranslationTextId defaultBaitId, string lang)
         {
             Match m;
+            /*
             if ((m = _直釣り省略パターン.Match(text)).Success)
             {
+                if (defaultBaitId == _unknownBaitNameId)
+                    throw new Exception();
                 var requires = m.Groups["requires"].Success ? TranslateRequirement(m.Groups["requires"].Value, lang) : null;
-                var hooking = m.Groups["hooking"].Success ? TranslateHooking(m.Groups["hooking"].Value, lang) : null;
-                return string.Format(
-                    "{0}{1}",
-                    requires != null ? string.Format("({0})", requires.TranslatedRequirement) : "",
-                    hooking != null ? string.Format("({0})", hooking) : "");
+                var hooking = m.Groups["atari"].Success ? TranslateHooking(m.Groups["atari"].Value, m.Groups["hooking"].Value, lang) : null;
+                if (hooking == null)
+                    throw new Exception();
+                return new MemoLine
+                {
+                    Text =
+                        string.Format(
+                            "{0}{1}⇒{2}{3}",
+                            requires != null ? string.Format("({0})", requires.TranslatedRequirement) : "",
+                            Translate.Instance[defaultBaitId, lang],
+                            hooking != null ? string.Format("({0})", hooking) : ""),
+                    TranslationIdOfBait = _unknownBaitNameId,
+                };
             }
-            else if ((m = _直釣りパターン.Match(text)).Success)
+            else*/ if ((m = _直釣りパターン.Match(text)).Success)
             {
                 var requires = m.Groups["requires"].Success ? TranslateRequirement(m.Groups["requires"].Value, lang) : null;
-                var baitName = Translate.Instance[new TranslationTextId(TranslationCategory.FishingBait, m.Groups["bait"].Value), lang];
-                var hooking = m.Groups["hooking"].Success ? TranslateHooking(m.Groups["hooking"].Value, lang) : null;
-                return string.Format(
-                    "{0}{1}⇒{2}{3}",
-                    requires != null ? string.Format("({0})", requires.TranslatedRequirement) : "",
-                    baitName,
-                    hooking != null ? string.Format("({0})", hooking) : "",
-                    requires != null && requires.RequiredFishName != null ? requires.RequiredFishName : Translate.Instance[_nameId, lang]);
+                var baitId = new TranslationTextId(TranslationCategory.FishingBait, m.Groups["bait"].Value);
+                var baitName = Translate.Instance[baitId, lang];
+                var hooking = TranslateHooking(m.Groups["atari"].Value, m.Groups["hooking"].Value, lang);
+                return new MemoLine
+                {
+                    Text =
+                        string.Format(
+                            "{0}{1}⇒({2}){3}",
+                            requires != null ? string.Format("({0})", requires.TranslatedRequirement) : "",
+                            baitName,
+                            hooking,
+                            requires != null && requires.RequiredFishName != null ? requires.RequiredFishName : Translate.Instance[_nameId, lang]),
+                    TranslationIdOfBait = baitId,
+                };
             }
             else if ((m = _泳がせ釣りパターン.Match(text)).Success)
             {
                 var requires = m.Groups["requires"].Success ? TranslateRequirement(m.Groups["requires"].Value, lang) : null;
-                var bait1Name = Translate.Instance[new TranslationTextId(TranslationCategory.FishingBait, m.Groups["bait1"].Value), lang];
-                var hooking1 = m.Groups["hooking1"].Success ? TranslateHooking(m.Groups["hooking1"].Value, lang) : null;
+                var bait1Id = new TranslationTextId(TranslationCategory.FishingBait, m.Groups["bait1"].Value);
+                var bait1Name = Translate.Instance[bait1Id, lang];
+                var hooking1 = TranslateHooking(m.Groups["atari1"].Value, m.Groups["hooking1"].Value, lang);
                 var bait2Name =
-                    string.Join(
-                        "/",
-                        m.Groups["bait2"].Value.Split('/')
-                        .Select(s => s.EndsWith("HQ") ? s.Substring(0, s.Length - 2) : s)
-                        .Select(s =>
-                            string.Format(
-                                Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "HighQualityItem"), lang],
-                                Translate.Instance[new TranslationTextId(TranslationCategory.Fish, s), lang])));
-                var hooking2 = m.Groups["hooking2"].Success ? TranslateHooking(m.Groups["hooking2"].Value, lang) : null;
-                return string.Format(
-                    "{0}{1}⇒{2}{3}⇒{4}{5}",
-                    requires != null ? string.Format("({0})", requires.TranslatedRequirement) : "",
-                    bait1Name,
-                    hooking1 != null ? string.Format("({0})", hooking1) : "",
-                    bait2Name,
-                    hooking2 != null ? string.Format("({0})", hooking2) : "",
-                    requires != null && requires.RequiredFishName != null ? requires.RequiredFishName : Translate.Instance[_nameId, lang]);
+                    string.Format(
+                        Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "HighQualityItem"), lang],
+                        Translate.Instance[new TranslationTextId(TranslationCategory.Fish, m.Groups["bait2"].Value), lang]);
+                var hooking2 = TranslateHooking(m.Groups["atari2"].Value, m.Groups["hooking2"].Value, lang);
+                return new MemoLine
+                {
+                    Text =
+                        string.Format(
+                            "{0}{1}⇒({2}){3}⇒({4}){5}",
+                            requires != null ? string.Format("({0})", requires.TranslatedRequirement) : "",
+                            bait1Name,
+                            hooking1,
+                            bait2Name,
+                            hooking2,
+                            requires != null && requires.RequiredFishName != null ? requires.RequiredFishName : Translate.Instance[_nameId, lang]),
+                    TranslationIdOfBait = bait1Id,
+                };
             }
             else if ((m = _2段泳がせ釣りパターン.Match(text)).Success)
             {
                 var requires = m.Groups["requires"].Success ? TranslateRequirement(m.Groups["requires"].Value, lang) : null;
-                var bait1Name = Translate.Instance[new TranslationTextId(TranslationCategory.FishingBait, m.Groups["bait1"].Value), lang];
-                var hooking1 = m.Groups["hooking1"].Success ? TranslateHooking(m.Groups["hooking1"].Value, lang) : null;
+                var bait1Id = new TranslationTextId(TranslationCategory.FishingBait, m.Groups["bait1"].Value);
+                var bait1Name = Translate.Instance[bait1Id, lang];
+                var hooking1 = TranslateHooking(m.Groups["atari1"].Value, m.Groups["hooking1"].Value, lang);
                 var bait2Name =
-                    string.Join(
-                        "/",
-                        m.Groups["bait2"].Value.Split('/')
-                        .Select(s => s.EndsWith("HQ") ? s.Substring(0, s.Length - 2) : s)
-                        .Select(s => Translate.Instance[new TranslationTextId(TranslationCategory.Fish, s), lang] + "HQ"));
-                var hooking2 = m.Groups["hooking2"].Success ? TranslateHooking(m.Groups["hooking2"].Value, lang) : null;
+                    string.Format(
+                        Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "HighQualityItem"), lang],
+                        Translate.Instance[new TranslationTextId(TranslationCategory.Fish, m.Groups["bait2"].Value), lang]);
+                var hooking2 = TranslateHooking(m.Groups["atari2"].Value, m.Groups["hooking2"].Value, lang);
                 var bait3Name =
-                    string.Join(
-                        "/",
-                        m.Groups["bait3"].Value.Split('/')
-                        .Select(s => s.EndsWith("HQ") ? s.Substring(0, s.Length - 2) : s)
-                        .Select(s => Translate.Instance[new TranslationTextId(TranslationCategory.Fish, s), lang] + "HQ"));
-                var hooking3 = m.Groups["hooking3"].Success ? TranslateHooking(m.Groups["hooking3"].Value, lang) : null;
-                return string.Format(
-                    "{0}{1}⇒{2}{3}⇒{4}{5}⇒{6}{7}",
-                    requires != null ? string.Format("({0})", requires.TranslatedRequirement) : "",
-                    bait1Name,
-                    hooking1 != null ? string.Format("({0})", hooking1) : "",
-                    bait2Name,
-                    hooking2 != null ? string.Format("({0})", hooking2) : "",
-                    bait3Name,
-                    hooking3 != null ? string.Format("({0})", hooking3) : "",
-                    requires != null && requires.RequiredFishName != null ? requires.RequiredFishName : Translate.Instance[_nameId, lang]);
+                    string.Format(
+                        Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "HighQualityItem"), lang],
+                        Translate.Instance[new TranslationTextId(TranslationCategory.Fish, m.Groups["bait3"].Value), lang]);
+                var hooking3 = TranslateHooking(m.Groups["atari3"].Value, m.Groups["hooking3"].Value, lang);
+                return new MemoLine
+                {
+                    Text =
+                        string.Format(
+                            "{0}{1}⇒({2}){3}⇒({4}){5}⇒({6}){7}",
+                            requires != null ? string.Format("({0})", requires.TranslatedRequirement) : "",
+                            bait1Name,
+                            hooking1,
+                            bait2Name,
+                            hooking2,
+                            bait3Name,
+                            hooking3,
+                            requires != null && requires.RequiredFishName != null ? requires.RequiredFishName : Translate.Instance[_nameId, lang]),
+                    TranslationIdOfBait = bait1Id,
+                };
             }
             else if ((m = _3段泳がせ釣りパターン.Match(text)).Success)
             {
                 var requires = m.Groups["requires"].Success ? TranslateRequirement(m.Groups["requires"].Value, lang) : null;
-                var bait1Name = Translate.Instance[new TranslationTextId(TranslationCategory.FishingBait, m.Groups["bait1"].Value), lang];
-                var hooking1 = m.Groups["hooking1"].Success ? TranslateHooking(m.Groups["hooking1"].Value, lang) : null;
+                var bait1Id = new TranslationTextId(TranslationCategory.FishingBait, m.Groups["bait1"].Value);
+                var bait1Name = Translate.Instance[bait1Id, lang];
+                var hooking1 = TranslateHooking(m.Groups["atari1"].Value, m.Groups["hooking1"].Value, lang);
                 var bait2Name =
-                    string.Join(
-                        "/",
-                        m.Groups["bait2"].Value.Split('/')
-                        .Select(s => s.EndsWith("HQ") ? s.Substring(0, s.Length - 2) : s)
-                        .Select(s => Translate.Instance[new TranslationTextId(TranslationCategory.Fish, s), lang] + "HQ"));
-                var hooking2 = m.Groups["hooking2"].Success ? TranslateHooking(m.Groups["hooking2"].Value, lang) : null;
+                    string.Format(
+                        Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "HighQualityItem"), lang],
+                        Translate.Instance[new TranslationTextId(TranslationCategory.Fish, m.Groups["bait2"].Value), lang]);
+                var hooking2 = TranslateHooking(m.Groups["atari2"].Value, m.Groups["hooking2"].Value, lang);
                 var bait3Name =
-                    string.Join(
-                        "/",
-                        m.Groups["bait3"].Value.Split('/')
-                        .Select(s => s.EndsWith("HQ") ? s.Substring(0, s.Length - 2) : s)
-                        .Select(s => Translate.Instance[new TranslationTextId(TranslationCategory.Fish, s), lang] + "HQ"));
-                var hooking3 = m.Groups["hooking3"].Success ? TranslateHooking(m.Groups["hooking3"].Value, lang) : null;
+                    string.Format(
+                        Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "HighQualityItem"), lang],
+                        Translate.Instance[new TranslationTextId(TranslationCategory.Fish, m.Groups["bait3"].Value), lang]);
+                var hooking3 = TranslateHooking(m.Groups["atari3"].Value, m.Groups["hooking3"].Value, lang);
                 var bait4Name =
-                    string.Join(
-                        "/",
-                        m.Groups["bait4"].Value.Split('/')
-                        .Select(s => s.EndsWith("HQ") ? s.Substring(0, s.Length - 2) : s)
-                        .Select(s => Translate.Instance[new TranslationTextId(TranslationCategory.Fish, s), lang] + "HQ"));
-                var hooking4 = m.Groups["hooking4"].Success ? TranslateHooking(m.Groups["hooking4"].Value, lang) : null;
-                return string.Format(
-                    "{0}{1}⇒{2}{3}⇒{4}{5}⇒{6}{7}⇒{8}{9}",
-                    requires != null ? string.Format("({0})", requires.TranslatedRequirement) : "",
-                    bait1Name,
-                    hooking1 != null ? string.Format("({0})", hooking1) : "",
-                    bait2Name,
-                    hooking2 != null ? string.Format("({0})", hooking2) : "",
-                    bait3Name,
-                    hooking3 != null ? string.Format("({0})", hooking3) : "",
-                    bait4Name,
-                    hooking4 != null ? string.Format("({0})", hooking4) : "",
-                    requires != null && requires.RequiredFishName != null ? requires.RequiredFishName : Translate.Instance[_nameId, lang]);
+                    string.Format(
+                        Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "HighQualityItem"), lang],
+                        Translate.Instance[new TranslationTextId(TranslationCategory.Fish, m.Groups["bait4"].Value), lang]);
+                var hooking4 = TranslateHooking(m.Groups["atari4"].Value, m.Groups["hooking4"].Value, lang);
+                return new MemoLine
+                {
+                    Text =
+                        string.Format(
+                            "{0}{1}⇒({2}){3}⇒({4}){5}⇒({6}){7}⇒({8}){9}",
+                            requires != null ? string.Format("({0})", requires.TranslatedRequirement) : "",
+                            bait1Name,
+                            hooking1,
+                            bait2Name,
+                            hooking2,
+                            bait3Name,
+                            hooking3,
+                            bait4Name,
+                            hooking4,
+                            requires != null && requires.RequiredFishName != null ? requires.RequiredFishName : Translate.Instance[_nameId, lang]),
+                    TranslationIdOfBait = bait1Id,
+                };
             }
             else if ((m = _トレードリリース推奨パターン.Match(text)).Success)
             {
                 var fishName = Translate.Instance[new TranslationTextId(TranslationCategory.Fish, m.Groups["fish"].Value), lang];
-                return string.Format(Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "UseTradeReleaseIf"), lang], fishName);
+                return new MemoLine
+                {
+                    Text = string.Format(Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "UseTradeReleaseIf"), lang], fishName),
+                    TranslationIdOfBait = _unknownBaitNameId,
+                };
             }
             else
-                throw new Exception();
+                throw new Exception(string.Format("Bad memo format. fish='{0}'", _nameId));
         }
 
-        private static string TranslateHooking(string source, string lang)
+        private static string TranslateHooking(string atari, string hooking, string lang)
         {
-            switch (source)
+            switch (atari)
             {
-                case "スト":
-                    return Translate.Instance[new TranslationTextId(TranslationCategory.Action, "ストロングフッキング"), lang];
-                case "プレ":
-                    return Translate.Instance[new TranslationTextId(TranslationCategory.Action, "プレシジョンフッキング"), lang];
+                case "!":
+                    switch (hooking)
+                    {
+                        case "スト":
+                            throw new Exception();
+                        case "プレ":
+                        case "":
+                            return "!";
+                        default:
+                            throw new Exception();
+                    }
+                case "!!":
+                    switch (hooking)
+                    {
+                        case "スト":
+                        case "":
+                            return "!!";
+                        case "プレ":
+                            throw new Exception();
+                        default:
+                            throw new Exception();
+                    }
+                case "!!!":
+                    switch (hooking)
+                    {
+                        case "スト":
+                        case "":
+                            return string.Format("{0}", atari);
+                        case "プレ":
+                            return string.Format("{0} {1}", atari, Translate.Instance[new TranslationTextId(TranslationCategory.Action, "プレシジョンフッキング"), lang]);
+                        default:
+                            throw new Exception();
+                    }
+                case "":
+                    throw new Exception();
                 default:
                     throw new Exception();
             }

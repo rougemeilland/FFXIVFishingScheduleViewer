@@ -15,6 +15,7 @@ namespace FishingScheduler
 
         public GameDataObjectId Id { get; }
         public string Name => Translate.Instance[_nameId];
+        public TranslationTextId NameId => _nameId;
 
         public IEnumerable<string> CheckTranslation()
         {

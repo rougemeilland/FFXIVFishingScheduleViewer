@@ -73,19 +73,6 @@ namespace FishingScheduler
             {
                 case nameof(_dataContext.CurrentTime):
                     UpdateCurrentTimeIndicator();
-                    Task.Run(async () =>
-                    {
-                        var interval = (_dataContext.CurrentTime.ToEorzeaDateTime().GetStartOfMinute() + EorzeaTimeSpan.FromMinutes(1)).ToEarthDateTime() - DateTime.UtcNow;
-                        System.Diagnostics.Debug.WriteLine(string.Format("wait start interval: {0}[sec]", interval.TotalSeconds));
-                        await Task.Delay(interval);
-                        System.Diagnostics.Debug.WriteLine(string.Format("wait end"));
-                        Dispatcher.Invoke(() =>
-                        {
-                            System.Diagnostics.Debug.WriteLine(string.Format("start updating CurrentTime"));
-                            _dataContext.CurrentTime = DateTime.UtcNow;
-                            System.Diagnostics.Debug.WriteLine(string.Format("end updating CurrentTime"));
-                        });
-                    });
                     break;
                 case nameof(_dataContext.FishChanceList):
                 case nameof(_dataContext.FishChanceTimeList):
@@ -469,15 +456,21 @@ namespace FishingScheduler
                         .Where(text => !string.IsNullOrEmpty(text)));
                 Func<string> detailTextBlockFormatter = () =>
                 {
+                    var eorzeaTimeRegion = firstRegionOfChance.FormatEorzeaTimeRegion(forecastWeatherRegion);
+                    var localTimeRegion = firstRegionOfChance.FormatLocalTimeRegion(forecastWeatherRegion);
                     var fishMemo = _dataContext.GetFishMemo(chance.Fish);
                     return string.Format(
-                        "ET {0} ( LT {1} )\n{2}: [{3}]{4}",
-                        firstRegionOfChance.FormatEorzeaTimeRegion(forecastWeatherRegion),
-                        firstRegionOfChance.FormatLocalTimeRegion(forecastWeatherRegion),
+                        "{0}{1}: [{2}]{3}",
+                        eorzeaTimeRegion != "" || localTimeRegion != ""
+                            ? string.Format("ET {0} ( LT {1} )\n", eorzeaTimeRegion, localTimeRegion)
+                            : "",
                         GUITextTranslate.Instance["Label.Conditions"],
-                        string.IsNullOrEmpty(conditionText) ? GUITextTranslate.Instance["Label.None"] : conditionText,
-                        string.IsNullOrEmpty(fishMemo) ? "" :
-                            string.Format("\n{0}\n{1}",
+                        string.IsNullOrEmpty(conditionText)
+                            ? GUITextTranslate.Instance["Label.None"]
+                            : conditionText,
+                        string.IsNullOrEmpty(fishMemo)
+                            ? ""
+                            : string.Format("\n{0}\n{1}",
                                 GUITextTranslate.Instance["Label.Memo"],
                                 string.Join("\n",
                                     fishMemo.Split(
@@ -532,12 +525,16 @@ namespace FishingScheduler
                 {
                     var startColumnIndex = (int)(region.Begin - wholeRegion.Begin).EorzeaTimeHours + 2;
                     var columnSpan = (int)region.Span.EorzeaTimeHours;
+                    var eorzeaTimeRegion = region.FormatEorzeaTimeRegion(wholeRegion);
+                    var localTimeRegion = region.FormatLocalTimeRegion(wholeRegion);
                     var toolTipText =
-                        string.Format(
+                        eorzeaTimeRegion != "" && localTimeRegion != ""
+                        ? string.Format(
                             "{0}\nET {1}\nLT {2}",
                             chance.Fish.Name,
                             region.FormatEorzeaTimeRegion(wholeRegion),
-                            region.FormatLocalTimeRegion(wholeRegion));
+                            region.FormatLocalTimeRegion(wholeRegion))
+                        : null;
                     var c = new Border
                     {
                         ToolTip = toolTipText,

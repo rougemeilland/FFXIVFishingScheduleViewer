@@ -7,12 +7,12 @@ using System.Windows;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("Fishing Scheduler")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Fishing Schedule Viewer")]
+[assembly: AssemblyDescription("It is an application that displays the time when you can fish with FFXIV.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Palmtree Software")]
-[assembly: AssemblyProduct("Fishing Scheduler")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyProduct("Fishing Schedule Viewer")]
+[assembly: AssemblyCopyright("© 2020 Palmtree Software.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

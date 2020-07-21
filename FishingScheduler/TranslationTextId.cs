@@ -13,15 +13,15 @@
 
         public static bool operator == (TranslationTextId x, TranslationTextId y)
         {
-            if (x == null)
-                return y == null;
+            if ((object)x == null)
+                return (object)y == null;
             return x.Equals(y);
         }
 
         public static bool operator !=(TranslationTextId x, TranslationTextId y)
         {
-            if (x == null)
-                return y != null;
+            if ((object)x == null)
+                return (object)y != null;
             return !x.Equals(y);
         }
 

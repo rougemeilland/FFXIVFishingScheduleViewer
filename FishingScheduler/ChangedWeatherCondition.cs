@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FishingScheduler
 {
@@ -15,6 +17,13 @@ namespace FishingScheduler
             _before = before;
             _after = after;
             DifficultyValue = 100.0 / _area.GetWeatherPercentage(_before) * 100.0 / _area.GetWeatherPercentage(_after);
+
+            // 与えられた条件の天候がそのエリアで発生しうるかどうか検証する
+            if (Enum.GetValues(typeof(WeatherType))
+                .Cast<WeatherType>()
+                .Where(w => (w & (_before | after)) != WeatherType.None)
+                .Any(w => !area.ContainsWeather(w)))
+                throw new Exception();
         }
 
         public double DifficultyValue { get; }
