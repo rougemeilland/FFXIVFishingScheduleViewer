@@ -1,0 +1,115 @@
+﻿<Window x:Class="FFXIVFishingScheduleViewer.FishDetailWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FFXIVFishingScheduleViewer"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        DataContextChanged="Window_DataContextChanged"
+        FocusManager.FocusedElement="{Binding ElementName=MemoTextBox}">
+    <DockPanel Background="{Binding Path=Background}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Column="0" Grid.Row="0">
+                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=GUIText[Label.DiscoveryDifficulty]}" ToolTip="{Binding Path=GUIText[ToolTip.DiscoveryDifficulty]}" Margin="3"/>
+            </Border>
+            <Border Grid.Column="1" Grid.Row="0">
+                <TextBlock VerticalAlignment="Center" Text="{Binding Path=DiscoveryDifficulty}" ToolTip="{Binding Path=GUIText[ToolTip.DiscoveryDifficulty]}" Margin="3"/>
+            </Border>
+            <Border Grid.Column="0" Grid.Row="1">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Path=GUIText[Label.FishingSpot]}" Margin="3"/>
+                    <TextBlock Text=":" Margin="1,3,3,3"/>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="1" Grid.Row="1">
+                <TextBlock VerticalAlignment="Center" Text="{Binding Path=FishingSpots}" Margin="5"/>
+            </Border>
+            <Border Grid.Column="0" Grid.Row="2">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" ToolTip="{Binding Path=GUIText[ToolTip.FishingBaits]}">
+                    <TextBlock Text="{Binding Path=GUIText[Label.RequiredFishingBaits]}" Margin="3"/>
+                    <TextBlock Text=":" Margin="1,3,3,3"/>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="1" Grid.Row="2">
+                <TextBlock VerticalAlignment="Center" Text="{Binding Path=RequiredFishingBaits}" Margin="5" ToolTip="{Binding Path=GUIText[ToolTip.FishingBaits]}"/>
+            </Border>
+            <Border Grid.Column="0" Grid.Row="3" Margin="5">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=TimeCondition}" Value="">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=GUIText[Label.TimeCondition]}"/>
+            </Border>
+            <Border Grid.Column="1" Grid.Row="3" Margin="5">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=TimeCondition}" Value="">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <TextBlock VerticalAlignment="Center" Text="{Binding Path=TimeCondition}"/>
+            </Border>
+            <Border Grid.Column="0" Grid.Row="4" Margin="5">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=WeatherCondition}" Value="">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=GUIText[Label.WeatherCondition]}"/>
+            </Border>
+            <Border Grid.Column="1" Grid.Row="4" Margin="5">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=WeatherCondition}" Value="">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <TextBlock VerticalAlignment="Center" Text="{Binding Path=WeatherCondition}"/>
+            </Border>
+            <Border Grid.Column="0" Grid.Row="5" Margin="5">
+                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Text="{Binding Path=GUIText[Label.Memo]}"/>
+            </Border>
+            <Border Grid.Column="1" Grid.Row="5" Margin="5">
+                <TextBox x:Name="MemoTextBox" VerticalAlignment="Center" Width="480" Text="{Binding Path=Memo, Mode=TwoWay}" AcceptsReturn="True" MaxLines="5" MinLines="5"/>
+            </Border>
+            <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="6" Margin="5">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Width="70" Content="{Binding Path=GUIText[Label.OK]}" Command="{Binding Path=OKCommand}" Margin="5" Padding="5"/>
+                    <Button Width="70" Content="{Binding Path=GUIText[Label.Cancel]}" Command="{Binding Path=CancelCommand}" Margin="5" Padding="5"/>
+                    <Button Width="70" Content="{Binding Path=GUIText[Label.Reset]}" Command="{Binding Path=ResetCommand}" Margin="25,5,5,5" Padding="5"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Window>

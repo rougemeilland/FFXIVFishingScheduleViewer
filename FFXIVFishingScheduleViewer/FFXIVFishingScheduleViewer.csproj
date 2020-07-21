@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{13B7C0F6-BF56-491A-AA8B-CE7CA5C8F67D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>FFXIVFishingScheduleViewer</RootNamespace>
+    <AssemblyName>FFXIVFishingScheduleViewer</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="AlwaysTimeCondition.cs" />
+    <Compile Include="AnyWeatherCondition.cs" />
+    <Compile Include="Area.cs" />
+    <Compile Include="AreaCollection.cs" />
+    <Compile Include="AreaGroup.cs" />
+    <Compile Include="AreaGroupCollection.cs" />
+    <Compile Include="ChangedWeatherCondition.cs" />
+    <Compile Include="DataContext.cs" />
+    <Compile Include="DifficultySymbolExtensions.cs" />
+    <Compile Include="DifficultySymbol.cs" />
+    <Compile Include="FishChanceListUserControl.xaml.cs">
+      <DependentUpon>FishChanceListUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FishCollection.cs" />
+    <Compile Include="FishDetailViewModel.cs" />
+    <Compile Include="FishDetailWindow.xaml.cs">
+      <DependentUpon>FishDetailWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FishingBaitCollection.cs" />
+    <Compile Include="FishingSpotCollection.cs" />
+    <Compile Include="FishMemoSettingUserControl.xaml.cs">
+      <DependentUpon>FishMemoSettingUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FishSettingOfAreaGroupViewModel.cs" />
+    <Compile Include="FishSettingOfAreaUserControl.xaml.cs">
+      <DependentUpon>FishSettingOfAreaUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FishSettingOfAreaViewModel.cs" />
+    <Compile Include="FishSettingOfFishingSpotUserControl.xaml.cs">
+      <DependentUpon>FishSettingOfFishingSpotUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FishSettingOfFishingSpotViewModel.cs" />
+    <Compile Include="FishSettingViewModel.cs" />
+    <Compile Include="GameDataObjectCategory.cs" />
+    <Compile Include="GameDataObjectCategoryExtensions.cs" />
+    <Compile Include="GridHelpers.cs" />
+    <Compile Include="GUITextTranslate.cs" />
+    <Compile Include="IFishingConditionElement.cs" />
+    <Compile Include="IGameDataObject.cs" />
+    <Compile Include="GameDataObjectId.cs" />
+    <Compile Include="MainWindowTabType.cs" />
+    <Compile Include="OptionWindow.xaml.cs">
+      <DependentUpon>OptionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ISettingProvider.cs" />
+    <Compile Include="SettingProvider.cs" />
+    <Compile Include="SimpleCommand.cs" />
+    <Compile Include="StringExtensions.cs" />
+    <Compile Include="Translate.cs" />
+    <Compile Include="TranslationCategory.cs" />
+    <Compile Include="TranslationCategoryExtensions.cs" />
+    <Compile Include="TranslationTextId.cs" />
+    <Compile Include="ViewModel.cs" />
+    <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="EorzeaDateTime.cs" />
+    <Compile Include="EorzeaDateTimeRegion.cs" />
+    <Compile Include="EorzeaDateTimeHourRegions.cs" />
+    <Compile Include="FishChanceTimeRegions.cs" />
+    <Compile Include="EorzeaTimeSpan.cs" />
+    <Compile Include="Fish.cs" />
+    <Compile Include="FishingBait.cs" />
+    <Compile Include="FishingCondition.cs" />
+    <Compile Include="FishingSpot.cs" />
+    <Compile Include="IKeyValueCollection.cs" />
+    <Compile Include="ITimeFishingConditionElement.cs" />
+    <Compile Include="IWeatherFishingConditionElement.cs" />
+    <Compile Include="KeyValueCollection.cs" />
+    <Compile Include="SimpleTimeRegionCondition.cs" />
+    <Compile Include="SimpleWeatherCondition.cs" />
+    <Compile Include="WeatherListCellViewModel.cs" />
+    <Compile Include="WeatherListViewModel.cs" />
+    <Compile Include="WeatherOfAreaViewModel.cs" />
+    <Compile Include="WeatherPercentageOfArea.cs" />
+    <Compile Include="WeathersOfAreaGroupUserControl.xaml.cs">
+      <DependentUpon>WeathersOfAreaGroupUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WeatherTypeExtensions.cs" />
+    <Compile Include="WeatherType.cs" />
+    <Page Include="FishChanceListUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FishDetailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FishMemoSettingUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FishSettingOfAreaUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FishSettingOfFishingSpotUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="OptionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WeathersOfAreaGroupUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 および x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
