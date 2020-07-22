@@ -12,9 +12,7 @@
         Height="640"
         DataContextChanged="Window_DataContextChanged">
     <DockPanel>
-        <Button Width="100" Margin="5" Click="CloseButton_Click" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
-            <AccessText>_Close</AccessText>
-        </Button>
+        <Button DockPanel.Dock="Bottom" HorizontalAlignment="Center" Content="{Binding Path=GUIText[Label.Close]}" Margin="10" Padding="10,5,10,5" Click="CloseButton_Click"/>
         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Path=GUIText[Label.Language]}" Margin="5" VerticalAlignment="Center"/>

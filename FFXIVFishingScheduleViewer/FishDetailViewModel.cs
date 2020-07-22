@@ -22,7 +22,7 @@ namespace FFXIVFishingScheduleViewer
             GUIText = GUITextTranslate.Instance;
             ResetCommand = new SimpleCommand(p =>
             {
-                Memo = _fish.TranslatedMemo;
+                Memo = _fish.TranslatedMemo.Replace("⇒", "=>");
             });
         }
 

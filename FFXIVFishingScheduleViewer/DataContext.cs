@@ -135,10 +135,12 @@ namespace FFXIVFishingScheduleViewer
                 .ToArray();
             _weatherList = new WeatherListViewModel[11];
             GUIText = GUITextTranslate.Instance;
+            About = new AboutViewModel(_settingProvider);
             UpdatedDateTime = DateTime.UtcNow;
             FishChanceList = new FishChanceTimeRegions[0];
-            OptionCommand = new SimpleCommand(p => OnOptionCommand(this, p));
-            ExitCommand = new SimpleCommand(p => OnExitCommand(this, p));
+            OptionMenuCommand = null;
+            ExitMenuCommand = null;
+            About.AboutMenuCommand = null;
             _settingProvider = settingProvider;
 
             _settingProvider.MainWindowTabSelected += _settingProvider_MainWindowTabSelected;
@@ -201,10 +203,9 @@ namespace FFXIVFishingScheduleViewer
             }
         }
 
-        public ICommand OptionCommand { get; }
-        public ICommand ExitCommand { get; }
-        public event EventHandler<object> OnOptionCommand;
-        public event EventHandler<object> OnExitCommand;
+        public AboutViewModel About { get; set; }
+        public ICommand OptionMenuCommand { get; set; }
+        public ICommand ExitMenuCommand { get; set; }
 
         public bool IsSelectedForecastWeatherTab
         {
@@ -253,6 +254,7 @@ namespace FFXIVFishingScheduleViewer
             {
                 foreach (var item in FishSettingOfWorld)
                     item?.Dispose();
+                About.Dispose();
                 _settingProvider.MainWindowTabSelected -= _settingProvider_MainWindowTabSelected;
                 _settingProvider.UserLanguageChanged -= _settingProvider_UserLanguageChanged;
                 _settingProvider.ForecastWeatherDaysChanged -= _settingProvider_ForecastWeatherDaysChanged;

@@ -30,12 +30,12 @@ namespace FFXIVFishingScheduleViewer
             _isEditMode = false;
             EditMemoCommand = new SimpleCommand(p =>
             {
-                EdittingMemo = Memo;
+                EdittingMemo = Memo.Replace("⇒", "=>");
                 IsEditMode = true;
             });
             SaveMemoCommand = new SimpleCommand(p =>
             {
-                Memo = EdittingMemo;
+                Memo = EdittingMemo.Replace("=>", "⇒");
                 IsEditMode = false;
             });
             CancelMemoCommand = new SimpleCommand(p =>

@@ -31,8 +31,21 @@ namespace FFXIVFishingScheduleViewer
             _settingProvider = new SettingProvider(_fishes);
             _dataContext = new DataContext(Dispatcher, _areaGroups, _fishes, _settingProvider);
             DataContext = _dataContext;
-            _dataContext.OnOptionCommand += _dataContext_OnOptionCommand;
-            _dataContext.OnExitCommand += _dataContext_OnExitCommand;
+            _dataContext.OptionMenuCommand = new SimpleCommand(p =>
+            {
+                var dialog = new OptionWindow();
+                dialog.Owner = this;
+                dialog.DataContext = _dataContext;
+                dialog.ShowDialog();
+            });
+            _dataContext.ExitMenuCommand = new SimpleCommand(p => Close());
+            _dataContext.About.AboutMenuCommand = new SimpleCommand(p =>
+            {
+                var dialog = new AboutWindow();
+                dialog.Owner = this;
+                dialog.DataContext = _dataContext.About;
+                dialog.ShowDialog();
+            });
             _dataContext.PropertyChanged += _dataContext_PropertyChanged;
             RecoverWindowBounds();
 
@@ -100,19 +113,6 @@ namespace FFXIVFishingScheduleViewer
             settings.MainWindowWidth = Width;
             settings.MainWindowHeight = Height;
             settings.Save();
-        }
-
-        private void _dataContext_OnOptionCommand(object sender, object e)
-        {
-            var dialog = new OptionWindow();
-            dialog.Owner = this;
-            dialog.DataContext = _dataContext;
-            dialog.ShowDialog();
-        }
-
-        private void _dataContext_OnExitCommand(object sender, object e)
-        {
-            Close();
         }
 
         private void _dataContext_PropertyChanged(object sender, PropertyChangedEventArgs e)

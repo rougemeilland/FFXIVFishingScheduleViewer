@@ -7,14 +7,17 @@
         mc:Ignorable="d"
         Title="FFXIV Fishing Schedule Viewer">
     <Window.InputBindings>
-        <KeyBinding Command="{Binding Path=OptionCommand}" Gesture="Ctrl+O"/>
+        <KeyBinding Command="{Binding Path=OptionMenuCommand}" Gesture="Ctrl+O"/>
     </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="{Binding Path=GUIText[Menu.File]}">
-                <MenuItem Header="{Binding Path=GUIText[Menu.Option]}" Command="{Binding Path=OptionCommand}" InputGestureText="Ctrl+O"/>
+                <MenuItem Header="{Binding Path=GUIText[Menu.Option]}" Command="{Binding Path=OptionMenuCommand}" InputGestureText="Ctrl+O"/>
                 <Separator/>
-                <MenuItem Header="{Binding Path=GUIText[Menu.Exit]}" InputGestureText="ALT+F4" Command="{Binding Path=ExitCommand}"/>
+                <MenuItem Header="{Binding Path=GUIText[Menu.Exit]}" InputGestureText="ALT+F4" Command="{Binding Path=ExitMenuCommand}"/>
+            </MenuItem>
+            <MenuItem Header="{Binding Path=GUIText[Menu.Help]}">
+                <MenuItem Header="{Binding Path=About.AboutMenuText}" Command="{Binding Path=About.AboutMenuCommand}"/>
             </MenuItem>
         </Menu>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="5">

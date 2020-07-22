@@ -626,11 +626,11 @@ namespace FFXIVFishingScheduleViewer
             contextMenu.Items.Add(showDetailMenuItem);
             showDetailMenuItem.Click += (s, e) =>
             {
-                var viewModel = new FishDetailViewModel(chance.Fish) { Memo = _dataContext.GetFishMemo(chance.Fish) };
+                var viewModel = new FishDetailViewModel(chance.Fish) { Memo = _dataContext.GetFishMemo(chance.Fish).Replace("⇒", "=>") };
                 var dialog = new FishDetailWindow();
                 viewModel.OKCommand = new SimpleCommand(p =>
                 {
-                    _dataContext.SetFishMemo(chance.Fish, viewModel.Memo);
+                    _dataContext.SetFishMemo(chance.Fish, viewModel.Memo.Replace("=>", "⇒"));
                     dialog.Close();
                 });
                 viewModel.CancelCommand = new SimpleCommand(p =>
