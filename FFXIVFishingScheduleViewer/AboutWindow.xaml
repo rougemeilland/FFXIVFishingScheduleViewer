@@ -8,14 +8,15 @@
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
         Title="{Binding Path=AboutWindowTitleText}"
-        MaxWidth="480">
-    <DockPanel Margin="20">
+        MaxWidth="640"
+        DataContextChanged="Window_DataContextChanged">
+    <DockPanel Margin="10">
         <Button DockPanel.Dock="Bottom" HorizontalAlignment="Center" Content="{Binding Path=GUIText[Label.Close]}" Margin="5" Padding="10,5,10,5" Click="CloseButton_Click"/>
         <StackPanel Orientation="Vertical" Margin="5">
             <TextBlock Text="{Binding Path=ProductVersionText}" Margin="5"/>
             <TextBlock Text="{Binding Path=Copyright}" Margin="5"/>
             <TextBlock Text="{Binding Path=FFXIVLicenseText}" Margin="5" TextWrapping="Wrap"/>
-            <TextBlock Height="50"/>
+            <TextBlock Height="20"/>
         </StackPanel>
     </DockPanel>
 </Window>
