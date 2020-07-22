@@ -6,10 +6,13 @@
         xmlns:local="clr-namespace:FFXIVFishingScheduleViewer"
         mc:Ignorable="d"
         Title="FFXIV Fishing Schedule Viewer">
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding Path=OptionCommand}" Gesture="Ctrl+O"/>
+    </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="{Binding Path=GUIText[Menu.File]}">
-                <MenuItem Header="{Binding Path=GUIText[Menu.Option], Mode=OneWay}" Command="{Binding Path=OptionCommand}" />
+                <MenuItem Header="{Binding Path=GUIText[Menu.Option]}" Command="{Binding Path=OptionCommand}" InputGestureText="Ctrl+O"/>
                 <Separator/>
                 <MenuItem Header="{Binding Path=GUIText[Menu.Exit]}" InputGestureText="ALT+F4" Command="{Binding Path=ExitCommand}"/>
             </MenuItem>
