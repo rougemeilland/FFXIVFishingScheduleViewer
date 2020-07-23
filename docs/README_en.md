@@ -1,6 +1,10 @@
 ﻿# FFXIV Fishing Schedule Viewer
 
+---
+
 [[日本語で表示する](README.md)] [Displaying in English]
+
+---
 
 This application predicts changes in the in-game weather on FINAL FANTASY XIV, and displays the appearance times of fish depending on the weather and time zone conditions in an easy-to-understand manner.
 
@@ -61,14 +65,15 @@ Please start FFXIVFishingScheduleViewer.exe in the folder where this application
 To start it, select "Run" from the Windows Start menu or open Explorer.
 
 ### 2. About "Fishing chance list" screen
+
 - For the fish checked in the "Option" screen, a graph will be displayed showing when the time zone and weather conditions will be met.
 The following information is also displayed for each fish.
   - Fishing spot to go
   - Required fishing baits
-  - What time should I go to catch (both Eorzea time and Earth time)
+  - Time when the fish can be caught (both Eorzea time and Earth time)
   - Memo that is a hint for fishing (user can freely edit the memo on the "Options" screen)
-- "Discovery difficulty" is a unique ranking of this application and is a measure of "how difficult it is to meet the time zone conditions and weather conditions of the fish." Please note that it does not always match the difficulty level of the fishing itself.
 - By right-clicking on the fish item, you can edit the memo of the fish or hide the fish from the "Fishing chance list" screen.
+- "Discovery difficulty" is a unique ranking of this application and is a measure of "how difficult it is to meet the time zone conditions and weather conditions of the fish." Please note that it does not always match the difficulty level of the fishing itself.
 
 ### 3. About format of fish memo
 The memo initially set for each fish emphasizes the compactness of the displayed contents, so the notation is considerably omitted.
