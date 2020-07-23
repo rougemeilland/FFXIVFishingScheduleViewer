@@ -901,7 +901,8 @@ namespace FFXIVFishingScheduleViewer
                     },
                     ToFishingBait("スプーンワーム"),
                     18,
-                    6, ""),
+                    6,
+                    "スプーンワーム⇒(!プレ)"),
                 new Fish(
                     "リトルサラオス",
                     new[]
@@ -911,7 +912,8 @@ namespace FFXIVFishingScheduleViewer
                         ToFishingSpot("常夏の島北"),
                     },
                     ToFishingBait("ポーラークリル"),
-                    WeatherType.雨 | WeatherType.暴雨, ""),
+                    WeatherType.雨 | WeatherType.暴雨,
+                    "ポーラークリル⇒(!!スト)"),
                 new Fish(
                     "ロックロブスター",
                     new[]
@@ -923,7 +925,8 @@ namespace FFXIVFishingScheduleViewer
                     },
                     ToFishingBait("ポーラークリル"),
                     17,
-                    22, ""),
+                    22,
+                    "ポーラークリル⇒(!!スト)"),
                 new Fish(
                     "ダークスリーパー",
                     new[]
@@ -938,7 +941,8 @@ namespace FFXIVFishingScheduleViewer
                     },
                     ToFishingBait("ユスリカ"),
                     15,
-                    10, ""),
+                    10,
+                    "ユスリカ⇒(!プレ)"),
                 new Fish(
                     "射手魚",
                     new[]
@@ -947,7 +951,8 @@ namespace FFXIVFishingScheduleViewer
                         ToFishingSpot("レインキャッチャー樹林"),
                     },
                     ToFishingBait("スナーブルフライ"),
-                    WeatherType.晴れ | WeatherType.快晴, ""),
+                    WeatherType.晴れ | WeatherType.快晴,
+                    "スナーブルフライ⇒(!プレ)"),
                 new Fish(
                     "雷紋魚",
                     new[]
@@ -956,7 +961,8 @@ namespace FFXIVFishingScheduleViewer
                         ToFishingSpot("ロングクライム渓谷"),
                     },
                     ToFishingBait("テッポウムシ"),
-                    WeatherType.雨, ""),
+                    WeatherType.雨,
+                    "テッポウムシ⇒(!!スト)"),
                 new Fish("ビアナックブーン", ToFishingSpot("南ブラッドショア"), ToFishingBait("シュリンプフィーダー"), 20, 23, "シュリンプフィーダー⇒(!!!スト)"),
                 new Fish("シャークトゥーナ", ToFishingSpot("コスタ・デル・ソル"), ToFishingBait("スプーンワーム"), 19, 21, WeatherType.快晴 | WeatherType.晴れ, "スプーンワーム⇒(!プレ)フルムーンサーディンHQ⇒(!!!スト)"),
                 new Fish("ボンバードフィッシュ", ToFishingSpot("北ブラッドショア"), ToFishingBait("ヘリングボール"), 9, 15, WeatherType.快晴, "ヘリングボール⇒(!!!スト)"),
@@ -996,7 +1002,8 @@ namespace FFXIVFishingScheduleViewer
                     },
                     ToFishingBait("バターワーム"),
                     17,
-                    10, ""),
+                    10,
+                    "バターワーム⇒(!!スト)"),
                 new Fish("トラマフィッシュ", ToFishingSpot("オークウッド"), ToFishingBait("スピナーベイト"), 17, 20, WeatherType.曇り | WeatherType.霧, "スピナーベイト⇒(!プレ)スカルピンHQ⇒(!!!スト)"),
                 new Fish("ジャンヌ・トラウト", ToFishingSpot("愚か者の滝"), ToFishingBait("クロウフライ"), 4, 6, "クロウフライ⇒(!!!スト)"),
                 new Fish("ワーム・オブ・ニーム", ToFishingSpot("ブロンズレイク・シャロー"), ToFishingBait("バターワーム"), 19, 22, "バターワーム⇒(!!!スト)"),

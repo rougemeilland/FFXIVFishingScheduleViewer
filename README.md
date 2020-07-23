@@ -1,117 +1,98 @@
-# FFXIV Fishing Schedule Viewer
+﻿# FFXIV Fishing Schedule Viewer
 
-FINAL FANTASY XIV �ł̃Q�[�����̓V��̕ω���\�����A�V��⎞�ԑтɈˑ����鋛�̏o���������킩��₷���\�����܂��B
+[日本語で表示中] [[Display in English](README_en.md)]
 
-�Ȃ��AFINAL FANTASY XIV �Œނ����̂̒��ɂ͖��炩�ɋ��ނł͂Ȃ����Ƃ����ď̂��K���ł͂Ȃ����̂���������܂����A
-�{�h�L�������g�ł͕֋X�セ�������ׂāu���v�ƌď̂��Ă��܂��B
+本アプリケーションは、FINAL FANTASY XIV でのゲーム内の天候の変化を予測し、天候や時間帯の条件に依存する魚の出現時刻をわかりやすく表示します。
 
-## �y���s��z
+なお、FINAL FANTASY XIV において釣ることのできるものの中には魚類ではなく「魚」という呼称が適当ではないものも多数ありますが、本ドキュメントでは便宜上それらをすべて「魚」と呼称しています。
 
-- �V�C�\���ʂŁA�e�n��̓V�C�\���\���ł��܂��B
+## 【使用例】
+
+- 「天気予報」画面で、各地域の天気予報を表示できます。
 ![weathermap](https://user-images.githubusercontent.com/28302784/88042870-98a20580-cb87-11ea-8924-fb918e9f0e82.png)
 
-- �ނ�`�����X��ʂŁA�w�肵�����̎�����V��̏���������������\���ł��܂��B
+- 「釣りチャンス一覧」画面で、指定した魚の時刻や天候の条件がいつ成立するかを予測できます。
 ![chance](https://user-images.githubusercontent.com/28302784/88042871-993a9c00-cb87-11ea-9d43-4a05ee2db797.png)
 
-- �ݒ��ʂŁA�ނ�`�����X��ʂɕ\�����鋛�̎w��₻�̑��̐ݒ肪�ł��܂��B
+- 「オプション」画面で、「釣りチャンス一覧」画面に表示する魚の指定やその他の設定ができます。
 ![optionwindow](https://user-images.githubusercontent.com/28302784/88042868-9770d880-cb87-11ea-9e97-312750a1a8ec.png)
 
-## �y��ȋ@�\�z
+## 【主な機能】
 
-- �n�斈�̓V�C�\�񂪕\������܂��B�\��������Ԃ͌��݂���ő��7��(�G�I���[�A����)�ŁA�X��8���ԑO�̓V����\������܂��B
-- ���[�U���w�肵������ނ邱�Ƃ��ł��鎞�ԑтƓV��̏��������������邩�O���t�ŕ\������܂��B
-- �{�A�v���P�[�V�����őΉ����Ă��鋛�͈ȉ��̒ʂ�ł��B
-    -  FINAL FANTASY XIV patch 5.2 �܂łŎ�������Ă���A����
-    -  �k�V/�I�I�k�V�A�܂��́A�V��܂��͎��ԑтɏ����̂��邷�ׂĂ̋��B
-- �����̌���ɑΉ����Ă��܂��B���ݑΉ��ς݂̌���́A���{��/�p��/�t�����X��/�h�C�c��ł��B
-
-
-## �yFINAL FANTASY XIV �̃o�[�W�����ɂ��āz
-FINAL FANTASY XIV patch 5.2 �ɑΉ����Ă��܂��B
+- ゲーム内の各地域の天気予報が表示されます。表示される期間は現在から最大で7日間(エオルゼア時間)で、更に8時間前の天候も表示されます。
+- ユーザが指定した魚を釣ることができる時間帯と天候の条件がいつ成立するかグラフで表示されます。
+- 本アプリケーションで対応している魚は以下の通りです。
+    -  FINAL FANTASY XIV patch 5.2 までで実装されている魚であり、かつ
+    -  ヌシ/オオヌシ、または、天候または時間帯に関する条件のあるすべての魚。
+- 複数の言語に対応しています。現在対応済みの言語は、日本語/英語/フランス語/ドイツ語です。
 
 
-## �y�K�v�Ȃ��́z
+## 【FINAL FANTASY XIV のバージョンについて】
+FINAL FANTASY XIV patch 5.2 に対応しています。
 
-* Windows (Windows 10 64bit�łł̂ݓ�����m�F���Ă��܂�)
+
+## 【必要なもの】
+
+* Windows (Windows 10 64bit版でのみ動作を確認しています)
 * .NET Framework 4.7.2
 
 
-## �y�C���X�g�[��/�A���C���X�g�[���ɂ��āz
+## 【インストール/アンインストールについて】
 
-### �C���X�g�[���̕��@
+### 1. インストールの方法
 
-1. �ȉ��̎菇��`.NET Framework 4.7.2`���C���X�g�[�����Ă��������B
-    1. [Microsoft�̃T�C�g](https://dotnet.microsoft.com/download/dotnet-framework/net472)��`.NET Framework 4.7.2 Runtime`��I�����ă_�E�����[�h�����Ă��������B
-    2. �_�E�����[�h�����t�@�C�������s���Ă��������B
-2. �ȉ��̎菇��`FFXIV Fishing Schedule Viewer`���C���X�g�[�����Ă��������B
-    1. [�{�A�v���P�[�V�����̌��J�ꏊ](https://github.com/rougemeilland/FFXIVFishingScheduleViewer/releases)����ŐV�ł�.zip�t�@�C�����_�E�����[�h���Ă��������B
-    2. �_�E�����[�h����.zip�t�@�C�����𓀂��āA�K���ȃt�H���_�ɃR�s�[���Ă��������B
+1. 以下の手順で`.NET Framework 4.7.2`をインストールしてください。
+    1. [Microsoftのサイト](https://dotnet.microsoft.com/download/dotnet-framework/net472)で`.NET Framework 4.7.2 Runtime`を選択してダウンロードをしてください。
+    2. ダウンロードしたファイルを実行してください。
+2. 以下の手順で`FFXIV Fishing Schedule Viewer`をインストールしてください。
+    1. [本アプリケーションの公開場所](https://github.com/rougemeilland/FFXIVFishingScheduleViewer/releases)から最新版の.zipファイルをダウンロードしてください。
+    2. ダウンロードした.zipファイルを解凍して、適当なフォルダにコピーしてください。
 
-### �A���C���X�g�[���̕��@
+### 2. アンインストールの方法
 
-1. `FFXIV Fishing Schedule Viewer`���R�s�[�����t�H���_���A�z���̃t�@�C�����ƍ폜���Ă��������B
+1. 本アプリケーションをインストールしたフォルダを配下のファイルごと削除してください。
 
-## �y�g�����z
+## 【使い方】
 
-### �N�����@
+### 1. 起動方法
 
-.zip�t�@�C�����𓀂����t�H���_�� FFXIVFishingScheduleViewer.exe ���N�����܂��B
+本アプリケーションをインストールしたフォルダの FFXIVFishingScheduleViewer.exe を起動してください。
+起動は、Windowsのスタートメニューから「ファイル名を指定して実行」を選択するか、あるいはエクスプローラを開いて行ってください。
 
-### �u�ނ�`�����X�ꗗ�v�ɂ���
-- �u�I�v�V�����v��ʂŃ`�F�b�N����ꂽ���ɂ��āA���ԑт�V������������̂������炢�܂łȂ̂��A���O���t�ŕ\�����܂��B
-���ꂼ��̋��ɂ́A�ȉ��̏����ꏏ�ɕ\������܂��B
-  - �ǂ̒ނ��ɍs���΂�����
-  - �ǂ�Ȓނ�a���K�v��
-  - �������炢�ɍs���Βނ��\�������邩(�G�I���[�A���Ԃƒn�����Ԃ̗���)
-  - �ނ���̃q���g�ƂȂ郁�� (�u�I�v�V�����v��ʂŃ��[�U�����R�ɕҏW�\�ł�)
-- �u�����̓�Փx�v�́A�{�A�v���P�[�V�����Ǝ��̃����N�����ŁA�u���̋��̎��ԑт̏����ƓV��̏������ǂꂾ���������ɂ������v�̖ڈ��ł��B�ނ莩�̂̓�Փx�Ƃ͕K��������v���Ă��܂���̂Œ��ӂ��Ă��������B
-- ���̕\�����E�N���b�N����ƁA���̋��̃�����ҏW������A�u�ނ�`�����X�ꗗ�v��ʂ��炻�̋���\�����Ȃ��悤�ɂ����肷�邱�Ƃ��ł��܂��B
+### 2. 「釣りチャンス一覧」画面について
+- 「オプション」画面でチェックを入れた魚について、時間帯や天候条件が合うのがいつからいつまでなのか、をグラフで表示します。
+それぞれの魚には、以下の情報も一緒に表示されます。
+  - どの釣り場に行けばいいか
+  - どんな釣り餌が必要か
+  - 何時ぐらいに行けば釣れる可能性があるか(エオルゼア時間と地球時間の両方)
+  - 釣り方のヒントとなるメモ (「オプション」画面でユーザが自由に編集可能です)
+- 「発見の難易度」は、本アプリケーション独自のランク分けで、「その魚の時間帯の条件と天候の条件をどれだけ満たしにくいか」の目安です。釣り自体の難易度とは必ずしも一致していませんので注意してください。
+- 魚の項目を右クリックすると、その魚のメモを編集したり、「釣りチャンス一覧」画面からその魚を表示しないようにしたりすることができます。
 
-### �����̌`���ɂ���
-���ꂼ��̋��ɍŏ��ɐݒ肳��Ă��郁���͕\�����e�̃R���p�N�g�����d������
-���Ȃ�ȗ������\�L�ɂȂ��Ă��܂��B
-���̒��œ��ɂ킩��ɂ����Ǝv���镔���̓ǂݕ���
-�ȉ��ɐ������܂��B
+### 3. 魚のメモの形式について
+それぞれの魚に最初に設定されているメモは、表示内容のコンパクトさを重視しているので
+かなり省略した表記になっています。
+その中で特にわかりにくいと思われる部分の読み方を[別紙](AboutFishMemo.md)で説明します。
 
-�Ȃ��A�����̓��[�U�����R�ɕҏW�\�ł���A�K�����������̕\�L���@�ɏ]���ĕҏW����K�v�͂���܂���B
+なお、***魚のメモはユーザが自由に編集可能であり、編集する場合は必ずしもこれらの表記方法に従って編集する必要はありません。***
 
-- ! (�т�����}�[�N/�G�N�X�N�����[�V�����}�[�N)�́A���̋��̈����̋����ł��B���������������Ƀv���C���[�L�����N�^�[�̓���ɕ\��������ł��B
-  -  ! �͎�k (�ア����)
-  -  !! �͋��k (��������)
-  -  !!! �͌��k (�k�V���̈���)
-- ���̒ނ���� `<�ނ�a�̖��O>��(<�����̋���>)<���̖��O>` �̂悤�ɏ�����Ă��܂��B�Ⴆ��`�U�U���V��(!!)���ʋ�`�̂悤�ɏ�����Ă�����A�ȉ��̂悤�ɓǂݑւ��Ă��������B
+## 【注意事項】
 
-```
-    �U�U���V��ނ�a�Ɏg���āA
-    ���k�������率�ʋ����ނ��(�\��������)
-```
-
-- ���l�ɁA�j�����ނ�̏ꍇ��`<�ނ�a�̖��O>��(<�����̋���>)<���̖��O>��(<�����̋���>)<���̖��O>`�̂悤�ɏ�����Ă��܂��B�Ⴆ��`�s���o�O��(!!)�n�[�o�[�w�����OHQ��(!!!)���K�I�N�g�p�X)`�Ə�����Ă�����A�ȉ��̂悤�ɓǂݑւ��Ă��������B
+- 本アプリケーションは予告なくアップデートされることがあります。
+- 本アプリケーションを使用することによって利用者が損害を受けた場合、それがゲーム内かゲーム外であるかにかかわらず、開発者は責任を負いかねますので、ご了承ください。
+- 「釣りチャンス一覧」画面では、同じ時間帯に複数の魚が重複している場合は、「発見の難易度」が高い魚が優先して表示されます。
+「オプション」画面でチェックを入れたはずの魚が天候・時間帯の条件を満たしているにもかかわらず表示されない場合は、
+ほかの魚が優先して表示されてしまっている可能性を疑ってください。
+そのような場合は、「オプション」画面でチェックを入れる魚の数を減らしてみることをお勧めします。
 
 
-```
-    �s���o�O��ނ�a�Ɏg���āA
-    ���k��������n�[�o�[�w�����OHQ���ނ��(�\��������)���炻��ŉj�����ނ�����āA
-    ���k�������烁�K�I�N�g�p�X���ނ��(�\��������)
-```
+## 【開発者について】
 
-- �y�[�V�F���X���g���ꍇ�̃t�b�L���O�́A��{�I�Ɉȉ��̂��̂�z�肵�Ă��܂��B����ȊO�̃t�b�L���O���K�v�ȏꍇ�̓����ɂ��̎|�ǋL���Ă���܂��B
-  - ! (��k) �̏ꍇ�̓v���V�W�����t�b�L���O
-  - !! (���k) �̏ꍇ�̓X�g�����O�t�b�L���O
-  - !!! (���k) �̏ꍇ�̓X�g�����O�t�b�L���O
+[Palmtree Software](https://github.com/rougemeilland)
 
-## �y���ӎ����z
+## 【ライセンス】
 
-- �{�A�v���P�[�V�����͗\���Ȃ��A�b�v�f�[�g����邱�Ƃ�����܂��B
-- �{�A�v���P�[�V�����ɂ���ė��p�҂����Q���󂯂��ꍇ�A���ꂪ�Q�[�������Q�[���O�ł��邩�ɂ�����炸�A�J���҂͐ӔC�𕉂����˂܂��̂ŁA���������������B
-- �u�ނ�`�����X�ꗗ�v��ʂł́A�������ԑтɕ����̋������Ԃ����ꍇ�́A�u�����̓�Փx�v�����������D�悵�ĕ\������܂��B�u�I�v�V�����v��ʂŃ`�F�b�N����ꂽ�͂��̋����V��E���ԑт̏����𖞂����Ă���ɂ�������炸�\������Ȃ��ꍇ�́A�ق��̋����D�悵�ĕ\������Ă��邽�߂ɉB��Ă��܂��Ă���\�����^���Ă��������B���̂悤�ȏꍇ�́A�u�I�v�V�����v��ʂŃ`�F�b�N�����鋛�̐������炵�Ă݂邱�Ƃ������߂��܂��B
+"FFXIV Fishing Schedule Viewer" is under [MIT license](https://raw.githubusercontent.com/rougemeilland/FFXIVFishingScheduleViewer/master/LICENSE).  
+© 2020 Palmtree Software.  
 
-
-## �y�J���҂ɂ��āz
-
-* �J����: Palmtree Software
-* URL: https://github.com/rougemeilland
-
-## �y���C�Z���X�z
-
-"FFXIV Fishing Schedule Viewer" is under [MIT license](https://raw.githubusercontent.com/rougemeilland/FFXIVFishingScheduleViewer/master/LICENSE).
+Copyright (C) SQUARE ENIX CO., LTD. All Rights Reserved.

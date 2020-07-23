@@ -354,7 +354,7 @@ namespace FFXIVFishingScheduleViewer
                 {
                     Text =
                         string.Format(
-                            "{0}{1}⇒({2}){3}",
+                            "{0}{1}⇒({2}) {3}",
                             requires != null ? string.Format("({0})", requires.TranslatedRequirement) : "",
                             baitName,
                             hooking,
@@ -377,7 +377,7 @@ namespace FFXIVFishingScheduleViewer
                 {
                     Text =
                         string.Format(
-                            "{0}{1}⇒({2}){3}⇒({4}){5}",
+                            "{0}{1}⇒({2}) {3}⇒({4}) {5}",
                             requires != null ? string.Format("({0})", requires.TranslatedRequirement) : "",
                             bait1Name,
                             hooking1,
@@ -407,7 +407,7 @@ namespace FFXIVFishingScheduleViewer
                 {
                     Text =
                         string.Format(
-                            "{0}{1}⇒({2}){3}⇒({4}){5}⇒({6}){7}",
+                            "{0}{1}⇒({2}) {3}⇒({4}) {5}⇒({6}) {7}",
                             requires != null ? string.Format("({0})", requires.TranslatedRequirement) : "",
                             bait1Name,
                             hooking1,
