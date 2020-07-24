@@ -2,7 +2,7 @@
 
 ---
 
-[[日本語で表示する](README.md)] [Displaying in English]
+[[日本語で表示する](README.md)] [Displaying in English] [[Afficher en français](README_fr.md)]
 
 ---
 
@@ -10,7 +10,7 @@ This application predicts changes in the in-game weather on FINAL FANTASY XIV, a
 
 In addition, there are many things that can be caught in FINAL FANTASY XIV that the name "fish" is not appropriate, not fish, but in this document, they are all called "fish" for convenience.
 
-## [DEMO]
+## [Demonstration]
 
 - You can display the weather forecast for each area on the "Weather Forecast" screen.
 ![weathermap](https://user-images.githubusercontent.com/28302784/88042870-98a20580-cb87-11ea-8924-fb918e9f0e82.png)
@@ -65,19 +65,20 @@ Please start FFXIVFishingScheduleViewer.exe in the folder where this application
 To start it, select "Run" from the Windows Start menu or open Explorer.
 
 ### 2. About "Fishing chance list" screen
-
+注意事項
 - For the fish checked in the "Option" screen, a graph will be displayed showing when the time zone and weather conditions will be met.
 The following information is also displayed for each fish.
-  - Fishing spot to go
-  - Required fishing baits
   - Time when the fish can be caught (both Eorzea time and Earth time)
-  - Memo that is a hint for fishing (user can freely edit the memo on the "Options" screen)
+  - A fishing spot where you can catch the fish
+  - Required fishing tackle
+  - A note that gives hints on how to catch the fish (the note can be freely edited by the user in the "Options" screen)
 - By right-clicking on the fish item, you can edit the memo of the fish or hide the fish from the "Fishing chance list" screen.
-- "Discovery difficulty" is a unique ranking of this application and is a measure of "how difficult it is to meet the time zone conditions and weather conditions of the fish." Please note that it does not always match the difficulty level of the fishing itself.
+- "Discovery difficulty" is a unique ranking by this application, and is a measure of "how difficult it is to meet the time zone conditions and weather conditions of the fish."
+Please note that it does not always match the difficulty level of the fishing itself.
 
 ### 3. About format of fish memo
 The memo initially set for each fish emphasizes the compactness of the displayed contents, so the notation is considerably omitted.
-A separate document explains how to read the part that seems to be particularly difficult to understand.
+The reading of the part that seems to be particularly difficult to understand is explained in [another document](AboutFishMemo_en.md).
 
 ***The fish memo can be freely edited by the user, and it is not necessary to edit it according to these notations.***
 
@@ -85,10 +86,8 @@ A separate document explains how to read the part that seems to be particularly 
 
 - This application may be updated without notice.
 - Please note that the developer is not responsible for any damage caused to the user by using this application, whether it is in-game or out-of-game.
-- On the "Fishing chance list" screen, if multiple fish are duplicated at the same time, the fish with the higher "Discovery difficulty" will be displayed with priority.
-If the fish you checked in the "Options" screen does not appear even though it meets the weather and time zone conditions,
-Please suspect that other fish may have been given priority.
-In such a case, it is recommended to try reducing the number of fish checked on the "Options" screen.
+- Although some of the fish you can fish in FINAL FANTASY XIV are not proper names for fish, they are all called "fish" for convenience in this document.
+- On the "Fishing chance list" screen, if multiple fish are expected to appear at the same time, the fish with the higher "discovery difficulty" will be displayed with priority. If the fish you checked on the "Options" screen does not appear even though the weather and time of day conditions are met, another fish may have been prioritized. In that case, it is recommended to check the number of fish confirmed in the "Option" screen.
 
 ## [Author]
 
