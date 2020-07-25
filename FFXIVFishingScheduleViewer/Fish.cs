@@ -543,7 +543,14 @@ namespace FFXIVFishingScheduleViewer
                         var toMinute = int.Parse(m.Groups["tominute"].Value);
                         return new FishingRequirement
                         {
-                            TranslatedRequirement = string.Format("ET {0:D2}:{1:D2} - {2:D2}:{3:D2}", fromHour, fromMinute, toHour, toMinute)
+                            TranslatedRequirement =
+                                string.Format(
+                                    "{0} {1:D2}:{2:D2} - {3:D2}:{4:D2}",
+                                    Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "ET.Short")],
+                                    fromHour,
+                                    fromMinute,
+                                    toHour,
+                                    toMinute)
                         };
                     }
                     if ((weather1 = TranslateWeathers(s, lang)) != null)

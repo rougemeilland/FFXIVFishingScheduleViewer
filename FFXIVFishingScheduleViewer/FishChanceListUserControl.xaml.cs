@@ -508,7 +508,12 @@ namespace FFXIVFishingScheduleViewer
                         return string.Format(
                             "{0}{1}: [{2}]{3}",
                             eorzeaTimeRegion != "" || localTimeRegion != ""
-                                ? string.Format("ET {0} ( LT {1} )\n", eorzeaTimeRegion, localTimeRegion)
+                                ? string.Format(
+                                    "{0} {1} ( {2} {3} )\n",
+                                    Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "ET.Short")],
+                                    eorzeaTimeRegion,
+                                    Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "LT.Short")],
+                                    localTimeRegion)
                                 : "",
                             GUITextTranslate.Instance["Label.Conditions"],
                             string.IsNullOrEmpty(conditionText)

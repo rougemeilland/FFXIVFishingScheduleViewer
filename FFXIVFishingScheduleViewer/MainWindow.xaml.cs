@@ -46,7 +46,6 @@ namespace FFXIVFishingScheduleViewer
                 dialog.DataContext = _dataContext.About;
                 dialog.ShowDialog();
             });
-            _dataContext.PropertyChanged += _dataContext_PropertyChanged;
             RecoverWindowBounds();
 
 #if DEBUG
@@ -63,7 +62,6 @@ namespace FFXIVFishingScheduleViewer
             if (_timer.IsEnabled)
                 _timer.Stop();
             _timer.Tick -= _timer_Tick;
-            _dataContext.PropertyChanged -= _dataContext_PropertyChanged;
             SaveWindowBounds();
             base.OnClosing(e);
         }
@@ -115,19 +113,6 @@ namespace FFXIVFishingScheduleViewer
             settings.Save();
         }
 
-        private void _dataContext_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case nameof(_dataContext.CurrentTime):
-                    UpdateCurrentTimeView();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-
         private void UpdateTimer()
         {
             var nextTime = (_dataContext.CurrentTime.ToEorzeaDateTime().GetStartOfMinute() + EorzeaTimeSpan.FromMinutes(1)).ToEarthDateTime();
@@ -145,15 +130,6 @@ namespace FFXIVFishingScheduleViewer
             _dataContext.CurrentTime = DateTime.UtcNow;
             UpdateTimer();
         }
-
-        private void UpdateCurrentTimeView()
-        {
-            var localTimeNow = _dataContext.CurrentTime.ToLocalTime();
-            var eorzeaTimeNow = _dataContext.CurrentTime.ToEorzeaDateTime();
-            CurrentEorzeaDateTime.Text = string.Format("{0:D02}:{1:D02}", eorzeaTimeNow.Hour, eorzeaTimeNow.Minute);
-            CurrentEarthDateTime.Text = string.Format("{0:D02}:{1:D02}:{2:D02}", localTimeNow.Hour, localTimeNow.Minute, localTimeNow.Second);
-        }
-
 
         private void InitializeData()
         {

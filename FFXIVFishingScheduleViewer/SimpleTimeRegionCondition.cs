@@ -24,7 +24,12 @@ namespace FFXIVFishingScheduleViewer
 
         public double DifficultyValue { get; }
 
-        public string Description => string.Format("ET {0:D02}:00 - {1:D02}:59", _hourOfStart, (_hourOfStart + _hours - 1) % 24);
+        public string Description =>
+            string.Format(
+                "{0} {1:D02}:00 - {2:D02}:59",
+                Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "ET.Short")],
+                _hourOfStart,
+                (_hourOfStart + _hours - 1) % 24);
 
         public EorzeaDateTimeHourRegions FindRegions(EorzeaDateTimeHourRegions wholeRange)
         {

@@ -151,6 +151,7 @@ namespace FFXIVFishingScheduleViewer
             _isPendingFishFilterChandedEvent = false;
 
             CurrentTime = DateTime.UtcNow;
+            CurrentDateTimeText = "";
         }
 
         public IEnumerable<FishSettingOfAreaGroupViewModel> FishSettingOfWorld { get; }
@@ -198,11 +199,13 @@ namespace FFXIVFishingScheduleViewer
                             UpdateFishChanceList(_currentTime);
                         }
                     }
+                    UpdateCurrentDateTimeText(_currentTime);
                     RaisePropertyChangedEvent(nameof(CurrentTime));
                 }
             }
         }
 
+        public string CurrentDateTimeText { get; private set; }
         public AboutViewModel About { get; set; }
         public ICommand OptionMenuCommand { get; set; }
         public ICommand ExitMenuCommand { get; set; }
@@ -330,6 +333,23 @@ namespace FFXIVFishingScheduleViewer
             });
         }
 
+        private void UpdateCurrentDateTimeText(DateTime currentDateTime)
+        {
+            var localTimeNow = currentDateTime.ToLocalTime();
+            var eorzeaTimeNow = currentDateTime.ToEorzeaDateTime();
+            CurrentDateTimeText =
+                string.Format(
+                    "{0} {1:D02}:{2:D02} ( {3} {4:D02}:{5:D02}:{6:D02} )",
+                    Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "ET.Short")],
+                    eorzeaTimeNow.Hour,
+                    eorzeaTimeNow.Minute,
+                    Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "LT.Short")],
+                    localTimeNow.Hour,
+                    localTimeNow.Minute,
+                    localTimeNow.Second);
+            RaisePropertyChangedEvent(nameof(CurrentDateTimeText));
+        }
+
         private void UpdateWeatherList(DateTime now)
         {
             UpdatedDateTime = now;
@@ -341,12 +361,14 @@ namespace FFXIVFishingScheduleViewer
                                     var localStartTime = startTime.ToEarthDateTime().ToLocalTime();
                                     string headerText =
                                         string.Format(
-                                            "LT {2:D02}:{3:D02}:{4:D02} -\n( ET {0:D02}:{1:D02} - )",
-                                            startTime.Hour,
-                                            startTime.Minute,
+                                            "{0} {1:D02}:{2:D02}:{3:D02} -\n( {4} {5:D02}:{6:D02} - )",
+                                            Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "LT.Short")],
                                             localStartTime.Hour,
                                             localStartTime.Minute,
-                                            localStartTime.Second);
+                                            localStartTime.Second,
+                                            Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "ET.Short")],
+                                            startTime.Hour,
+                                            startTime.Minute);
                                     var isLastTime = index == _settingProvider.ForecastWeatherDays * 3;
                                     return new { index, headerText, startTime, isLastTime };
                                 })
