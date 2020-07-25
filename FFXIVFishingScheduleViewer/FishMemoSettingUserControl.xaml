@@ -49,7 +49,7 @@
                 </StackPanel>
             </StackPanel>
             <Border BorderBrush="#222222" BorderThickness="1" Margin="15,5,5,5" HorizontalAlignment="Stretch" >
-                <TextBox Text="{Binding Path=EdittingMemo, Mode=TwoWay}" Margin="5" MinLines="5" TextWrapping="NoWrap" />
+                <TextBox Text="{Binding Path=EdittingMemo, Mode=TwoWay}" TextWrapping="NoWrap" AcceptsReturn="True" MinLines="5" Margin="5" />
             </Border>
         </DockPanel>
     </Grid>

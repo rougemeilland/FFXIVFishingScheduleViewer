@@ -2,7 +2,7 @@
 
 ---
 
-[[日本語で表示する](README.md)] [[Display in English](README_en.md)] [[Afficher en français](README_fr.md)][Anzeige auf Deutsch]
+[[日本語で表示する](README.md#ffxiv-fishing-schedule-viewer)] [[Display in English](README_en.md#ffxiv-fishing-schedule-viewer)] [[Afficher en français](README_fr.md#ffxiv-fishing-schedule-viewer)][Anzeige auf Deutsch]
 
 ---
 
@@ -11,13 +11,13 @@ Diese Anwendung sagt Wetteränderungen im Spiel in FINAL FANTASY XIV voraus und 
 ## [Demonstration]
 
 - Sie können die Wettervorhersage für jedes Gebiet auf dem Bildschirm "Wettervorhersage" anzeigen.
-![weathermap](https://user-images.githubusercontent.com/28302784/88042870-98a20580-cb87-11ea-8924-fb918e9f0e82.png)
+![forecastweather_de](https://user-images.githubusercontent.com/28302784/88461551-725dcc00-cedf-11ea-9991-61dcce1209d3.png)
 
 - Auf dem Bildschirm "Angelchancenliste" können Sie vorhersagen, wann die angegebenen Zeit- und Wetterbedingungen für den angegebenen Fisch erfüllt werden.
-![chance](https://user-images.githubusercontent.com/28302784/88042871-993a9c00-cb87-11ea-9d43-4a05ee2db797.png)
+![fishchancelist_de](https://user-images.githubusercontent.com/28302784/88461549-712c9f00-cedf-11ea-82a8-543ba4a3a5d2.png)
 
 - Auf dem Bildschirm "Optionen" können Sie den Fisch angeben, der auf dem Bildschirm "Liste der Fangchancen" und anderen Einstellungen angezeigt werden soll.
-![optionwindow](https://user-images.githubusercontent.com/28302784/88042868-9770d880-cb87-11ea-9e97-312750a1a8ec.png)
+![option_de](https://user-images.githubusercontent.com/28302784/88461552-72f66280-cedf-11ea-996f-a3add1bac30d.png)
 
 ## [Feature]
 
@@ -77,7 +77,7 @@ Bitte beachten Sie, dass es nicht immer dem Schwierigkeitsgrad des Fischfangs se
 ### 3. Format der Fischnotiz
 
 Der anfängliche Inhalt jeder Fischnote wird stark abgekürzt, wobei der Schwerpunkt auf der Einfachheit liegt.
-Das Lesen des Teils, der besonders schwer zu verstehen scheint, wird in [einem anderen Dokument](AboutFishMemo_de.md) erläutert.
+Das Lesen des Teils, der besonders schwer zu verstehen scheint, wird in [einem anderen Dokument](AboutFishMemo_de.md#format-der-fischnotiz) erläutert.
 
 ***Das Fischmemo kann vom Benutzer frei bearbeitet werden, und es ist nicht erforderlich, es gemäß diesen Notationen zu bearbeiten.***
 

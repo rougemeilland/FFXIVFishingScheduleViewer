@@ -40,9 +40,6 @@ namespace FFXIVFishingScheduleViewer
         private static Regex _ET時間帯パターン = new Regex(@"^ET ?(?<fromhour>[0-9]+):(?<fromminute>[0-9]+) ?[-～] ?(?<tohour>[0-9]+):(?<tominute>[0-9]+)$", RegexOptions.Compiled);
         private static Regex _天候移ろいパターン = new Regex(@"^(?<before>[^/⇒]+(/[^/⇒]+)*)⇒(?<after>[^/⇒]+(/[^/⇒]+)*)$", RegexOptions.Compiled);
         private static TranslationTextId _unknownBaitNameId = new TranslationTextId(TranslationCategory.FishingBait, "??unknown??");
-        private const string _hookingSymbol_弱震 = "!";
-        private const string _hookingSymbol_強震 = "!!";
-        private const string _hookingSymbol_激震 = "!!!";
         private TranslationTextId _nameId;
         private TranslationTextId _memoId;
         private string _memoSource;

@@ -285,9 +285,10 @@ namespace FFXIVFishingScheduleViewer
 
         private void _settingProvider_UserLanguageChanged(object sender, EventArgs e)
         {
-            RaisePropertyChangedEvent(nameof(UserLanguage));
+            UpdateCurrentDateTimeText(DateTime.UtcNow);
             RaisePropertyChangedEvent(nameof(FishChanceList));
             RaisePropertyChangedEvent(nameof(GUIText));
+            RaisePropertyChangedEvent(nameof(UserLanguage));
         }
 
         private void _settingProvider_ForecastWeatherDaysChanged(object sender, EventArgs e)

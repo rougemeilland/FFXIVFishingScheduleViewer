@@ -2,7 +2,7 @@
 
 ---
 
-[[日本語で表示する](README.md)] [Display in English] [[Afficher en français](README_fr.md)][[Anzeige auf Deutsch](README_de.md)]
+[[日本語で表示する](README.md#ffxiv-fishing-schedule-viewer)] [Display in English] [[Afficher en français](README_fr.md#ffxiv-fishing-schedule-viewer)][[Anzeige auf Deutsch](README_de.md#ffxiv-fishing-schedule-viewer)]
 
 ---
 
@@ -11,13 +11,13 @@ This application predicts in-game weather changes in FINAL FANTASY XIV and gives
 ## [Demonstration]
 
 - You can display the weather forecast for each area on the "Weather Forecast" screen.
-![weathermap](https://user-images.githubusercontent.com/28302784/88042870-98a20580-cb87-11ea-8924-fb918e9f0e82.png)
+![forecastweather_en](https://user-images.githubusercontent.com/28302784/88461499-fb283800-cede-11ea-83b4-4e7691868867.png)
 
 - On the "Fishing chance List" screen, you can predict when the specified time and weather conditions will be met for the specified fish.
-![chance](https://user-images.githubusercontent.com/28302784/88042871-993a9c00-cb87-11ea-9d43-4a05ee2db797.png)
+![fishchancelist_en](https://user-images.githubusercontent.com/28302784/88461501-fcf1fb80-cede-11ea-899d-c8c731fe93b9.png)
 
 - On the "Options" screen, you can specify the fish to be displayed on the "Fishing chance List" screen and other settings.
-![optionwindow](https://user-images.githubusercontent.com/28302784/88042868-9770d880-cb87-11ea-9e97-312750a1a8ec.png)
+![option_en](https://user-images.githubusercontent.com/28302784/88461500-fc596500-cede-11ea-9f59-68eec7073088.png)
 
 ## [Features]
 
@@ -68,7 +68,7 @@ To start it, select "Run" from the Windows Start menu or open Explorer.
 The following information is also displayed for each fish item.
   - Time at which fish can be caught (both Eorzean time and local time)
   - A fishing spot where you can catch the fish
-  - Required fishing tackle
+  - Required fishing tackles
   - Notes for fishing tips (user can freely edit in "Options" screen)
 - By right-clicking on the fish item, you can edit the memo of the fish or hide the fish from the "Fishing chance list" screen.
 - "Discovery difficulty" is a unique ranking by this application, and is a measure of "how difficult it is to meet the time zone conditions and weather conditions of the fish."
@@ -76,7 +76,7 @@ Please note that it does not always match the difficulty level of the fishing it
 
 ### 3. About format of fish memo
 The memo initially set for each fish emphasizes the compactness of the displayed contents, so the notation is considerably omitted.
-The reading of the part that seems to be particularly difficult to understand is explained in [another document](AboutFishMemo_en.md).
+The reading of the part that seems to be particularly difficult to understand is explained in [another document](AboutFishMemo_en.md#about-format-of-fish-memo).
 
 ***The fish memo can be freely edited by the user, and it is not necessary to edit it according to these notations.***
 

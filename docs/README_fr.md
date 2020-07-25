@@ -2,7 +2,7 @@
 
 ---
 
-[[日本語で表示する](README.md)] [[Display in English](README_en.md)] [Afficher en français][[Anzeige auf Deutsch](README_de.md)]
+[[日本語で表示する](README.md#ffxiv-fishing-schedule-viewer)] [[Display in English](README_en.md#ffxiv-fishing-schedule-viewer)] [Afficher en français][[Anzeige auf Deutsch](README_de.md#ffxiv-fishing-schedule-viewer)]
 
 ---
 
@@ -11,13 +11,13 @@ Cette application prédit les changements météorologiques dans le jeu dans FIN
 ## [Manifestation]
 
 - Vous pouvez afficher les prévisions météorologiques pour chaque zone sur l'écran «Prévisions météorologiques».
-![weathermap](https://user-images.githubusercontent.com/28302784/88042870-98a20580-cb87-11ea-8924-fb918e9f0e82.png)
+![forecastweather_fr](https://user-images.githubusercontent.com/28302784/88461529-3c204c80-cedf-11ea-86c8-7f01023f34e5.png)
 
 - Sur l'écran «Liste des possibilités de pêche», vous pouvez prédire quand l'heure et les conditions météorologiques spécifiées seront réunies pour le poisson spécifié.
-![chance](https://user-images.githubusercontent.com/28302784/88042871-993a9c00-cb87-11ea-9d43-4a05ee2db797.png)
+![fishchancelist_fr](https://user-images.githubusercontent.com/28302784/88461532-3d517980-cedf-11ea-8b01-6aedc8a252e3.png)
 
 - Sur l'écran «Options», vous pouvez spécifier le poisson à afficher sur l'écran «Liste des possibilités de pêche» et d'autres paramètres.
-![optionwindow](https://user-images.githubusercontent.com/28302784/88042868-9770d880-cb87-11ea-9e97-312750a1a8ec.png)
+![option_fr](https://user-images.githubusercontent.com/28302784/88461531-3d517980-cedf-11ea-9b9a-10cf14808c0d.png)
 
 ## [Caractéristiques]
 
@@ -75,7 +75,7 @@ Veuillez noter que cela ne correspond pas toujours à la difficulté de la pêch
 
 ### 3. À propos du format du mémo de poisson
 Le contenu initial de chaque note de poisson met l'accent sur la brièveté et est abrégé.
-La lecture de la partie qui semble particulièrement difficile à comprendre est expliquée dans [un autre document](AboutFishMemo_fr.md).
+La lecture de la partie qui semble particulièrement difficile à comprendre est expliquée dans [un autre document](AboutFishMemo_fr.md#%C3%A0-propos-du-format-du-m%C3%A9mo-de-poisson).
 
 ***Le mémo de poisson peut être librement édité par l'utilisateur, et il n'est pas nécessaire de l'éditer selon ces notations.***
 

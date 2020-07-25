@@ -2,8 +2,8 @@
 
 ---
 
-[[日本語で表示する](AboutFishMemo.md)][Display in English][[Afficher en français](AboutFishMemo_fr.md)][[Anzeige auf Deutsch](AboutFishMemo_de.md)]  
-[[Return to README](README_en.md)]
+[[日本語で表示する](AboutFishMemo.md#%E9%AD%9A%E3%81%AE%E3%83%A1%E3%83%A2%E3%81%AE%E5%BD%A2%E5%BC%8F%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)][Display in English][[Afficher en français](AboutFishMemo_fr.md#%C3%A0-propos-du-format-du-m%C3%A9mo-de-poisson)][[Anzeige auf Deutsch](AboutFishMemo_de.md#format-der-fischnotiz)]  
+[[Return to README](README_en.md#ffxiv-fishing-schedule-viewer)]
 
 ---
 
@@ -35,7 +35,7 @@ For example, if the memo says "Fistful of northern krill ⇒ (!!) Rock Lobster",
 Similarly, in the case of mooching, it is written as follows.
 
 ```
-<name of fishing bait>
+<name of fishing tackle>
     ⇒ (<exclamation points>)<fish name>
     ⇒ (<exclamation points>)<fish name>
 ```

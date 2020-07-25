@@ -26,6 +26,10 @@ namespace FFXIVFishingScheduleViewer
                     return "fish";
                 case TranslationCategory.Action:
                     return "action";
+                case TranslationCategory.License:
+                    return "license";
+                case TranslationCategory.Url:
+                    return "url";
                 case TranslationCategory.GUIText:
                     return "guiText";
                 case TranslationCategory.Generic:

@@ -23,8 +23,10 @@ namespace FFXIVFishingScheduleViewer
 
         public MainWindow()
         {
+            UpgradeSettings();
+
             ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(Int32.MaxValue));
-            
+
             InitializeComponent();
 
             InitializeData();
@@ -39,6 +41,11 @@ namespace FFXIVFishingScheduleViewer
                 dialog.ShowDialog();
             });
             _dataContext.ExitMenuCommand = new SimpleCommand(p => Close());
+            _dataContext.About.ViewREADMEMenuCommand = new SimpleCommand(p =>
+            {
+                var url = _dataContext.About.READMEUrlText;
+                System.Diagnostics.Process.Start(url);
+            });
             _dataContext.About.AboutMenuCommand = new SimpleCommand(p =>
             {
                 var dialog = new AboutWindow();
@@ -64,6 +71,16 @@ namespace FFXIVFishingScheduleViewer
             _timer.Tick -= _timer_Tick;
             SaveWindowBounds();
             base.OnClosing(e);
+        }
+
+        private static void UpgradeSettings()
+        {
+            if (!Properties.Settings.Default.IsUpgraded)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.IsUpgraded = true;
+                Properties.Settings.Default.Save();
+            }
         }
 
         private void RecoverWindowBounds()

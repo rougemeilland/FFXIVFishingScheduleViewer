@@ -2,7 +2,7 @@
 
 ---
 
-[日本語で表示する] [[Display in English](README_en.md)] [[Afficher en français](README_fr.md)][[Anzeige auf Deutsch](README_de.md)]
+[日本語で表示する] [[Display in English](README_en.md#ffxiv-fishing-schedule-viewer)] [[Afficher en français](README_fr.md#ffxiv-fishing-schedule-viewer)][[Anzeige auf Deutsch](README_de.md#ffxiv-fishing-schedule-viewer)]
 
 ---
 
@@ -11,13 +11,13 @@
 ## 【使用例】
 
 - 「天気予報」画面で、各地域の天気予報を表示できます。
-![weathermap](https://user-images.githubusercontent.com/28302784/88042870-98a20580-cb87-11ea-8924-fb918e9f0e82.png)
+![forecastweather_ja](https://user-images.githubusercontent.com/28302784/88461433-70dfd400-cede-11ea-90f0-47ba6a5c6151.png)
 
 - 「釣りチャンス一覧」画面で、指定した魚の時刻や天候の条件がいつ成立するかを予測できます。
-![chance](https://user-images.githubusercontent.com/28302784/88042871-993a9c00-cb87-11ea-9d43-4a05ee2db797.png)
+![fishchancelist_ja](https://user-images.githubusercontent.com/28302784/88461431-6faea700-cede-11ea-8a0e-68d3ec1a3bd3.png)
 
 - 「オプション」画面で、「釣りチャンス一覧」画面に表示する魚の指定やその他の設定ができます。
-![optionwindow](https://user-images.githubusercontent.com/28302784/88042868-9770d880-cb87-11ea-9e97-312750a1a8ec.png)
+![option_ja](https://user-images.githubusercontent.com/28302784/88461434-71786a80-cede-11ea-964b-16af51cae3cb.png)
 
 ## 【主な機能】
 
@@ -74,7 +74,7 @@
 ### 3. 魚のメモの形式について
 
 それぞれの魚のメモの初期内容は簡潔さが重視されており、かなり省略された表記になっています。
-その中で特にわかりにくいと思われる部分の読み方が[別のドキュメント](AboutFishMemo.md)で説明されています。
+その中で特にわかりにくいと思われる部分の読み方が[別のドキュメント](AboutFishMemo.md#%E9%AD%9A%E3%81%AE%E3%83%A1%E3%83%A2%E3%81%AE%E5%BD%A2%E5%BC%8F%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)で説明されています。
 
 なお、***魚のメモはユーザが自由に編集可能であり、編集する場合は必ずしもこれらの表記方法に従って編集する必要はありません。***
 

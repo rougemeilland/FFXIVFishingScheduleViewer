@@ -9942,6 +9942,20 @@ namespace FFXIVFishingScheduleViewer
 #endif
 #endregion
 
+#region ライセンス
+                new { id = "license.**FFXIVLicense**.ja", text = "Copyright (C) SQUARE ENIX CO., LTD. All Rights Reserved." },
+                new { id = "license.**FFXIVLicense**.en", text = "FINAL FANTASY XIV © 2010 - 2020 SQUARE ENIX CO., LTD. All Rights Reserved." },
+                new { id = "license.**FFXIVLicense**.fr", text = "FINAL FANTASY XIV (C) 2010 - 2020 SQUARE ENIX CO., Ltd. FINAL FANTASY est une marque déposée de Square Enix Holdings Co., Ltd. Tous les matériels sont utilisés sous licence." },
+                new { id = "license.**FFXIVLicense**.de", text = "FINAL FANTASY XIV (C) 2010 - 2020 SQUARE ENIX CO. LTD. FINAL FANTASY ist ein eingetragenes Markenzeichen von Square Enix Holdings Co., Ltd. Alle Materialien werden unter Lizenz genutzt." },
+#endregion
+
+#region URL
+                new { id = "url.**README**.ja", text = "https://github.com/rougemeilland/FFXIVFishingScheduleViewer/blob/master/docs/README.md#ffxiv-fishing-schedule-viewer" },
+                new { id = "url.**README**.en", text = "https://github.com/rougemeilland/FFXIVFishingScheduleViewer/blob/master/docs/README_en.md#ffxiv-fishing-schedule-viewer" },
+                new { id = "url.**README**.fr", text = "https://github.com/rougemeilland/FFXIVFishingScheduleViewer/blob/master/docs/README_fr.md#ffxiv-fishing-schedule-viewer" },
+                new { id = "url.**README**.de", text = "https://github.com/rougemeilland/FFXIVFishingScheduleViewer/blob/master/docs/README_de.md#ffxiv-fishing-schedule-viewer" },
+#endregion
+
 #region GUI
                 new { id = "guiText.**Title.Option**.ja", text = "オプション" },
                 new { id = "guiText.**Title.Option**.en", text = "Options" },
@@ -9971,6 +9985,10 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "guiText.**Menu.Help**.en", text = "_Help" },
                 new { id = "guiText.**Menu.Help**.fr", text = "_Aide" },
                 new { id = "guiText.**Menu.Help**.de", text = "_Hilfe" },
+                new { id = "guiText.**Menu.ViewREADME**.ja", text = "READMEの表示(_V)" },
+                new { id = "guiText.**Menu.ViewREADME**.en", text = "_View README" },
+                new { id = "guiText.**Menu.ViewREADME**.fr", text = "_Afficher README" },
+                new { id = "guiText.**Menu.ViewREADME**.de", text = "_README anzeigen" },
                 new { id = "guiText.**Menu.About**.ja", text = "{0} のバージョン情報(_H)..." },
                 new { id = "guiText.**Menu.About**.en", text = "_About {0}..." },
                 new { id = "guiText.**Menu.About**.fr", text = "_À propos de {0}..." },
@@ -10020,9 +10038,9 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "guiText.**Label.FishingSpot**.fr", text = "Spot de pêche" },
                 new { id = "guiText.**Label.FishingSpot**.de", text = "Angelplatz" },
                 new { id = "guiText.**Label.RequiredFishingBaits**.ja", text = "必要な釣り餌" },
-                new { id = "guiText.**Label.RequiredFishingBaits**.en", text = "Required fishing baits" },
+                new { id = "guiText.**Label.RequiredFishingBaits**.en", text = "Required fishing tackles" },
                 new { id = "guiText.**Label.RequiredFishingBaits**.fr", text = "Appâts de pêche requis" },
-                new { id = "guiText.**Label.RequiredFishingBaits**.de", text = "Erforderliche Fischköder" },
+                new { id = "guiText.**Label.RequiredFishingBaits**.de", text = "Erforderliche Angelköder" },
                 new { id = "guiText.**Label.EorzeaTime**.ja", text = "エオルゼア時刻" },
                 new { id = "guiText.**Label.EorzeaTime**.en", text = "Eorzea time" },
                 new { id = "guiText.**Label.EorzeaTime**.fr", text = "Heure d'Éorzéa" },
@@ -10044,9 +10062,9 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "guiText.**ToolTip.FishingSpot**.fr", text = "Ceci est un lieu de pêche pour attraper le poisson." },
                 new { id = "guiText.**ToolTip.FishingSpot**.de", text = "Dies ist ein Angelplatz zum Fangen der Fische." },
                 new { id = "guiText.**ToolTip.FishingBaits**.ja", text = "これはその魚を釣るために必要な釣り餌の例です。\n「漁師の直感」が必要な魚の場合、そのための魚を釣るための釣り餌も含みます。" },
-                new { id = "guiText.**ToolTip.FishingBaits**.en", text = "This is an example of the fishing bait needed to catch the fish.\nIf the fish requires \"Fisher's intuition\", it also includes fishing baits for that purpose." },
+                new { id = "guiText.**ToolTip.FishingBaits**.en", text = "This is an example of the fishing tackle needed to catch the fish.\nIf the fish requires \"Fisher's intuition\", it also includes fishing tackles for that purpose." },
                 new { id = "guiText.**ToolTip.FishingBaits**.fr", text = "Ceci est un exemple de l'appât de pêche nécessaire pour attraper le poisson.\nSi le poisson nécessite \"Instinct du pêcheur\", il comprend également des appâts de pêche à cet effet." },
-                new { id = "guiText.**ToolTip.FishingBaits**.de", text = "Dies ist ein Beispiel für den Fischköder, der zum Fangen des Fisches benötigt wird.\nWenn der Fisch die \"Petri Heil\" erfordert, umfasst er auch Fischköder für diesen Zweck." },
+                new { id = "guiText.**ToolTip.FishingBaits**.de", text = "Dies ist ein Beispiel für den Angelköder, der zum Fangen des Fisches benötigt wird.\nWenn der Fisch die \"Petri Heil\" erfordert, umfasst er auch Angelköder für diesen Zweck." },
                 new { id = "guiText.**Label.Conditions**.ja", text = "条件" },
                 new { id = "guiText.**Label.Conditions**.en", text = "conditions" },
                 new { id = "guiText.**Label.Conditions**.fr", text = "conditions" },
@@ -10112,9 +10130,9 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "guiText.**Label.WeatherCondition**.fr", text = "Météo:" },
                 new { id = "guiText.**Label.WeatherCondition**.de", text = "Wetter:" },
                 new { id = "guiText.**Label.NoCheckedFishes**.ja", text = "表示する魚がひとつも指定されていません。\n「Ctrl+O」キーを押して「オプション」ウィンドウを開き、表示させたい魚にチェックを入れてください。" },
-                new { id = "guiText.**Label.NoCheckedFishes**.en", text = "No fish have been specified for display. Open the \"Options\" window by pressing \"Ctrl+O\" and check the fish you want to display." },
-                new { id = "guiText.**Label.NoCheckedFishes**.fr", text = "Aucun poisson n'a été spécifié pour l'affichage. Ouvrez la fenêtre \"Options\" en appuyant sur \"Ctrl + O\" et cochez le poisson que vous souhaitez afficher." },
-                new { id = "guiText.**Label.NoCheckedFishes**.de", text = "Für die Anzeige wurden keine Fische angegeben. Öffnen Sie das Fenster \"Optionen\" durch Drücken von \"Strg + O\" und überprüfen Sie den Fisch, den Sie anzeigen möchten." },
+                new { id = "guiText.**Label.NoCheckedFishes**.en", text = "No fish have been specified for display.\nOpen the \"Options\" window by pressing \"Ctrl+O\" and check the fish you want to display." },
+                new { id = "guiText.**Label.NoCheckedFishes**.fr", text = "Aucun poisson n'a été spécifié pour l'affichage.\nOuvrez la fenêtre \"Options\" en appuyant sur \"Ctrl + O\" et cochez le poisson que vous souhaitez afficher." },
+                new { id = "guiText.**Label.NoCheckedFishes**.de", text = "Für die Anzeige wurden keine Fische angegeben.\nÖffnen Sie das Fenster \"Optionen\" durch Drücken von \"Strg + O\" und überprüfen Sie den Fisch, den Sie anzeigen möchten." },
 #endregion
 
 #region 一般
@@ -10158,10 +10176,6 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "generic.**ProductVersion**.en", text = "{0} Version {1}" },
                 new { id = "generic.**ProductVersion**.fr", text = "{0} Version {1}" },
                 new { id = "generic.**ProductVersion**.de", text = "{0} Version {1}" },
-                new { id = "generic.**FFXIVLicense**.ja", text = "Copyright (C) SQUARE ENIX CO., LTD. All Rights Reserved." },
-                new { id = "generic.**FFXIVLicense**.en", text = "FINAL FANTASY XIV © 2010 - 2020 SQUARE ENIX CO., LTD. All Rights Reserved." },
-                new { id = "generic.**FFXIVLicense**.fr", text = "FINAL FANTASY XIV (C) 2010 - 2020 SQUARE ENIX CO., Ltd. FINAL FANTASY est une marque déposée de Square Enix Holdings Co., Ltd. Tous les matériels sont utilisés sous licence." },
-                new { id = "generic.**FFXIVLicense**.de", text = "FINAL FANTASY XIV (C) 2010 - 2020 SQUARE ENIX CO. LTD. FINAL FANTASY ist ein eingetragenes Markenzeichen von Square Enix Holdings Co., Ltd. Alle Materialien werden unter Lizenz genutzt." },
 #endregion
             };
             var duplicated =

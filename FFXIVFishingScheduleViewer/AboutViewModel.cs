@@ -34,8 +34,10 @@ namespace FFXIVFishingScheduleViewer
         public string AboutMenuText => string.Format(GUITextTranslate.Instance["Menu.About"], Product);
         public string AboutWindowTitleText => string.Format(GUITextTranslate.Instance["Title.About"], Product);
         public string ProductVersionText => string.Format(Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "ProductVersion")], Product, Version);
-        public string FFXIVLicenseText => Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "FFXIVLicense")];
+        public string FFXIVLicenseText => Translate.Instance[new TranslationTextId(TranslationCategory.License, "FFXIVLicense")];
+        public string READMEUrlText => Translate.Instance[new TranslationTextId(TranslationCategory.Url, "README")];
         public GUITextTranslate GUIText => GUITextTranslate.Instance;
+        public ICommand ViewREADMEMenuCommand { get; set; }
         public ICommand AboutMenuCommand { get; set; }
         protected override void Dispose(bool disposing)
         {
@@ -49,6 +51,7 @@ namespace FFXIVFishingScheduleViewer
 
         private void _settingProvider_UserLanguageChanged(object sender, EventArgs e)
         {
+            RaisePropertyChangedEvent(nameof(READMEUrlText));
             RaisePropertyChangedEvent(nameof(AboutMenuText));
             RaisePropertyChangedEvent(nameof(AboutWindowTitleText));
             RaisePropertyChangedEvent(nameof(ProductVersionText));

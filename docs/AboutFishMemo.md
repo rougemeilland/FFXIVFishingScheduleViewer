@@ -2,8 +2,8 @@
 
 ---
 
-[日本語で表示する][[Display in English](AboutFishMemo_en.md)][[Afficher en français](AboutFishMemo_fr.md)][[Anzeige auf Deutsch](AboutFishMemo_de.md)]  
-[[READMEに戻る](README.md)]
+[日本語で表示する][[Display in English](AboutFishMemo_en.md#about-format-of-fish-memo)][[Afficher en français](AboutFishMemo_fr.md#%C3%A0-propos-du-format-du-m%C3%A9mo-de-poisson)][[Anzeige auf Deutsch](AboutFishMemo_de.md#format-der-fischnotiz)]  
+[[READMEに戻る](README.md#ffxiv-fishing-schedule-viewer)]
 
 ---
 

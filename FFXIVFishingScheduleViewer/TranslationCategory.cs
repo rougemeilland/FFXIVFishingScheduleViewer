@@ -11,6 +11,8 @@
         FishMemo,
         Fish,
         Action,
+        License,
+        Url,
         GUIText,
         Generic,
     }

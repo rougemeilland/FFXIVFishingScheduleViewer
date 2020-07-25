@@ -17,6 +17,8 @@
                 <MenuItem Header="{Binding Path=GUIText[Menu.Exit]}" InputGestureText="ALT+F4" Command="{Binding Path=ExitMenuCommand}"/>
             </MenuItem>
             <MenuItem Header="{Binding Path=GUIText[Menu.Help]}">
+                <MenuItem Header="{Binding Path=GUIText[Menu.ViewREADME]}" Command="{Binding Path=About.ViewREADMEMenuCommand}" InputGestureText="F1"/>
+                <Separator/>
                 <MenuItem Header="{Binding Path=About.AboutMenuText}" Command="{Binding Path=About.AboutMenuCommand}"/>
             </MenuItem>
         </Menu>
