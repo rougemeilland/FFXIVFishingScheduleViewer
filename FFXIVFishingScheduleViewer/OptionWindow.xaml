@@ -12,7 +12,7 @@
         Height="640"
         DataContextChanged="Window_DataContextChanged">
     <DockPanel>
-        <Button DockPanel.Dock="Bottom" HorizontalAlignment="Center" Content="{Binding Path=GUIText[Label.Close]}" Margin="10" Padding="10,5,10,5" Click="CloseButton_Click"/>
+        <Button DockPanel.Dock="Bottom" HorizontalAlignment="Center" Content="{Binding Path=GUIText[ButtonText.Close]}" Margin="10" Padding="10,5,10,5" Click="CloseButton_Click"/>
         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Path=GUIText[Label.Language]}" Margin="5" VerticalAlignment="Center"/>
@@ -22,6 +22,7 @@
                 <TextBlock Text="{Binding Path=GUIText[Label.ForecastPeriod]}" Margin="5" VerticalAlignment="Center"/>
                 <ComboBox Name="ForecastPeriodDays" Margin="5" VerticalAlignment="Center"/>
             </StackPanel>
+            <CheckBox Content="{Binding Path=GUIText[Label.IsEnabledToCheckNewVersionReleased]}" IsChecked="{Binding Path=IsEnabledToCheckNewVersionReleased, Mode=TwoWay}" Margin="5"/>
         </StackPanel>
         <TextBlock DockPanel.Dock="Top" Text="{Binding Path=GUIText[Label.FishFilter]}" VerticalAlignment="Stretch" Margin="5,10,5,5"/>
         <TabControl ItemsSource="{Binding Path=FishSettingOfWorld}" SelectedIndex="0" >

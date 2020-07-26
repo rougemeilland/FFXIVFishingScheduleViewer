@@ -166,5 +166,26 @@ namespace FFXIVFishingScheduleViewer.Properties {
                 this["IsUpgraded"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsEnabledToCheckNewVersionReleased {
+            get {
+                return ((bool)(this["IsEnabledToCheckNewVersionReleased"]));
+            }
+            set {
+                this["IsEnabledToCheckNewVersionReleased"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://github.com/rougemeilland/FFXIVFishingScheduleViewer/releases/latest")]
+        public string UrlOfDownloadPage {
+            get {
+                return ((string)(this["UrlOfDownloadPage"]));
+            }
+        }
     }
 }

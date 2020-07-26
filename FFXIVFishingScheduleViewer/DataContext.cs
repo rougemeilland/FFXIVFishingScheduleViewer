@@ -148,10 +148,14 @@ namespace FFXIVFishingScheduleViewer
             _settingProvider.ForecastWeatherDaysChanged += _settingProvider_ForecastWeatherDaysChanged;
             _settingProvider.FishMemoChanged += _settingProvider_FishMemoChanged;
             _settingProvider.FishFilterChanded += _settingProvider_FishFilterChanded;
+            _settingProvider.IsEnabledToCheckNewVersionReleasedChanged += _settingProvider_IsEnabledToCheckNewVersionReleasedChanged;
+            _settingProvider.NewVersionOfApplicationChanged += _settingProvider_NewVersionOfApplicationChanged;
             _isPendingFishFilterChandedEvent = false;
 
             CurrentTime = DateTime.UtcNow;
             CurrentDateTimeText = "";
+            NewVersionReleasedText = null;
+            _settingProvider.CheckNewVersionReleased();
         }
 
         public IEnumerable<FishSettingOfAreaGroupViewModel> FishSettingOfWorld { get; }
@@ -207,6 +211,7 @@ namespace FFXIVFishingScheduleViewer
 
         public string CurrentDateTimeText { get; private set; }
         public AboutViewModel About { get; set; }
+        public ICommand ShowDownloadPageCommand { get; set; }
         public ICommand OptionMenuCommand { get; set; }
         public ICommand ExitMenuCommand { get; set; }
 
@@ -251,6 +256,16 @@ namespace FFXIVFishingScheduleViewer
 
         public event EventHandler<Fish> FishMemoChanged;
 
+        public bool IsEnabledToCheckNewVersionReleased
+        {
+            get => _settingProvider.IsEnabledToCheckNewVersionReleased;
+            set => _settingProvider.IsEnabledToCheckNewVersionReleased = value;
+        }
+
+        public string NewVersionReleasedText { get; private set; }
+
+        public string UrlOfDownloadPage => _settingProvider.UrlOfDownloadPage;
+
         protected override void Dispose(bool disposing)
         {
             if (!_isDisposed)
@@ -263,6 +278,8 @@ namespace FFXIVFishingScheduleViewer
                 _settingProvider.ForecastWeatherDaysChanged -= _settingProvider_ForecastWeatherDaysChanged;
                 _settingProvider.FishMemoChanged -= _settingProvider_FishMemoChanged;
                 _settingProvider.FishFilterChanded -= _settingProvider_FishFilterChanded;
+                _settingProvider.NewVersionOfApplicationChanged -= _settingProvider_NewVersionOfApplicationChanged;
+                _settingProvider.IsEnabledToCheckNewVersionReleasedChanged += _settingProvider_IsEnabledToCheckNewVersionReleasedChanged;
                 _isDisposed = true;
                 base.Dispose(disposing);
             }
@@ -286,6 +303,7 @@ namespace FFXIVFishingScheduleViewer
         private void _settingProvider_UserLanguageChanged(object sender, EventArgs e)
         {
             UpdateCurrentDateTimeText(DateTime.UtcNow);
+            UpdateNewVersionReleasedText();
             RaisePropertyChangedEvent(nameof(FishChanceList));
             RaisePropertyChangedEvent(nameof(GUIText));
             RaisePropertyChangedEvent(nameof(UserLanguage));
@@ -331,6 +349,19 @@ namespace FFXIVFishingScheduleViewer
                     UpdateFishChanceList(now);
                     _isPendingFishFilterChandedEvent = false;
                 }
+            });
+        }
+
+        private void _settingProvider_IsEnabledToCheckNewVersionReleasedChanged(object sender, EventArgs e)
+        {
+            RaisePropertyChangedEvent(nameof(IsEnabledToCheckNewVersionReleased));
+        }
+
+        private void _settingProvider_NewVersionOfApplicationChanged(object sender, EventArgs e)
+        {
+            _dispatcher.InvokeAsync(() =>
+            {
+                UpdateNewVersionReleasedText();
             });
         }
 
@@ -561,6 +592,19 @@ namespace FFXIVFishingScheduleViewer
                 .ToArray();
             RaisePropertyChangedEvent(nameof(FishChanceTimeList));
             RaisePropertyChangedEvent(nameof(FishChanceList));
+        }
+
+        private void UpdateNewVersionReleasedText()
+        {
+            var format = GUITextTranslate.Instance["Label.NewVersionReleased"];
+            NewVersionReleasedText =
+                _settingProvider.NewVersionOfApplication != null
+                ? string.Format(
+                    GUITextTranslate.Instance["Label.NewVersionReleased"],
+                    _settingProvider.NewVersionOfApplication,
+                    _settingProvider.CurrentVersionOfApplication)
+                : null;
+            RaisePropertyChangedEvent(nameof(NewVersionReleasedText));
         }
     }
 }

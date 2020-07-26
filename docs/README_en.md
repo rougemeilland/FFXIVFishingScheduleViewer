@@ -1,8 +1,8 @@
-﻿# FFXIV Fishing Schedule Viewer
+﻿# FFXIV Fishing Schedule Viewer<a name="top_of_content"></a>
 
 ---
 
-[[日本語で表示する](README.md#ffxiv-fishing-schedule-viewer)] [Display in English] [[Afficher en français](README_fr.md#ffxiv-fishing-schedule-viewer)][[Anzeige auf Deutsch](README_de.md#ffxiv-fishing-schedule-viewer)]
+[[日本語で表示する](README.md#top_of_content)] [Display in English] [[Afficher en français](README_fr.md#top_of_content)][[Anzeige auf Deutsch](README_de.md#top_of_content)]
 
 ---
 
@@ -47,7 +47,7 @@ This application supports FINAL FANTASY XIV patch 5.2.
     1. Select `.NET Framework 4.7.2 Runtime` on the [Microsoft official website](https://dotnet.microsoft.com/download/dotnet-framework/net472) and download it.
     2. Execute the downloaded file.
 2. Follow the steps below to install this application.
-    1. Download the latest .zip file from [Published location of this application](https://github.com/rougemeilland/FFXIVFishingScheduleViewer/releases).
+    1. Download the latest .zip file from [Published location of this application](https://github.com/rougemeilland/FFXIVFishingScheduleViewer/releases/latest).
     2. Unzip the downloaded .zip file and copy it to an appropriate folder.
 
 ### How to uninstall
@@ -76,7 +76,7 @@ Please note that it does not always match the difficulty level of the fishing it
 
 ### 3. About format of fish memo
 The memo initially set for each fish emphasizes the compactness of the displayed contents, so the notation is considerably omitted.
-The reading of the part that seems to be particularly difficult to understand is explained in [another document](AboutFishMemo_en.md#about-format-of-fish-memo).
+The reading of the part that seems to be particularly difficult to understand is explained in [another document](AboutFishMemo_en.md#top_of_content).
 
 ***The fish memo can be freely edited by the user, and it is not necessary to edit it according to these notations.***
 

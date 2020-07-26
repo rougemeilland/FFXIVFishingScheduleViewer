@@ -1,4 +1,11 @@
 ﻿using System;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Web;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,7 +15,8 @@ namespace FFXIVFishingScheduleViewer
     class SettingProvider
         : ISettingProvider
     {
-
+        private static Regex _locationOfReleasePattern = new Regex(@"^*./releases/tag/v(?<version>[0-9\.]+)$", RegexOptions.Compiled);
+        private static Regex _versionTextPattern = new Regex(@"^(?<version>[0-9\.]+)$", RegexOptions.Compiled);
         private event EventHandler<MainWindowTabType> _mainWindowTabSelected;
         private event EventHandler<MainWindowTabType> _mainWindowTabUnselected;
         private event EventHandler<AreaGroup> _areaGroupOnForecastWeatherExpanded;
@@ -17,11 +25,16 @@ namespace FFXIVFishingScheduleViewer
         private event EventHandler<Fish> _fishMemoChanded;
         private event EventHandler _forecastWeatherDaysChanged;
         private event EventHandler _userLanguageChanged;
+        private event EventHandler _newVersionOfApplicationChanged;
+        private event EventHandler _isEnabledToCheckNewVersionReleasedChanged;
+
         private FishCollection _fishes;
         private IDictionary<string, string> _filteredfishNames;
         private IDictionary<string, string> _expandedAreaGroupNames;
         private IDictionary<string, string> _selectedTabNames;
         private IDictionary<string, string> _fishMemoList;
+        private string _newVersionOfApplication;
+        private string _currentVersionText;
 
         public SettingProvider(FishCollection fishes)
         {
@@ -68,6 +81,9 @@ namespace FFXIVFishingScheduleViewer
                 Properties.Settings.Default.Save();
             }
             Translate.Instance.SetLanguage(Properties.Settings.Default.UserLanguage);
+            _newVersionOfApplication = null;
+            var m = _versionTextPattern.Match(GetType().Assembly.GetName().Version.ToString());
+            _currentVersionText = m.Success ? m.Groups["version"].Value : null;
         }
 
         bool ISettingProvider.GetIsSelectedMainWindowTab(MainWindowTabType tab)
@@ -400,7 +416,6 @@ namespace FFXIVFishingScheduleViewer
                     catch (Exception)
                     {
                     }
-
                 }
             }
         }
@@ -417,5 +432,105 @@ namespace FFXIVFishingScheduleViewer
                 _userLanguageChanged -= value;
             }
         }
+
+        bool ISettingProvider.IsEnabledToCheckNewVersionReleased
+        {
+            get => Properties.Settings.Default.IsEnabledToCheckNewVersionReleased;
+
+            set
+            {
+                if (value != Properties.Settings.Default.IsEnabledToCheckNewVersionReleased)
+                {
+                    Properties.Settings.Default.IsEnabledToCheckNewVersionReleased = value;
+                    Properties.Settings.Default.Save();
+                    try
+                    {
+                        _isEnabledToCheckNewVersionReleasedChanged(this, EventArgs.Empty);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+        }
+
+        event EventHandler ISettingProvider.IsEnabledToCheckNewVersionReleasedChanged
+        {
+            add
+            {
+                _isEnabledToCheckNewVersionReleasedChanged += value;
+            }
+
+            remove
+            {
+                _isEnabledToCheckNewVersionReleasedChanged -= value;
+            }
+        }
+
+        void ISettingProvider.CheckNewVersionReleased()
+        {
+            if (Properties.Settings.Default.IsEnabledToCheckNewVersionReleased && _currentVersionText != null)
+            {
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        using (var client = new HttpClient())
+                        using (var res = await client.GetAsync(Properties.Settings.Default.UrlOfDownloadPage))
+                        {
+                            res.EnsureSuccessStatusCode();
+                            var content = await res.Content.ReadAsStringAsync();
+                            var url = res.RequestMessage.RequestUri;
+                            var m = _locationOfReleasePattern.Match(url.AbsoluteUri);
+                            if (m.Success)
+                            {
+                                var newVersionText = m.Groups["version"].Value;
+                                NewVersionOfApplication = newVersionText.CompareVersionString(_currentVersionText) > 0 ? newVersionText : null;
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                });
+            }
+        }
+
+        public string NewVersionOfApplication
+        {
+            get => _newVersionOfApplication;
+
+            private set
+            {
+                if ( value != _newVersionOfApplication)
+                {
+                    _newVersionOfApplication = value;
+                    try
+                    {
+                        _newVersionOfApplicationChanged(this, EventArgs.Empty);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+        }
+
+        string ISettingProvider.CurrentVersionOfApplication => _currentVersionText;
+
+        event EventHandler ISettingProvider.NewVersionOfApplicationChanged
+        {
+            add
+            {
+                _newVersionOfApplicationChanged += value;
+            }
+
+            remove
+            {
+                _newVersionOfApplicationChanged -= value;
+            }
+        }
+
+        string ISettingProvider.UrlOfDownloadPage => Properties.Settings.Default.UrlOfDownloadPage;
     }
 }

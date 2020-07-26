@@ -1,8 +1,8 @@
-﻿# FFXIV Fishing Schedule Viewer
+﻿# FFXIV Fishing Schedule Viewer<a name="top_of_content"></a>
 
 ---
 
-[日本語で表示する] [[Display in English](README_en.md#ffxiv-fishing-schedule-viewer)] [[Afficher en français](README_fr.md#ffxiv-fishing-schedule-viewer)][[Anzeige auf Deutsch](README_de.md#ffxiv-fishing-schedule-viewer)]
+[日本語で表示する] [[Display in English](README_en.md#top_of_content)] [[Afficher en français](README_fr.md#top_of_content)][[Anzeige auf Deutsch](README_de.md#top_of_content)]
 
 ---
 
@@ -46,7 +46,7 @@
     1. [Microsoftのサイト](https://dotnet.microsoft.com/download/dotnet-framework/net472)で`.NET Framework 4.7.2 Runtime`を選択してダウンロードをしてください。
     2. ダウンロードしたファイルを実行してください。
 2. 以下の手順で`FFXIV Fishing Schedule Viewer`をインストールしてください。
-    1. [本アプリケーションの公開場所](https://github.com/rougemeilland/FFXIVFishingScheduleViewer/releases)から最新版の.zipファイルをダウンロードしてください。
+    1. [本アプリケーションの公開場所](https://github.com/rougemeilland/FFXIVFishingScheduleViewer/releases/latest)から最新版の.zipファイルをダウンロードしてください。
     2. ダウンロードした.zipファイルを解凍して、適当なフォルダにコピーしてください。
 
 ### 2. アンインストールの方法
@@ -74,7 +74,7 @@
 ### 3. 魚のメモの形式について
 
 それぞれの魚のメモの初期内容は簡潔さが重視されており、かなり省略された表記になっています。
-その中で特にわかりにくいと思われる部分の読み方が[別のドキュメント](AboutFishMemo.md#%E9%AD%9A%E3%81%AE%E3%83%A1%E3%83%A2%E3%81%AE%E5%BD%A2%E5%BC%8F%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6)で説明されています。
+その中で特にわかりにくいと思われる部分の読み方が[別のドキュメント](AboutFishMemo.md#top_of_content)で説明されています。
 
 なお、***魚のメモはユーザが自由に編集可能であり、編集する場合は必ずしもこれらの表記方法に従って編集する必要はありません。***
 

@@ -21,7 +21,7 @@ namespace FFXIVFishingScheduleViewer
             _settingProvider.UserLanguageChanged += _settingProvider_UserLanguageChanged;
             var assembly = typeof(MainWindow).Assembly;
             Product = ((AssemblyProductAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyProductAttribute))).Product;
-            Version = assembly.GetName().Version.ToString();
+            Version = _settingProvider.CurrentVersionOfApplication;
             Company = ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCompanyAttribute))).Company;
             Copyright = ((AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCopyrightAttribute))).Copyright;
             AboutMenuCommand = null;

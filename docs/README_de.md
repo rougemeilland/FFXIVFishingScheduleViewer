@@ -1,8 +1,8 @@
-﻿# FFXIV Fishing Schedule Viewer
+﻿# FFXIV Fishing Schedule Viewer<a name="top_of_content"></a>
 
 ---
 
-[[日本語で表示する](README.md#ffxiv-fishing-schedule-viewer)] [[Display in English](README_en.md#ffxiv-fishing-schedule-viewer)] [[Afficher en français](README_fr.md#ffxiv-fishing-schedule-viewer)][Anzeige auf Deutsch]
+[[日本語で表示する](README.md#top_of_content)] [[Display in English](README_en.md#top_of_content)] [[Afficher en français](README_fr.md#top_of_content)][Anzeige auf Deutsch]
 
 ---
 
@@ -47,7 +47,7 @@ Diese Anwendung unterstützt FINAL FANTASY XIV Patch 5.2.
   1. Wählen Sie auf der [offiziellen Microsoft-Website] (https://dotnet.microsoft.com/download/dotnet-framework/net472) ".NET Framework 4.7.2 Runtime" aus und laden Sie es herunter.
   2. Führen Sie die heruntergeladene Datei aus.
 2. Führen Sie die folgenden Schritte aus, um diese Anwendung zu installieren.
-  1. Laden Sie die neueste ZIP-Datei von [Veröffentlichter Speicherort dieser Anwendung] herunter (https://github.com/rougemeilland/FFXIVFishingScheduleViewer/releases).
+  1. Laden Sie die neueste ZIP-Datei von [Veröffentlichter Speicherort dieser Anwendung] herunter (https://github.com/rougemeilland/FFXIVFishingScheduleViewer/releases/latest).
   2. Entpacken Sie die heruntergeladene ZIP-Datei und kopieren Sie sie in einen geeigneten Ordner.
 
 ### So deinstallieren Sie
@@ -77,7 +77,7 @@ Bitte beachten Sie, dass es nicht immer dem Schwierigkeitsgrad des Fischfangs se
 ### 3. Format der Fischnotiz
 
 Der anfängliche Inhalt jeder Fischnote wird stark abgekürzt, wobei der Schwerpunkt auf der Einfachheit liegt.
-Das Lesen des Teils, der besonders schwer zu verstehen scheint, wird in [einem anderen Dokument](AboutFishMemo_de.md#format-der-fischnotiz) erläutert.
+Das Lesen des Teils, der besonders schwer zu verstehen scheint, wird in [einem anderen Dokument](AboutFishMemo_de.md#top_of_content) erläutert.
 
 ***Das Fischmemo kann vom Benutzer frei bearbeitet werden, und es ist nicht erforderlich, es gemäß diesen Notationen zu bearbeiten.***
 

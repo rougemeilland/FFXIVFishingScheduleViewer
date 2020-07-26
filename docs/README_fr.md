@@ -1,8 +1,8 @@
-﻿# FFXIV Fishing Schedule Viewer
+﻿# FFXIV Fishing Schedule Viewer<a name="top_of_content"></a>
 
 ---
 
-[[日本語で表示する](README.md#ffxiv-fishing-schedule-viewer)] [[Display in English](README_en.md#ffxiv-fishing-schedule-viewer)] [Afficher en français][[Anzeige auf Deutsch](README_de.md#ffxiv-fishing-schedule-viewer)]
+[[日本語で表示する](README.md#top_of_content)] [[Display in English](README_en.md#top_of_content)] [Afficher en français][[Anzeige auf Deutsch](README_de.md#top_of_content)]
 
 ---
 
@@ -45,7 +45,7 @@ Cette application prend en charge FINAL FANTASY XIV patch 5.2.
     1. Sélectionnez «.NET Framework 4.7.2 Runtime» sur le [site Web officiel de Microsoft] (https://dotnet.microsoft.com/download/dotnet-framework/net472) et téléchargez-le.
     2. Exécutez le fichier téléchargé.
 2. Suivez les étapes ci-dessous pour installer cette application.
-    1. Téléchargez le dernier fichier .zip à partir de [Emplacement de publication de cette application] (https://github.com/rougemeilland/FFXIVFishingScheduleViewer/releases).
+    1. Téléchargez le dernier fichier .zip à partir de [Emplacement de publication de cette application] (https://github.com/rougemeilland/FFXIVFishingScheduleViewer/releases/latest).
     2. Décompressez le fichier .zip téléchargé et copiez-le dans un dossier approprié.
 
 ### Comment désinstaller
@@ -75,7 +75,7 @@ Veuillez noter que cela ne correspond pas toujours à la difficulté de la pêch
 
 ### 3. À propos du format du mémo de poisson
 Le contenu initial de chaque note de poisson met l'accent sur la brièveté et est abrégé.
-La lecture de la partie qui semble particulièrement difficile à comprendre est expliquée dans [un autre document](AboutFishMemo_fr.md#%C3%A0-propos-du-format-du-m%C3%A9mo-de-poisson).
+La lecture de la partie qui semble particulièrement difficile à comprendre est expliquée dans [un autre document](AboutFishMemo_fr.md#top_of_content).
 
 ***Le mémo de poisson peut être librement édité par l'utilisateur, et il n'est pas nécessaire de l'éditer selon ces notations.***
 

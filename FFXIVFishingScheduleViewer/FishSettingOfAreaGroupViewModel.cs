@@ -41,8 +41,8 @@ namespace FFXIVFishingScheduleViewer
         }
 
         public string AreaGroupName => _areaGroup.Name;
-        public string CheckAllFishButtonLabel => string.Format(GUIText["Label.CheckAllFishOf"], _areaGroup.Name);
-        public string UncheckAllFishButtonLabel => string.Format(GUIText["Label.UncheckAllFishOf"], _areaGroup.Name);
+        public string CheckAllFishButtonLabel => string.Format(GUIText["ButtonText.CheckAllFishOf"], _areaGroup.Name);
+        public string UncheckAllFishButtonLabel => string.Format(GUIText["ButtonText.UncheckAllFishOf"], _areaGroup.Name);
         public bool HasManyFish { get; }
         public IEnumerable<FishSettingOfAreaViewModel> Areas { get; }
         public GUITextTranslate GUIText { get; }

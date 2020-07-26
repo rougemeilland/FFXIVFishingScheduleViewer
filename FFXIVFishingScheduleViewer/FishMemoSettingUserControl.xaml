@@ -22,7 +22,7 @@
             </DockPanel.Style>
             <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock Text="{Binding Path=GUIText[Label.Memo]}" VerticalAlignment="Center" Margin="5" />
-                <Button Content="{Binding Path=GUIText[Label.EditMemo]}" VerticalAlignment="Center" Command="{Binding Path=EditMemoCommand}" Margin="5" Padding="5" />
+                <Button Content="{Binding Path=GUIText[ButtonText.EditMemo]}" VerticalAlignment="Center" Command="{Binding Path=EditMemoCommand}" Margin="5" Padding="5" />
             </StackPanel>
             <Border BorderBrush="#222222" BorderThickness="1" Margin="15,5,5,5" HorizontalAlignment="Stretch" >
                 <TextBlock Text="{Binding Path=Memo}" Margin="5" TextWrapping="Wrap"/>
@@ -43,9 +43,9 @@
             </DockPanel.Style>
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Left">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="{Binding Path=GUIText[Label.Save]}" Command="{Binding Path=SaveMemoCommand}" Margin="5" Padding="5" />
-                    <Button Content="{Binding Path=GUIText[Label.Cancel]}" Command="{Binding Path=CancelMemoCommand}" Margin="5" Padding="5" />
-                    <Button Content="{Binding Path=GUIText[Label.Reset]}" Command="{Binding Path=ResetMemoCommand}" Margin="15, 5, 5, 5" Padding="5" />
+                    <Button Content="{Binding Path=GUIText[ButtonText.Save]}" Command="{Binding Path=SaveMemoCommand}" Margin="5" Padding="5" />
+                    <Button Content="{Binding Path=GUIText[ButtonText.Cancel]}" Command="{Binding Path=CancelMemoCommand}" Margin="5" Padding="5" />
+                    <Button Content="{Binding Path=GUIText[ButtonText.Reset]}" Command="{Binding Path=ResetMemoCommand}" Margin="15, 5, 5, 5" Padding="5" />
                 </StackPanel>
             </StackPanel>
             <Border BorderBrush="#222222" BorderThickness="1" Margin="15,5,5,5" HorizontalAlignment="Stretch" >

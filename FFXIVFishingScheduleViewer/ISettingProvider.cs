@@ -29,5 +29,15 @@ namespace FFXIVFishingScheduleViewer
 
         string UserLanguage { get; set; }
         event EventHandler UserLanguageChanged;
+
+        bool IsEnabledToCheckNewVersionReleased { get; set; }
+        event EventHandler IsEnabledToCheckNewVersionReleasedChanged;
+
+        void CheckNewVersionReleased();
+        string NewVersionOfApplication { get; }
+        string CurrentVersionOfApplication { get; }
+        event EventHandler NewVersionOfApplicationChanged;
+
+        string UrlOfDownloadPage { get; }
     }
 }

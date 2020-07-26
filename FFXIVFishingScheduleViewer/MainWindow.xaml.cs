@@ -33,6 +33,11 @@ namespace FFXIVFishingScheduleViewer
             _settingProvider = new SettingProvider(_fishes);
             _dataContext = new DataContext(Dispatcher, _areaGroups, _fishes, _settingProvider);
             DataContext = _dataContext;
+            _dataContext.ShowDownloadPageCommand = new SimpleCommand(p =>
+            {
+                var url = _dataContext.UrlOfDownloadPage;
+                System.Diagnostics.Process.Start(url);
+            });
             _dataContext.OptionMenuCommand = new SimpleCommand(p =>
             {
                 var dialog = new OptionWindow();

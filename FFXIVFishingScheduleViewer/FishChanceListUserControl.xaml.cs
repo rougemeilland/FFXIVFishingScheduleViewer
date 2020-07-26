@@ -654,7 +654,7 @@ namespace FFXIVFishingScheduleViewer
                 _dataContext.SetFishFilter(chance.Fish, false);
             };
             contextMenu.Items.Add(new Separator());
-            var cancelMenuItem = new MenuItem { Header = GUITextTranslate.Instance["Label.Cancel"] };
+            var cancelMenuItem = new MenuItem { Header = GUITextTranslate.Instance["ButtonText.Cancel"] };
             contextMenu.Items.Add(cancelMenuItem);
             cancelMenuItem.Click += (s, e) =>
             {

@@ -1,9 +1,9 @@
-# 魚のメモの形式について
+# 魚のメモの形式について<a name="top_of_content"></a>
 
 ---
 
-[日本語で表示する][[Display in English](AboutFishMemo_en.md#about-format-of-fish-memo)][[Afficher en français](AboutFishMemo_fr.md#%C3%A0-propos-du-format-du-m%C3%A9mo-de-poisson)][[Anzeige auf Deutsch](AboutFishMemo_de.md#format-der-fischnotiz)]  
-[[READMEに戻る](README.md#ffxiv-fishing-schedule-viewer)]
+[日本語で表示する][[Display in English](AboutFishMemo_en.md#top_of_content)][[Afficher en français](AboutFishMemo_fr.md#top_of_content)][[Anzeige auf Deutsch](AboutFishMemo_de.md#top_of_content)]  
+[[READMEに戻る](README.md#top_of_content)]
 
 ---
 
@@ -12,7 +12,7 @@
 ! (びっくりマーク/エクスクラメーションマーク)は、その魚がかかったときのアタリの強さを表します。
 魚がかかった時にプレイヤーキャラクターの頭上に表示されるエフェクトと同じ意味です。
 
--  ! は弱震 (弱いアタリ)
+  -  ! は弱震 (弱いアタリ)
 -  !! は強震 (強いアタリ)
 -  !!! は激震 (ヌシ級のアタリ)
 
