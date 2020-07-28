@@ -6,6 +6,49 @@ namespace FFXIVFishingScheduleViewer
 {
     static class WeatherTypeExtensions
     {
+        public static WeatherType TryParseAsWeather(this string text)
+        {
+            switch (text)
+            {
+                case "雨":
+                    return WeatherType.雨;
+                case "快晴":
+                    return WeatherType.快晴;
+                case "砂塵":
+                    return WeatherType.砂塵;
+                case "灼熱波":
+                    return WeatherType.灼熱波;
+                case "吹雪":
+                    return WeatherType.吹雪;
+                case "晴れ":
+                    return WeatherType.晴れ;
+                case "雪":
+                    return WeatherType.雪;
+                case "曇り":
+                    return WeatherType.曇り;
+                case "風":
+                    return WeatherType.風;
+                case "放電":
+                    return WeatherType.放電;
+                case "暴雨":
+                    return WeatherType.暴雨;
+                case "暴風":
+                    return WeatherType.暴風;
+                case "霧":
+                    return WeatherType.霧;
+                case "妖霧":
+                    return WeatherType.妖霧;
+                case "雷":
+                    return WeatherType.雷;
+                case "雷雨":
+                    return WeatherType.雷雨;
+                case "霊風":
+                    return WeatherType.霊風;
+                default:
+                    return WeatherType.None;
+            }
+        }
+
         public static string GetText(this WeatherType weather)
         {
             return GetText(weather, id => Translate.Instance[new TranslationTextId(TranslationCategory.Weather, id)]);

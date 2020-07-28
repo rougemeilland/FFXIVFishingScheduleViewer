@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -11,6 +11,7 @@ namespace FFXIVFishingScheduleViewer
         private bool _isDisposed;
         private Fish _fish;
         private string _memo;
+        private ICollection<MenuItemViewModel> _menuItems;
 
         public FishDetailViewModel(Fish fish)
         {
@@ -19,18 +20,25 @@ namespace FFXIVFishingScheduleViewer
             IsOK = false;
             var brushConverer = new BrushConverter();
             Background = _fish.DifficultySymbol.GetBackgroundColor();
+            _menuItems = new List<MenuItemViewModel>();
+            _menuItems.Add(MenuItemViewModel.CreateShowFishInCBHMenuItem(_fish));
+            foreach (var spot in _fish.FishingSpots.OrderBy(spot => spot.Area.AreaGroup.Order).ThenBy(spot => spot.Area.Order).ThenBy(spot => spot.Order))
+                _menuItems.Add(MenuItemViewModel.CreateShowSpotInCBHMenuItem(spot));
+            foreach (var bait in _fish.FishingBaits.OrderBy(bait => bait.Name))
+                _menuItems.Add(MenuItemViewModel.CreateShowBaitInCBHMenuItem(bait));
+            _menuItems.Add(MenuItemViewModel.CreateSeparatorMenuItem());
+            _menuItems.Add(MenuItemViewModel.CreateCancelMenuItem());
             GUIText = GUITextTranslate.Instance;
             ResetCommand = new SimpleCommand(p =>
             {
-                Memo = _fish.TranslatedMemo.Replace("⇒", "=>");
+                Memo = _fish.DefaultMemoText.Replace("⇒", "=>");
             });
         }
 
         public bool IsOK { get; }
 
         public string Title => string.Format(GUIText["Title.FishDetailWindow"], _fish.Name);
-        public GUITextTranslate GUIText { get; }
-        public string FishingSpots => string.Join(" / ", _fish.FishingSpots.Select(spot => spot.Name));
+        public string FishingSpots => string.Join(", ", _fish.FishingSpots.Select(spot => spot.Name));
         public string RequiredFishingBaits => string.Join(" , ", _fish.FishingBaits.Select(bait => bait.Name));
 
         public string Memo
@@ -104,6 +112,8 @@ namespace FFXIVFishingScheduleViewer
             }
         }
 
+        public IEnumerable<MenuItemViewModel> ContextMenuItems => _menuItems;
+        public GUITextTranslate GUIText { get; }
         public Brush Background { get; }
         public ICommand OKCommand { get; set; }
         public ICommand CancelCommand { get; set; }
@@ -113,6 +123,9 @@ namespace FFXIVFishingScheduleViewer
         {
             if (!_isDisposed)
             {
+                foreach (var menuItem in _menuItems)
+                    menuItem.Dispose();
+                _menuItems.Clear();
                 _isDisposed = true;
                 base.Dispose(disposing);
             }

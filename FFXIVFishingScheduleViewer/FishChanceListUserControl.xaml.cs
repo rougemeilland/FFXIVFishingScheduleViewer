@@ -627,39 +627,81 @@ namespace FFXIVFishingScheduleViewer
         private ContextMenu BuildFishContextMenu(FishChanceTimeRegions chance)
         {
             var contextMenu = new ContextMenu();
-            var showDetailMenuItem = new MenuItem { Header = string.Format(GUITextTranslate.Instance["Menu.ShowFishDetail"], chance.Fish.Name) };
-            contextMenu.Items.Add(showDetailMenuItem);
-            showDetailMenuItem.Click += (s, e) =>
-            {
-                var viewModel = new FishDetailViewModel(chance.Fish) { Memo = _dataContext.GetFishMemo(chance.Fish).Replace("⇒", "=>") };
-                var dialog = new FishDetailWindow();
-                viewModel.OKCommand = new SimpleCommand(p =>
+            AddContextMenuItem(
+                contextMenu,
+                string.Format(GUITextTranslate.Instance["Menu.ShowFishDetail"], chance.Fish.Name),
+                true,
+                () =>
                 {
-                    _dataContext.SetFishMemo(chance.Fish, viewModel.Memo.Replace("=>", "⇒"));
-                    dialog.Close();
+                    var viewModel = new FishDetailViewModel(chance.Fish) { Memo = _dataContext.GetFishMemo(chance.Fish).Replace("⇒", "=>") };
+                    var dialog = new FishDetailWindow();
+                    viewModel.OKCommand = new SimpleCommand(p =>
+                    {
+                        _dataContext.SetFishMemo(chance.Fish, viewModel.Memo.Replace("=>", "⇒"));
+                        dialog.Close();
+                    });
+                    viewModel.CancelCommand = new SimpleCommand(p =>
+                    {
+                        dialog.Close();
+                    });
+                    dialog.Owner = Window.GetWindow(this);
+                    dialog.DataContext = viewModel;
+                    dialog.ShowDialog();
                 });
-                viewModel.CancelCommand = new SimpleCommand(p =>
+            contextMenu.Items.Add(new Separator());
+            AddContextMenuItem(
+                contextMenu,
+                string.Format(GUITextTranslate.Instance["Menu.DontShowFish"], chance.Fish.Name),
+                true,
+                () =>
                 {
-                    dialog.Close();
+                    _dataContext.SetFishFilter(chance.Fish, false);
                 });
-                dialog.Owner = Window.GetWindow(this);
-                dialog.DataContext = viewModel;
-                dialog.ShowDialog();
-            };
             contextMenu.Items.Add(new Separator());
-            var removeFilterMenuItem = new MenuItem { Header = string.Format(GUITextTranslate.Instance["Menu.DontShowFish"], chance.Fish.Name) };
-            contextMenu.Items.Add(removeFilterMenuItem);
-            removeFilterMenuItem.Click += (s, e) =>
+            var urlOfFishPageOfCBH = chance.Fish.GetCBHLink();
+            AddContextMenuItem(
+                contextMenu,
+                string.Format(GUITextTranslate.Instance["Menu.ViewPageInCBH"], chance.Fish.Name),
+                urlOfFishPageOfCBH != null,
+                () =>
+                {
+                    System.Diagnostics.Process.Start(urlOfFishPageOfCBH);
+                });
+            var urlOfSpotPageOfCBH = chance.FishingCondition.FishingSpot.GetCBHLink();
+            AddContextMenuItem(
+                contextMenu,
+                string.Format(GUITextTranslate.Instance["Menu.ViewPageInCBH"], chance.FishingCondition.FishingSpot.Name),
+                urlOfSpotPageOfCBH != null,
+                () =>
+                {
+                    System.Diagnostics.Process.Start(urlOfSpotPageOfCBH);
+                });
+            foreach (var bait in chance.Fish.FishingBaits)
             {
-                _dataContext.SetFishFilter(chance.Fish, false);
-            };
+                var urlOfBaitPageOfCBH = bait.GetCBHLink();
+                AddContextMenuItem(
+                    contextMenu,
+                    string.Format(GUITextTranslate.Instance["Menu.ViewPageInCBH"], bait.Name),
+                    urlOfBaitPageOfCBH != null,
+                    () =>
+                    {
+                        System.Diagnostics.Process.Start(urlOfBaitPageOfCBH);
+                    });
+            }
             contextMenu.Items.Add(new Separator());
-            var cancelMenuItem = new MenuItem { Header = GUITextTranslate.Instance["ButtonText.Cancel"] };
-            contextMenu.Items.Add(cancelMenuItem);
-            cancelMenuItem.Click += (s, e) =>
-            {
-            };
+            AddContextMenuItem(
+                contextMenu,
+                GUITextTranslate.Instance["Menu.Cancel"],
+                true,
+                () => { });
             return contextMenu;
+        }
+
+        private void AddContextMenuItem(ContextMenu contextMenu, string header, bool isEnabled, Action action)
+        {
+            var showDetailMenuItem = new MenuItem { Header = header, IsEnabled = isEnabled };
+            contextMenu.Items.Add(showDetailMenuItem);
+            showDetailMenuItem.Click += (s, e) => action();
         }
 
         private static Brush GetBackgroundColorOfTime(BrushConverter converter, EorzeaDateTime time)

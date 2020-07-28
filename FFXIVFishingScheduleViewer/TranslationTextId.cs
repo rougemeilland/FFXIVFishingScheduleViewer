@@ -4,11 +4,13 @@
     {
         private TranslationCategory _category;
         private string _id;
+        private string _text;
 
         public TranslationTextId(TranslationCategory category, string id)
         {
             _category = category;
             _id = id;
+            _text = string.Format("{0}.**{1}**", category.ToInternalKeyText(), id);
         }
 
         public static bool operator == (TranslationTextId x, TranslationTextId y)
@@ -44,7 +46,7 @@
 
         public override string ToString()
         {
-            return string.Format("{0}.**{1}**", _category.ToInternalKeyText(), _id);
+            return _text;
         }
     }
 }

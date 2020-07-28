@@ -7,11 +7,13 @@ namespace FFXIVFishingScheduleViewer
     {
         private GameDataObjectCategory _category;
         private string _id;
+        private string _text;
 
         public GameDataObjectId(GameDataObjectCategory category, string id)
         {
             _category = category;
             _id = id;
+            _text = string.Format("{0}.**{1}**", category.ToInternalKeyText(), id);
         }
 
         public bool CheckCategory(GameDataObjectCategory category)
@@ -63,7 +65,7 @@ namespace FFXIVFishingScheduleViewer
 
         public override string ToString()
         {
-            return string.Format("{0}.**{1}**", _category.ToInternalKeyText(), _id);
+            return _text;
         }
     }
 }

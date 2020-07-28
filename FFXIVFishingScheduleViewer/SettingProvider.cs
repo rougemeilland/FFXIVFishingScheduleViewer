@@ -298,13 +298,13 @@ namespace FFXIVFishingScheduleViewer
                 return value;
             }
             // ユーザのメモが未設定である場合は、既定値を返す。
-            return _fishes[fish.Id].TranslatedMemo;
+            return _fishes[fish.Id].DefaultMemoText;
         }
 
         void ISettingProvider.SetFishMemo(Fish fish, string text)
         {
             var fishIdText = fish.Id.ToString();
-            if (text == null || _fishes[fish.Id].TranslatedMemo == text)
+            if (text == null || _fishes[fish.Id].DefaultMemoText == text)
             {
                 // メモの削除が指定されているかあるいはユーザのメモの内容が既定値である場合
                 // いずれにしろ、ユーザのメモは不要であるので、削除を試みる

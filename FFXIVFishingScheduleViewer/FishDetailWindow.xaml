@@ -11,6 +11,28 @@
         DataContextChanged="Window_DataContextChanged"
         FocusManager.FocusedElement="{Binding ElementName=MemoTextBox}">
     <DockPanel Background="{Binding Path=Background}">
+        <DockPanel.ContextMenu>
+            <ContextMenu ItemsSource="{Binding Path=ContextMenuItems}">
+                <ContextMenu.ItemContainerStyle>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Header" Value="{Binding Path=MenuHeader}" />
+                        <Setter Property="Command" Value="{Binding Path=MenuCommand}" />
+                        <Setter Property="IsEnabled" Value="{Binding Path=MenuIsEnabled}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=MenuIsSeparator}" Value="True">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Separator/>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContextMenu.ItemContainerStyle>
+            </ContextMenu>
+        </DockPanel.ContextMenu>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>

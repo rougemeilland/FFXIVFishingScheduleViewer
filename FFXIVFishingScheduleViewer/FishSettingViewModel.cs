@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -13,6 +14,7 @@ namespace FFXIVFishingScheduleViewer
         private ISettingProvider _settingProvider;
         private bool _isEditMode;
         private string _edittingMemo;
+        private ICollection<MenuItemViewModel> _menuItems;
 
         public FishSettingViewModel(Fish fish, FishingSpot fishingSpot, string cellPositionType, ISettingProvider settingProvider)
         {
@@ -26,6 +28,13 @@ namespace FFXIVFishingScheduleViewer
             var brushConverer = new BrushConverter();
             Background = Fish.DifficultySymbol.GetBackgroundColor();
             CellPositionType = cellPositionType;
+            _menuItems = new List<MenuItemViewModel>();
+            _menuItems.Add(MenuItemViewModel.CreateShowFishInCBHMenuItem(fish));
+            _menuItems.Add(MenuItemViewModel.CreateShowSpotInCBHMenuItem(fishingSpot));
+            foreach (var bait in fish.FishingBaits.OrderBy(bait => bait.Name))
+                _menuItems.Add(MenuItemViewModel.CreateShowBaitInCBHMenuItem(bait));
+            _menuItems.Add(MenuItemViewModel.CreateSeparatorMenuItem());
+            _menuItems.Add(MenuItemViewModel.CreateCancelMenuItem());
             GUIText = GUITextTranslate.Instance;
             _isEditMode = false;
             EditMemoCommand = new SimpleCommand(p =>
@@ -117,6 +126,7 @@ namespace FFXIVFishingScheduleViewer
                     .Distinct());
         public Brush Background { get; }
         public string CellPositionType { get; }
+        public IEnumerable<MenuItemViewModel> ContextMenuItems => _menuItems;
         public GUITextTranslate GUIText { get; }
         public ICommand EditMemoCommand { get; }
         public ICommand SaveMemoCommand { get; }
@@ -127,6 +137,8 @@ namespace FFXIVFishingScheduleViewer
         {
             if (!_isDisposed)
             {
+                foreach (var menuItem in _menuItems)
+                    menuItem.Dispose();
                 _settingProvider.FishFilterChanded -= _settingProvider_FishFilterChanded;
                 _settingProvider.FishMemoChanged -= _settingProvider_FishMemoChanged;
                 _settingProvider.UserLanguageChanged -= _settingProvider_UserLanguageChanged;
@@ -151,6 +163,7 @@ namespace FFXIVFishingScheduleViewer
         {
             RaisePropertyChangedEvent(nameof(FishName));
             RaisePropertyChangedEvent(nameof(Memo));
+            RaisePropertyChangedEvent(nameof(ContextMenuItems));
             RaisePropertyChangedEvent(nameof(GUIText));
             RaisePropertyChangedEvent(nameof(DiscoveryDifficulty));
             RaisePropertyChangedEvent(nameof(TimeCondition));

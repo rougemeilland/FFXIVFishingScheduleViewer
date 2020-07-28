@@ -35,8 +35,7 @@ namespace FFXIVFishingScheduleViewer
             DataContext = _dataContext;
             _dataContext.ShowDownloadPageCommand = new SimpleCommand(p =>
             {
-                var url = _dataContext.UrlOfDownloadPage;
-                System.Diagnostics.Process.Start(url);
+                System.Diagnostics.Process.Start(_dataContext.UrlOfDownloadPage);
             });
             _dataContext.OptionMenuCommand = new SimpleCommand(p =>
             {
@@ -48,8 +47,7 @@ namespace FFXIVFishingScheduleViewer
             _dataContext.ExitMenuCommand = new SimpleCommand(p => Close());
             _dataContext.About.ViewREADMEMenuCommand = new SimpleCommand(p =>
             {
-                var url = _dataContext.About.READMEUrlText;
-                System.Diagnostics.Process.Start(url);
+                System.Diagnostics.Process.Start(_dataContext.About.READMEUrlText);
             });
             _dataContext.About.AboutMenuCommand = new SimpleCommand(p =>
             {
@@ -1127,7 +1125,7 @@ namespace FFXIVFishingScheduleViewer
                 new Fish("カローンズランタン", ToFishingSpot("聖ダナフェンの旅程"), ToFishingBait("グロウワーム"), 0, 4, WeatherType.吹雪 | WeatherType.雪, "グロウワーム⇒(!!!プレ)"),
                 new Fish("スターブライト", ToFishingSpot("剣ヶ峰山麓"), ToFishingBait("ハナアブ"), 21, 4, WeatherType.快晴 | WeatherType.晴れ, "ハナアブ⇒(!プレ)アバラシアスメルトHQ⇒(!!!スト)"),
                 new Fish("ドーンメイデン", ToFishingSpot("キャンプ・ドラゴンヘッド溜池"), ToFishingBait("フェザントフライ"), 5, 7, WeatherType.快晴 | WeatherType.晴れ, "フェザントフライ⇒(!!!スト)"),
-                new Fish("メイトリアーク", ToFishingSpot("調査隊の氷穴"), ToFishingBait("ハナアブ"), "ハナアブ⇒(!プレ)アバラシアスメルトHQ⇒(!!!プレ)"),
+                new Fish("メイトリアーク", ToFishingSpot("調査隊の氷穴"), ToFishingBait("ハニーワーム"), "ハニーワーム⇒(!プレ)アバラシアスメルトHQ⇒(!!!プレ)"),
                 new Fish("ダークスター", ToFishingSpot("聖ダナフェンの落涙"), new[]{ ToFishingBait("ハニーワーム"), ToFishingBait("チョコボフライ") }, 19, 4, WeatherType.吹雪 | WeatherType.雪, "(要ランプマリモ×5, 時間帯不問, 天候不問) チョコボフライ⇒(!プレ)\nハニーワーム⇒(!プレ)アバラシアスメルトHQ⇒(!!!スト)"),
                 new Fish("ブルーコープス", ToFishingSpot("スノークローク大氷壁"), ToFishingBait("カディスラーヴァ"), WeatherType.雪 | WeatherType.吹雪, WeatherType.快晴 | WeatherType.晴れ, "カディスラーヴァ⇒(!!!プレ)"),
                 new Fish("アノマロカリス", ToFishingSpot("イシュガルド大雲海"), ToFishingBait("ホバーワーム"), 10, 15, WeatherType.快晴 | WeatherType.晴れ, "ホバーワーム⇒(!!スト)スプリットクラウドHQ⇒(!!!スト)"),
@@ -1397,6 +1395,7 @@ namespace FFXIVFishingScheduleViewer
             })
             {
                 _fishes.Add(fish);
+                fish.TranslateMemo();
             }
             Fish.RandDifficulty(_fishes);
         }
@@ -1404,32 +1403,34 @@ namespace FFXIVFishingScheduleViewer
 #if DEBUG
         private void SelfCheck()
         {
-            var result = _fishes.SelectMany(fish => fish.CheckTranslation())
-                            .Concat(
-                                _areaGroups
-                                    .SelectMany(areaGroup => areaGroup.CheckTranslation()))
-                            .Concat(
-                                _areaGroups
-                                    .SelectMany(areaGroup => areaGroup.Areas)
-                                    .SelectMany(area => area.CheckTranslation()))
-                            .Concat(
-                                _areaGroups
-                                    .SelectMany(areaGroup => areaGroup.Areas)
-                                    .SelectMany(area => area.FishingSpots)
-                                    .SelectMany(spot => spot.CheckTranslation()))
-                            .Concat(
-                                _fishes
-                                    .SelectMany(fish => fish.FishingSpots)
-                                    .SelectMany(fishingSpot => fishingSpot.CheckTranslation()))
-                            .Concat(
-                                _fishingBaites
-                                    .SelectMany(bait => bait.CheckTranslation()))
-                            .Concat(
-                                Enum.GetValues(typeof(WeatherType))
-                                .Cast<WeatherType>()
-                                .Where(weather => weather != WeatherType.None)
-                                .SelectMany(weather => weather.CheckTranslation()))
-                            .ToArray();
+            var result =
+                _fishes
+                    .SelectMany(fish => fish.CheckTranslation())
+                    .Concat(
+                        _areaGroups
+                            .SelectMany(areaGroup => areaGroup.CheckTranslation()))
+                    .Concat(
+                        _areaGroups
+                            .SelectMany(areaGroup => areaGroup.Areas)
+                            .SelectMany(area => area.CheckTranslation()))
+                    .Concat(
+                        _areaGroups
+                            .SelectMany(areaGroup => areaGroup.Areas)
+                            .SelectMany(area => area.FishingSpots)
+                            .SelectMany(spot => spot.CheckTranslation()))
+                    .Concat(
+                        _fishes
+                            .SelectMany(fish => fish.FishingSpots)
+                            .SelectMany(fishingSpot => fishingSpot.CheckTranslation()))
+                    .Concat(
+                        _fishingBaites
+                            .SelectMany(bait => bait.CheckTranslation()))
+                    .Concat(
+                        Enum.GetValues(typeof(WeatherType))
+                        .Cast<WeatherType>()
+                        .Where(weather => weather != WeatherType.None)
+                        .SelectMany(weather => weather.CheckTranslation()))
+                    .ToArray();
             if (result.Any())
                 throw new Exception(string.Format("Can't translate: {0}", string.Join(", ", result.Select(s => string.Format("'{0}'", s)))));
         }

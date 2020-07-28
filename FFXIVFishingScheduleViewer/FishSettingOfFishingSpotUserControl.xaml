@@ -35,7 +35,29 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <GroupBox Header="{Binding Path=FishingSpotName}" BorderBrush="#222222">
+    <GroupBox Header="{Binding Path=FishingSpotName}" BorderBrush="#222222" Background="Transparent">
+        <GroupBox.ContextMenu>
+            <ContextMenu ItemsSource="{Binding Path=ContextMenuItems}">
+                <ContextMenu.ItemContainerStyle>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Header" Value="{Binding Path=MenuHeader}" />
+                        <Setter Property="Command" Value="{Binding Path=MenuCommand}" />
+                        <Setter Property="IsEnabled" Value="{Binding Path=MenuIsEnabled}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=MenuIsSeparator}" Value="True">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Separator/>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContextMenu.ItemContainerStyle>
+            </ContextMenu>
+        </GroupBox.ContextMenu>
         <DockPanel Grid.IsSharedSizeScope="True">
             <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Right" Orientation="Vertical">
                 <StackPanel.Style>
@@ -62,6 +84,28 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid Background="{Binding Path=Background}">
+                            <Grid.ContextMenu>
+                                <ContextMenu ItemsSource="{Binding Path=ContextMenuItems}">
+                                    <ContextMenu.ItemContainerStyle>
+                                        <Style TargetType="{x:Type MenuItem}">
+                                            <Setter Property="Header" Value="{Binding Path=MenuHeader}" />
+                                            <Setter Property="Command" Value="{Binding Path=MenuCommand}" />
+                                            <Setter Property="IsEnabled" Value="{Binding Path=MenuIsEnabled}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=MenuIsSeparator}" Value="True">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate>
+                                                                <Separator/>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContextMenu.ItemContainerStyle>
+                                </ContextMenu>
+                            </Grid.ContextMenu>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="FishName"/>
                                 <ColumnDefinition Width="*"/>
