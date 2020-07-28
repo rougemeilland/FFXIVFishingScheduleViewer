@@ -87,7 +87,7 @@ namespace FFXIVFishingScheduleViewer
                     fishes = g
                         .Select(item => item.fish)
                         .OrderBy(item => item.DifficultyValue)
-                        .ThenBy(item => item.Name)
+                        .ThenBy(item => item.Order)
                         .ToArray()
                         .AsEnumerable()
                 })

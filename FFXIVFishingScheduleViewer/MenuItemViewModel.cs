@@ -48,9 +48,48 @@ namespace FFXIVFishingScheduleViewer
         }
 
         private abstract class ShowPageInCBHMenuItem
-            : MenuItemViewModel
+                : MenuItemViewModel
         {
             public override string MenuHeader => string.Format(GUITextTranslate.Instance["Menu.ViewPageInCBH"], PageItemName);
+            public override ICommand MenuCommand => new SimpleCommand(p => System.Diagnostics.Process.Start(PageUrl));
+            public override bool MenuIsEnabled => PageUrl != null;
+            public override bool MenuIsSeparator => false;
+            protected abstract string PageItemName { get; }
+            protected abstract string PageUrl { get; }
+        }
+
+        private class ShowFishInEDBMenuItem
+            : ShowPageInEDBMenuItem
+        {
+            public ShowFishInEDBMenuItem(Fish fish)
+            {
+                PageItemName = fish.Name;
+                PageUrl = fish.GetEDBLink();
+            }
+
+            protected override string PageItemName { get; }
+
+            protected override string PageUrl { get; }
+        }
+
+        private class ShowBaitInEDBMenuItem
+        : ShowPageInEDBMenuItem
+        {
+            public ShowBaitInEDBMenuItem(FishingBait bait)
+            {
+                PageItemName = bait.Name;
+                PageUrl = bait.GetEDBLink();
+            }
+
+            protected override string PageItemName { get; }
+
+            protected override string PageUrl { get; }
+        }
+
+        private abstract class ShowPageInEDBMenuItem
+                : MenuItemViewModel
+        {
+            public override string MenuHeader => string.Format(GUITextTranslate.Instance["Menu.ViewPageInEDB"], PageItemName);
             public override ICommand MenuCommand => new SimpleCommand(p => System.Diagnostics.Process.Start(PageUrl));
             public override bool MenuIsEnabled => PageUrl != null;
             public override bool MenuIsSeparator => false;
@@ -107,6 +146,16 @@ namespace FFXIVFishingScheduleViewer
         public static MenuItemViewModel CreateShowBaitInCBHMenuItem(FishingBait bait)
         {
             return new ShowBaitInCBHMenuItem(bait);
+        }
+
+        public static MenuItemViewModel CreateShowFishInEDBMenuItem(Fish fish)
+        {
+            return new ShowFishInEDBMenuItem(fish);
+        }
+
+        public static MenuItemViewModel CreateShowBaitInEDBMenuItem(FishingBait bait)
+        {
+            return new ShowBaitInEDBMenuItem(bait);
         }
 
         public static MenuItemViewModel CreateSeparatorMenuItem()

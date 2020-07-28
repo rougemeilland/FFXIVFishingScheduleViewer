@@ -658,35 +658,61 @@ namespace FFXIVFishingScheduleViewer
                     _dataContext.SetFishFilter(chance.Fish, false);
                 });
             contextMenu.Items.Add(new Separator());
-            var urlOfFishPageOfCBH = chance.Fish.GetCBHLink();
-            AddContextMenuItem(
-                contextMenu,
-                string.Format(GUITextTranslate.Instance["Menu.ViewPageInCBH"], chance.Fish.Name),
-                urlOfFishPageOfCBH != null,
-                () =>
-                {
-                    System.Diagnostics.Process.Start(urlOfFishPageOfCBH);
-                });
-            var urlOfSpotPageOfCBH = chance.FishingCondition.FishingSpot.GetCBHLink();
-            AddContextMenuItem(
-                contextMenu,
-                string.Format(GUITextTranslate.Instance["Menu.ViewPageInCBH"], chance.FishingCondition.FishingSpot.Name),
-                urlOfSpotPageOfCBH != null,
-                () =>
-                {
-                    System.Diagnostics.Process.Start(urlOfSpotPageOfCBH);
-                });
-            foreach (var bait in chance.Fish.FishingBaits)
             {
-                var urlOfBaitPageOfCBH = bait.GetCBHLink();
+                var urlOfFishPageOfCBH = chance.Fish.GetCBHLink();
                 AddContextMenuItem(
                     contextMenu,
-                    string.Format(GUITextTranslate.Instance["Menu.ViewPageInCBH"], bait.Name),
-                    urlOfBaitPageOfCBH != null,
+                    string.Format(GUITextTranslate.Instance["Menu.ViewPageInCBH"], chance.Fish.Name),
+                    urlOfFishPageOfCBH != null,
                     () =>
                     {
-                        System.Diagnostics.Process.Start(urlOfBaitPageOfCBH);
+                        System.Diagnostics.Process.Start(urlOfFishPageOfCBH);
                     });
+                var urlOfSpotPageOfCBH = chance.FishingCondition.FishingSpot.GetCBHLink();
+                AddContextMenuItem(
+                    contextMenu,
+                    string.Format(GUITextTranslate.Instance["Menu.ViewPageInCBH"], chance.FishingCondition.FishingSpot.Name),
+                    urlOfSpotPageOfCBH != null,
+                    () =>
+                    {
+                        System.Diagnostics.Process.Start(urlOfSpotPageOfCBH);
+                    });
+                foreach (var bait in chance.Fish.FishingBaits)
+                {
+                    var urlOfBaitPageOfCBH = bait.GetCBHLink();
+                    AddContextMenuItem(
+                        contextMenu,
+                        string.Format(GUITextTranslate.Instance["Menu.ViewPageInCBH"], bait.Name),
+                        urlOfBaitPageOfCBH != null,
+                        () =>
+                        {
+                            System.Diagnostics.Process.Start(urlOfBaitPageOfCBH);
+                        });
+                }
+            }
+            contextMenu.Items.Add(new Separator());
+            {
+                var urlOfFishPageOfEDB = chance.Fish.GetEDBLink();
+                AddContextMenuItem(
+                    contextMenu,
+                    string.Format(GUITextTranslate.Instance["Menu.ViewPageInEDB"], chance.Fish.Name),
+                    urlOfFishPageOfEDB != null,
+                    () =>
+                    {
+                        System.Diagnostics.Process.Start(urlOfFishPageOfEDB);
+                    });
+                foreach (var bait in chance.Fish.FishingBaits)
+                {
+                    var urlOfBaitPageOfEDB = bait.GetEDBLink();
+                    AddContextMenuItem(
+                        contextMenu,
+                        string.Format(GUITextTranslate.Instance["Menu.ViewPageInEDB"], bait.Name),
+                        urlOfBaitPageOfEDB != null,
+                        () =>
+                        {
+                            System.Diagnostics.Process.Start(urlOfBaitPageOfEDB);
+                        });
+                }
             }
             contextMenu.Items.Add(new Separator());
             AddContextMenuItem(

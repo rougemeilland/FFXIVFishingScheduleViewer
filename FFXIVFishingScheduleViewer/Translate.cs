@@ -9966,6 +9966,14 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "url.**CBH.BaitPage**.en", text = "https://en.ff14angler.com/?spot=0&fish=0&bait={0}&cmd=search" },
                 new { id = "url.**CBH.BaitPage**.fr", text = "https://fr.ff14angler.com/?spot=0&fish=0&bait={0}&cmd=search" },
                 new { id = "url.**CBH.BaitPage**.de", text = "https://de.ff14angler.com/?spot=0&fish=0&bait={0}&cmd=search" },
+                new { id = "url.**EDB.FishPage**.ja", text = "https://jp.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+                new { id = "url.**EDB.FishPage**.en", text = "https://na.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+                new { id = "url.**EDB.FishPage**.fr", text = "https://fr.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+                new { id = "url.**EDB.FishPage**.de", text = "https://de.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+                new { id = "url.**EDB.BaitPage**.ja", text = "https://jp.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+                new { id = "url.**EDB.BaitPage**.en", text = "https://na.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+                new { id = "url.**EDB.BaitPage**.fr", text = "https://fr.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+                new { id = "url.**EDB.BaitPage**.de", text = "https://de.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
 #endregion
 
 #region GUI
@@ -10017,6 +10025,10 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "guiText.**Menu.ViewPageInCBH**.en", text = "View the page of \"{0}\" in \"Cat became hungry\"...." },
                 new { id = "guiText.**Menu.ViewPageInCBH**.fr", text = "Afficher la page de «{0}» dans «Le chat a faim»...." },
                 new { id = "guiText.**Menu.ViewPageInCBH**.de", text = "Anzeigen der Page von \"{0}\" in \"Katze wurde hungrig\"..." },
+                new { id = "guiText.**Menu.ViewPageInEDB**.ja", text = "「エオルゼアデータベース」の「{0}」のページを表示する..." },
+                new { id = "guiText.**Menu.ViewPageInEDB**.en", text = "View the page of \"{0}\" in \"Eorzea Database\"...." },
+                new { id = "guiText.**Menu.ViewPageInEDB**.fr", text = "Afficher la page de «{0}» dans «Base de données d'Éorzéa»...." },
+                new { id = "guiText.**Menu.ViewPageInEDB**.de", text = "Anzeigen der Page von \"{0}\" in \"Eorzea-Datenbank\"..." },
                 new { id = "guiText.**Menu.Cancel**.ja", text = "キャンセル" },
                 new { id = "guiText.**Menu.Cancel**.en", text = "Cancel" },
                 new { id = "guiText.**Menu.Cancel**.fr", text = "Annuler" },

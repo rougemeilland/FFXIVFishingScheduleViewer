@@ -7,6 +7,8 @@ namespace FFXIVFishingScheduleViewer
     class Fish
         : IGameDataObject
     {
+        private static int _serialNumber = 0;
+
         public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, string memo)
             : this(fishId, new[] { fishingBait }, memo, new[] { new FishingCondition(fishingSpot) })
         {
@@ -131,6 +133,7 @@ namespace FFXIVFishingScheduleViewer
         {
             if (fishId.Trim() != fishId)
                 throw new ArgumentException();
+            Order = _serialNumber++;
             Id = new GameDataObjectId(GameDataObjectCategory.Fish, fishId);
             NameId = new TranslationTextId(TranslationCategory.Fish, fishId);
             DefaultMemoId = new TranslationTextId(TranslationCategory.FishMemo, fishId);
@@ -143,6 +146,7 @@ namespace FFXIVFishingScheduleViewer
             DifficultySymbol = DifficultySymbol.None;
         }
 
+        public int Order { get; }
         public GameDataObjectId Id { get; }
         public TranslationTextId NameId { get; }
         public string Name => Translate.Instance[NameId];

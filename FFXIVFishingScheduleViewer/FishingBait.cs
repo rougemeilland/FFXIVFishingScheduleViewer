@@ -5,21 +5,23 @@ namespace FFXIVFishingScheduleViewer
     class FishingBait
         : IGameDataObject
     {
-        private TranslationTextId _nameId;
+        private static int _serialNumber = 0;
 
         public FishingBait(string fishingBaitId)
         {
+            Order = _serialNumber++;
             Id = new GameDataObjectId(GameDataObjectCategory.FishingBait, fishingBaitId);
-            _nameId = new TranslationTextId(TranslationCategory.FishingBait, fishingBaitId);
+            NameId = new TranslationTextId(TranslationCategory.FishingBait, fishingBaitId);
         }
 
+        public int Order { get; }
         public GameDataObjectId Id { get; }
-        public string Name => Translate.Instance[_nameId];
-        public TranslationTextId NameId => _nameId;
+        public string Name => Translate.Instance[NameId];
+        public TranslationTextId NameId { get; }
 
         public IEnumerable<string> CheckTranslation()
         {
-            return Translate.Instance.CheckTranslation(_nameId);
+            return Translate.Instance.CheckTranslation(NameId);
         }
 
         public override bool Equals(object o)

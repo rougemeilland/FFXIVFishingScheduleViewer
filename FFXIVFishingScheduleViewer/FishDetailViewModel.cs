@@ -24,8 +24,12 @@ namespace FFXIVFishingScheduleViewer
             _menuItems.Add(MenuItemViewModel.CreateShowFishInCBHMenuItem(_fish));
             foreach (var spot in _fish.FishingSpots.OrderBy(spot => spot.Area.AreaGroup.Order).ThenBy(spot => spot.Area.Order).ThenBy(spot => spot.Order))
                 _menuItems.Add(MenuItemViewModel.CreateShowSpotInCBHMenuItem(spot));
-            foreach (var bait in _fish.FishingBaits.OrderBy(bait => bait.Name))
+            foreach (var bait in _fish.FishingBaits.OrderBy(bait => bait.Order))
                 _menuItems.Add(MenuItemViewModel.CreateShowBaitInCBHMenuItem(bait));
+            _menuItems.Add(MenuItemViewModel.CreateSeparatorMenuItem());
+            _menuItems.Add(MenuItemViewModel.CreateShowFishInEDBMenuItem(_fish));
+            foreach (var bait in _fish.FishingBaits.OrderBy(bait => bait.Order))
+                _menuItems.Add(MenuItemViewModel.CreateShowBaitInEDBMenuItem(bait));
             _menuItems.Add(MenuItemViewModel.CreateSeparatorMenuItem());
             _menuItems.Add(MenuItemViewModel.CreateCancelMenuItem());
             GUIText = GUITextTranslate.Instance;
