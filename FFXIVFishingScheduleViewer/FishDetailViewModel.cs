@@ -75,14 +75,15 @@ namespace FFXIVFishingScheduleViewer
                             .SelectMany(condition => condition.ConditionElements)
                             .Where(element => element is ITimeFishingConditionElement)
                             .Select(element => element.Description)
+                            .Where(description => description != null)
                             .Distinct()
-                            .Single()
+                            .SingleOrDefault()
                     })
                     .ToArray();
                 if (query.Length == 0)
                     return "";
                 else if (query.Length == 1)
-                    return query[0].timeCondition;
+                    return query[0].timeCondition ?? "";
                 else
                     return string.Join(", ", query.Select(item => string.Format("{0} ({1})", item.timeCondition, item.fishingSpot)));
             }
@@ -103,14 +104,15 @@ namespace FFXIVFishingScheduleViewer
                             .SelectMany(condition => condition.ConditionElements)
                             .Where(element => element is IWeatherFishingConditionElement)
                             .Select(element => element.Description)
+                            .Where(description => description != null)
                             .Distinct()
-                            .Single()
+                            .SingleOrDefault()
                     })
                     .ToArray();
                 if (query.Length == 0)
                     return "";
                 else if (query.Length == 1)
-                    return query[0].weatherCondition;
+                    return query[0].weatherCondition ?? "";
                 else
                     return string.Join(", ", query.Select(item => string.Format("{0} ({1})", item.weatherCondition, item.fishingSpot)));
             }

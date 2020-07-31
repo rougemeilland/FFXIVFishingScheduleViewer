@@ -9,8 +9,9 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
         DataContextChanged="Window_DataContextChanged"
-        FocusManager.FocusedElement="{Binding ElementName=MemoTextBox}">
-    <DockPanel Background="{Binding Path=Background}">
+        FocusManager.FocusedElement="{Binding ElementName=MemoTextBox}"
+        Background="{Binding Path=Background}">
+    <DockPanel Margin="10">
         <DockPanel.ContextMenu>
             <ContextMenu ItemsSource="{Binding Path=ContextMenuItems}">
                 <ContextMenu.ItemContainerStyle>
