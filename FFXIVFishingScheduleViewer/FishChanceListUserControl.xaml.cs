@@ -322,7 +322,7 @@ namespace FFXIVFishingScheduleViewer
                 foreach (var chance in _dataContext.FishChanceList)
                 {
                     var contextMenu = BuildFishContextMenu(chance);
-                    var backgroundColorOfFish = chance.Fish.DifficultySymbol.GetBackgroundColor();
+                    var backgroundColorOfFish = chance.FishingCondition.Fish.DifficultySymbol.GetBackgroundColor();
                     FishChanceGrid.RowDefinitions.Add(new RowDefinition());
                     FishChanceGrid.RowDefinitions.Add(new RowDefinition());
                     {
@@ -349,7 +349,7 @@ namespace FFXIVFishingScheduleViewer
                         FishChanceGrid.Children.Add(c);
                         vStack.Children.Add(new TextBlock
                         {
-                            Text = chance.Fish.Name,
+                            Text = chance.FishingCondition.Fish.Name,
                             HorizontalAlignment = HorizontalAlignment.Center,
                             VerticalAlignment = VerticalAlignment.Center,
                             ToolTip = new ToolTip { Content = GUITextTranslate.Instance["ToolTip.FishName"], },
@@ -371,7 +371,7 @@ namespace FFXIVFishingScheduleViewer
                         });
                         hStack.Children.Add(new TextBlock
                         {
-                            Text = chance.Fish.DifficultySymbol.GetShortText(),
+                            Text = chance.FishingCondition.Fish.DifficultySymbol.GetShortText(),
                             HorizontalAlignment = HorizontalAlignment.Center,
                             VerticalAlignment = VerticalAlignment.Center,
                             Margin = new Thickness(5, 0, 0, 0),
@@ -408,7 +408,7 @@ namespace FFXIVFishingScheduleViewer
                         {
                             Child = new TextBlock
                             {
-                                Text = string.Join(", ", chance.Fish.FishingBaits.Select(fishingBait => fishingBait.Name)),
+                                Text = string.Join(", ", chance.FishingCondition.FishingBaits.Select(fishingBait => fishingBait.Name)),
                                 HorizontalAlignment = HorizontalAlignment.Left,
                                 VerticalAlignment = VerticalAlignment.Center,
                                 Margin = new Thickness(5),
@@ -504,7 +504,7 @@ namespace FFXIVFishingScheduleViewer
                     {
                         var eorzeaTimeRegion = firstRegionOfChance.FormatEorzeaTimeRegion(forecastWeatherRegion);
                         var localTimeRegion = firstRegionOfChance.FormatLocalTimeRegion(forecastWeatherRegion);
-                        var fishMemo = _dataContext.GetFishMemo(chance.Fish);
+                        var fishMemo = _dataContext.GetFishMemo(chance.FishingCondition.Fish, chance.FishingCondition.FishingSpot);
                         return string.Format(
                             "{0}{1}: [{2}]{3}",
                             eorzeaTimeRegion != "" || localTimeRegion != ""
@@ -523,11 +523,16 @@ namespace FFXIVFishingScheduleViewer
                                 ? ""
                                 : string.Format("\n{0}\n{1}",
                                     GUITextTranslate.Instance["Label.Memo"],
+#if true
+                                    fishMemo
+#else
                                     string.Join("\n",
                                         fishMemo.Split(
                                             "\n".ToCharArray(),
                                             StringSplitOptions.RemoveEmptyEntries)
-                                        .Select(s => string.Format("- {0}", s)))));
+                                        .Select(s => string.Format("- {0}", s)))
+#endif
+                                    ));
                     };
                     var detailTextBlock = new TextBlock
                     {
@@ -537,9 +542,9 @@ namespace FFXIVFishingScheduleViewer
                         Background = transparentBrush,
                         Margin = new Thickness(5),
                     };
-                    EventHandler<Fish> fishMemoChangedEventHandler = new EventHandler<Fish>((s, e) =>
+                    EventHandler<FishMemoChangedEventArgs> fishMemoChangedEventHandler = new EventHandler<FishMemoChangedEventArgs>((s, e) =>
                     {
-                        if (e == chance.Fish)
+                        if (e.Fish == chance.FishingCondition.Fish && e.FishingSpot == chance.FishingCondition.FishingSpot)
                         {
                             detailTextBlock.Text = detailTextBlockFormatter();
                         }
@@ -567,7 +572,7 @@ namespace FFXIVFishingScheduleViewer
                 foreach (var chance in _dataContext.FishChanceList)
                 {
                     var contextMenu = BuildFishContextMenu(chance);
-                    var backgroundColorOfFish = chance.Fish.DifficultySymbol.GetBackgroundColor();
+                    var backgroundColorOfFish = chance.FishingCondition.Fish.DifficultySymbol.GetBackgroundColor();
                     var wholeRegion =
                         new EorzeaDateTimeRegion(
                             _dataContext.FishChanceTimeList.First(),
@@ -582,7 +587,7 @@ namespace FFXIVFishingScheduleViewer
                             eorzeaTimeRegion != "" && localTimeRegion != ""
                             ? string.Format(
                                 "{0}\nET {1}\nLT {2}",
-                                chance.Fish.Name,
+                                chance.FishingCondition.Fish.Name,
                                 region.FormatEorzeaTimeRegion(wholeRegion),
                                 region.FormatLocalTimeRegion(wholeRegion))
                             : null;
@@ -629,15 +634,19 @@ namespace FFXIVFishingScheduleViewer
             var contextMenu = new ContextMenu();
             AddContextMenuItem(
                 contextMenu,
-                string.Format(GUITextTranslate.Instance["Menu.ShowFishDetail"], chance.Fish.Name),
+                string.Format(GUITextTranslate.Instance["Menu.ShowFishDetail"], chance.FishingCondition.Fish.Name),
                 true,
                 () =>
                 {
-                    var viewModel = new FishDetailViewModel(chance.Fish) { Memo = _dataContext.GetFishMemo(chance.Fish).Replace("⇒", "=>") };
+                    var viewModel =
+                        _dataContext.GetDetailViewModel(
+                            chance.FishingCondition.Fish,
+                            chance.FishingCondition.FishingSpot);
                     var dialog = new FishDetailWindow();
                     viewModel.OKCommand = new SimpleCommand(p =>
                     {
-                        _dataContext.SetFishMemo(chance.Fish, viewModel.Memo.Replace("=>", "⇒"));
+                        foreach (var fishingSpotModel in viewModel.FishingSpots)
+                            _dataContext.SetFishMemo(fishingSpotModel.Fish, fishingSpotModel.FishingSpot, fishingSpotModel.Memo.Replace("=>", "⇒"));
                         dialog.Close();
                     });
                     viewModel.CancelCommand = new SimpleCommand(p =>
@@ -651,18 +660,18 @@ namespace FFXIVFishingScheduleViewer
             contextMenu.Items.Add(new Separator());
             AddContextMenuItem(
                 contextMenu,
-                string.Format(GUITextTranslate.Instance["Menu.DontShowFish"], chance.Fish.Name),
+                string.Format(GUITextTranslate.Instance["Menu.DontShowFish"], chance.FishingCondition.Fish.Name),
                 true,
                 () =>
                 {
-                    _dataContext.SetFishFilter(chance.Fish, false);
+                    _dataContext.SetFishFilter(chance.FishingCondition.Fish, false);
                 });
             contextMenu.Items.Add(new Separator());
             {
-                var urlOfFishPageOfCBH = chance.Fish.GetCBHLink();
+                var urlOfFishPageOfCBH = chance.FishingCondition.Fish.GetCBHLink();
                 AddContextMenuItem(
                     contextMenu,
-                    string.Format(GUITextTranslate.Instance["Menu.ViewPageInCBH"], chance.Fish.Name),
+                    string.Format(GUITextTranslate.Instance["Menu.ViewPageInCBH"], chance.FishingCondition.Fish.Name),
                     urlOfFishPageOfCBH != null,
                     () =>
                     {
@@ -677,7 +686,7 @@ namespace FFXIVFishingScheduleViewer
                     {
                         System.Diagnostics.Process.Start(urlOfSpotPageOfCBH);
                     });
-                foreach (var bait in chance.Fish.FishingBaits)
+                foreach (var bait in chance.FishingCondition.FishingBaits)
                 {
                     var urlOfBaitPageOfCBH = bait.GetCBHLink();
                     AddContextMenuItem(
@@ -692,16 +701,16 @@ namespace FFXIVFishingScheduleViewer
             }
             contextMenu.Items.Add(new Separator());
             {
-                var urlOfFishPageOfEDB = chance.Fish.GetEDBLink();
+                var urlOfFishPageOfEDB = chance.FishingCondition.Fish.GetEDBLink();
                 AddContextMenuItem(
                     contextMenu,
-                    string.Format(GUITextTranslate.Instance["Menu.ViewPageInEDB"], chance.Fish.Name),
+                    string.Format(GUITextTranslate.Instance["Menu.ViewPageInEDB"], chance.FishingCondition.Fish.Name),
                     urlOfFishPageOfEDB != null,
                     () =>
                     {
                         System.Diagnostics.Process.Start(urlOfFishPageOfEDB);
                     });
-                foreach (var bait in chance.Fish.FishingBaits)
+                foreach (var bait in chance.FishingCondition.FishingBaits)
                 {
                     var urlOfBaitPageOfEDB = bait.GetEDBLink();
                     AddContextMenuItem(

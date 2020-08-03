@@ -20,9 +20,9 @@ namespace FFXIVFishingScheduleViewer
         void SetIsEnabledFishFilter(IEnumerable<Fish> fishes, bool value);
         event EventHandler<Fish> FishFilterChanded;
 
-        string GetFishMemo(Fish fish);
-        void SetFishMemo(Fish fish, string text);
-        event EventHandler<Fish> FishMemoChanged;
+        string GetFishMemo(Fish fish, FishingSpot fishingSpot);
+        void SetFishMemo(Fish fish, FishingSpot fishingSpot, string text);
+        event EventHandler<FishMemoChangedEventArgs> FishMemoChanged;
 
         int ForecastWeatherDays { get; set; }
         event EventHandler ForecastWeatherDaysChanged;

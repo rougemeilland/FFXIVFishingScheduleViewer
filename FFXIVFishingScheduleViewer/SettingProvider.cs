@@ -22,7 +22,7 @@ namespace FFXIVFishingScheduleViewer
         private event EventHandler<AreaGroup> _areaGroupOnForecastWeatherExpanded;
         private event EventHandler<AreaGroup> _areaGroupOnForecastWeatherContracted;
         private event EventHandler<Fish> _fishFilterChanded;
-        private event EventHandler<Fish> _fishMemoChanded;
+        private event EventHandler<FishMemoChangedEventArgs> _fishMemoChanded;
         private event EventHandler _forecastWeatherDaysChanged;
         private event EventHandler _userLanguageChanged;
         private event EventHandler _newVersionOfApplicationChanged;
@@ -288,27 +288,36 @@ namespace FFXIVFishingScheduleViewer
             }
         }
 
-        string ISettingProvider.GetFishMemo(Fish fish)
+        string ISettingProvider.GetFishMemo(Fish fish, FishingSpot fishingSpot)
         {
+            var key = string.Format("{0}**{1}", ((IGameDataObject)fish).InternalId, ((IGameDataObject)fishingSpot).InternalId);
+            var condition =
+                _fishes[fish.Id].FishingConditions
+                .Where(item => item.FishingSpot == fishingSpot)
+                .Single();
             // まず設定済みのユーザのメモの取得を試みる
             string value;
-            if (_fishMemoList.TryGetValue(fish.Id.ToString(), out value))
+            if (_fishMemoList.TryGetValue(key, out value))
             {
                 // ユーザのメモが存在した場合、そのメモを返す
                 return value;
             }
             // ユーザのメモが未設定である場合は、既定値を返す。
-            return _fishes[fish.Id].DefaultMemoText;
+            return condition.DefaultMemoText;
         }
 
-        void ISettingProvider.SetFishMemo(Fish fish, string text)
+        void ISettingProvider.SetFishMemo(Fish fish, FishingSpot fishingSpot, string text)
         {
-            var fishIdText = fish.Id.ToString();
-            if (text == null || _fishes[fish.Id].DefaultMemoText == text)
+            var key = string.Format("{0}**{1}", ((IGameDataObject)fish).InternalId, ((IGameDataObject)fishingSpot).InternalId);
+            var condition =
+                _fishes[fish.Id].FishingConditions
+                .Where(item => item.FishingSpot == fishingSpot)
+                .Single();
+            if (text == null || condition.DefaultMemoText == text)
             {
                 // メモの削除が指定されているかあるいはユーザのメモの内容が既定値である場合
                 // いずれにしろ、ユーザのメモは不要であるので、削除を試みる
-                if (!_fishMemoList.Remove(fishIdText))
+                if (!_fishMemoList.Remove(key))
                 {
                     // メモの削除を試みようとしたがもともとユーザのメモが存在しなかった場合
                     // 何もせずに復帰
@@ -322,7 +331,7 @@ namespace FFXIVFishingScheduleViewer
                 // 設定すべきユーザのメモが指定されており、かつメモの内容が既定値と一致していない場合
                 // 現在設定されているユーザのメモを取得する
                 string currentText;
-                if (_fishMemoList.TryGetValue(fishIdText, out currentText) && currentText == text)
+                if (_fishMemoList.TryGetValue(key, out currentText) && currentText == text)
                 {
                     // ユーザのメモが現在の設定値と同一である場合
                     // 何もせずに復帰
@@ -330,21 +339,21 @@ namespace FFXIVFishingScheduleViewer
                 }
                 // 設定すべきユーザのメモが指定されており、かつメモの内容が既定値と一致おらず、かつ現在の設定値と一致していない場合
                 // メモの設定値を更新する
-                _fishMemoList[fishIdText] = text;
+                _fishMemoList[key] = text;
                 // 以降の処理で Settings を変更する
             }
             Properties.Settings.Default.FishMemoList = string.Join("\n", _fishMemoList.Select(item => string.Format("{0}\t{1}", item.Key.SimpleEncode(), item.Value.SimpleEncode())));
             Properties.Settings.Default.Save();
             try
             {
-                _fishMemoChanded(this, fish);
+                _fishMemoChanded(this, new FishMemoChangedEventArgs(fish, fishingSpot));
             }
             catch (Exception)
             {
             }
         }
 
-        event EventHandler<Fish> ISettingProvider.FishMemoChanged
+        event EventHandler<FishMemoChangedEventArgs> ISettingProvider.FishMemoChanged
         {
             add
             {

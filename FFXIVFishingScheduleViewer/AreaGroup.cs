@@ -6,24 +6,27 @@ namespace FFXIVFishingScheduleViewer
         : IGameDataObject
     {
         private static int _serialNumber = 0;
-        private TranslationTextId _nameId;
+        private string _rawId;
 
         public AreaGroup(string areaGroupId)
         {
             Order = _serialNumber++;
+            _rawId = areaGroupId;
             Id = new GameDataObjectId(GameDataObjectCategory.AreaGroup, areaGroupId);
-            _nameId = new TranslationTextId(TranslationCategory.AreaGroup, areaGroupId);
+            NameId = new TranslationTextId(TranslationCategory.AreaGroup, areaGroupId);
             Areas = new AreaCollection();
         }
 
+        string IGameDataObject.InternalId => _rawId;
         public int Order { get; }
         public GameDataObjectId Id { get; }
-        public string Name => Translate.Instance[_nameId];
+        public TranslationTextId NameId { get; }
+        public string Name => Translate.Instance[NameId];
         public AreaCollection Areas { get; }
 
         public IEnumerable<string> CheckTranslation()
         {
-            return Translate.Instance.CheckTranslation(_nameId);
+            return Translate.Instance.CheckTranslation(NameId);
         }
 
         public override bool Equals(object o)

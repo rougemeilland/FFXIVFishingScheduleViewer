@@ -26,7 +26,7 @@ namespace FFXIVFishingScheduleViewer
                     Areas
                         .SelectMany(area => area.FishingSpots)
                         .SelectMany(fishingSpot => fishingSpot.Fishes)
-                        .Select(fish => fish.Fish),
+                        .Select(fish => fish.Condition.Fish),
                     true);
             });
             UncheckAllFishCommand = new SimpleCommand(p =>
@@ -35,7 +35,7 @@ namespace FFXIVFishingScheduleViewer
                     Areas
                         .SelectMany(area => area.FishingSpots)
                         .SelectMany(fishingSpot => fishingSpot.Fishes)
-                        .Select(fish => fish.Fish),
+                        .Select(fish => fish.Condition.Fish),
                     false);
             });
         }

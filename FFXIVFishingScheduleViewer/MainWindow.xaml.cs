@@ -861,13 +861,13 @@ namespace FFXIVFishingScheduleViewer
             {
                 // リムサ・ロミンサ
                 new Fish("ゴールデンフィン", ToFishingSpot("リムサ・ロミンサ：上甲板層"), ToFishingBait("ピルバグ"), 9, 14, "ピルバグ⇒(!!!プレ)"),
-                new Fish("メガオクトパス", ToFishingSpot("リムサ・ロミンサ：下甲板層"), ToFishingBait("ピルバグ"), 9, 17, "ピルバグ⇒(!!スト)ハーバーヘリングHQ⇒(!!!スト)"),
+                new Fish("メガオクトパス", ToFishingSpot("リムサ・ロミンサ：下甲板層"), ToFishingBait("ピルバグ"), 9, 17, "ピルバグ⇒(!!スト)ハーバーヘリングHQ⇒(!!!スト); ピルバグ⇒(!プレ)メルトールゴビーHQ⇒(!!!スト)"),
 
                 // 中央ラノシア
                 new Fish("ザルエラ", ToFishingSpot("ゼファードリフト沿岸"), ToFishingBait("ラットの尾"), 9, 14, "ラットの尾⇒(!!!プレ)"),
                 new Fish("トリックスター", ToFishingSpot("ローグ川"), ToFishingBait("モスプパ"), 9, 14, "モスプパ⇒(!!!プレ)"),
                 new Fish("スナガクレ", ToFishingSpot("西アジェレス川"), ToFishingBait("ザリガニボール"), "ザリガニボール⇒(!!!プレ)"),
-                new Fish("ギガシャーク", ToFishingSpot("サマーフォード沿岸"), ToFishingBait("ピルバグ"), WeatherType.快晴 | WeatherType.晴れ, "ピルバグ⇒(!!スト)ハーバーヘリングHQ⇒(!!スト)オーガバラクーダHQ⇒(!!!スト)"),
+                new Fish("ギガシャーク", ToFishingSpot("サマーフォード沿岸"), ToFishingBait("フローティングミノー"), WeatherType.快晴 | WeatherType.晴れ, "フローティングミノー⇒(!!スト)ハーバーヘリングHQ⇒(!!スト)オーガバラクーダHQ⇒(!!!スト); フローティングミノー⇒(!!スト)ハーバーヘリングHQ⇒(!!!スト); フローティングミノー⇒(!プレ)メルトールゴビーHQ⇒(!!!スト)"),
                 new Fish("ハイパーチ", ToFishingSpot("ニーム川"), ToFishingBait("シンキングミノー"), 5, 8, "シンキングミノー⇒(!!!スト)"),
                 new Fish("クリスタルパーチ", ToFishingSpot("ささやきの谷"), ToFishingBait("バターワーム"), WeatherType.曇り | WeatherType.霧 | WeatherType.風, "バターワーム⇒(!!!プレ)"),
 
@@ -888,93 +888,72 @@ namespace FFXIVFishingScheduleViewer
                     "フルムーンサーディン",
                     new[]
                     {
-                        ToFishingSpot("南ブラッドショア"),
-                        ToFishingSpot("コスタ・デル・ソル"),
-                        ToFishingSpot("幻影諸島北岸"),
-                        ToFishingSpot("幻影諸島南岸"),
-                        ToFishingSpot("サプサ産卵地"),
-                        ToFishingSpot("ミスト・ヴィレッジ"),
-                    },
-                    ToFishingBait("スプーンワーム"),
-                    18,
-                    6,
-                    "スプーンワーム⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("南ブラッドショア"), new[] { ToFishingBait("スプーンワーム") }, 18, 6, "スプーンワーム⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("コスタ・デル・ソル"), new[] { ToFishingBait("スプーンワーム")}, 18, 6, "スプーンワーム⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("幻影諸島北岸"), new[] { ToFishingBait("スプーンワーム")}, 18, 6, "スプーンワーム⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("幻影諸島南岸"), new[] { ToFishingBait("スプーンワーム")}, 18, 6, "スプーンワーム⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("サプサ産卵地"), new[] { ToFishingBait("メタルジグ")}, 18, 6, "メタルジグ⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("ミスト・ヴィレッジ"), new[] { ToFishingBait("スプーンワーム")}, 18, 6, "スプーンワーム⇒(!プレ)"),
+                    }),
                 new Fish(
                     "リトルサラオス",
                     new[]
                     {
-                        ToFishingSpot("コスタ・デル・ソル"),
-                        ToFishingSpot("ロータノ海沖合：船尾"),
-                        ToFishingSpot("常夏の島北"),
-                    },
-                    ToFishingBait("ポーラークリル"),
-                    WeatherType.雨 | WeatherType.暴雨,
-                    "ポーラークリル⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("コスタ・デル・ソル"), new[] { ToFishingBait("ポーラークリル") }, WeatherType.雨 | WeatherType.暴雨, "ポーラークリル⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("ロータノ海沖合：船尾"), new[] { ToFishingBait("ポーラークリル") }, WeatherType.雨 | WeatherType.暴雨, "ポーラークリル⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("常夏の島北"), new[] { ToFishingBait("ポーラークリル") }, WeatherType.雨 | WeatherType.暴雨, "ポーラークリル⇒(!!スト)"),
+                    }),
                 new Fish(
                     "ロックロブスター",
                     new[]
                     {
-                        ToFishingSpot("ロータノ海沖合：船尾"),
-                        ToFishingSpot("船隠しの港"),
-                        ToFishingSpot("シルバーバザー"),
-                        ToFishingSpot("クレセントコーヴ"),
-                    },
-                    ToFishingBait("ポーラークリル"),
-                    17,
-                    22,
-                    "ポーラークリル⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("ロータノ海沖合：船尾"), new[] { ToFishingBait("ポーラークリル") }, 17, 22, "ポーラークリル⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("船隠しの港"), new[] { ToFishingBait("ポーラークリル") }, 17, 22, "ポーラークリル⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("シルバーバザー"), new[] { ToFishingBait("ポーラークリル") }, 17, 22, "ポーラークリル⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("クレセントコーヴ"), new[] { ToFishingBait("ポーラークリル") }, 17, 22, "ポーラークリル⇒(!!スト)"),
+                    }),
                 new Fish(
                     "ダークスリーパー",
                     new[]
                     {
-                        ToFishingSpot("隠れ滝"),
-                        ToFishingSpot("花蜜桟橋"),
-                        ToFishingSpot("ハズーバ支流：上流"),
-                        ToFishingSpot("ハズーバ支流：中流"),
-                        ToFishingSpot("ハズーバ支流：東"),
-                        ToFishingSpot("フォールゴウド秋瓜湖畔"),
-                        ToFishingSpot("ラベンダーベッド"),
-                    },
-                    ToFishingBait("ユスリカ"),
-                    15,
-                    10,
-                    "ユスリカ⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("隠れ滝"), new[] { ToFishingBait("ブラススプーン") }, 15, 10, "ブラススプーン⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("花蜜桟橋"), new[] { ToFishingBait("シルバースプーン") }, 15, 10, "シルバースプーン⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("ハズーバ支流：上流"), new[] { ToFishingBait("スピナー") }, 15, 10, "スピナー⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("ハズーバ支流：中流"), new[] { ToFishingBait("バターワーム") }, 15, 10, "バターワーム⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("ハズーバ支流：東"), new[] { ToFishingBait("スピナーベイト") }, 15, 10, "スピナーベイト⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("フォールゴウド秋瓜湖畔"), new[] { ToFishingBait("スピナーベイト") }, 15, 10, "スピナーベイト⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("ラベンダーベッド"), new[] { ToFishingBait("ブラススプーン") }, 15, 10, "ブラススプーン⇒(!プレ)"),
+                    }),
                 new Fish(
                     "射手魚",
                     new[]
                     {
-                        ToFishingSpot("東アジェレス川"),
-                        ToFishingSpot("レインキャッチャー樹林"),
-                    },
-                    ToFishingBait("スナーブルフライ"),
-                    WeatherType.晴れ | WeatherType.快晴,
-                    "スナーブルフライ⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("東アジェレス川"), new[] { ToFishingBait("スナーブルフライ") }, WeatherType.晴れ | WeatherType.快晴, "スナーブルフライ⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("レインキャッチャー樹林"), new[] { ToFishingBait("スナーブルフライ") }, WeatherType.晴れ | WeatherType.快晴, "スナーブルフライ⇒(!プレ)"),
+                    }),
                 new Fish(
                     "雷紋魚",
                     new[]
                     {
-                        ToFishingSpot("レインキャッチャー樹林"),
-                        ToFishingSpot("ロングクライム渓谷"),
-                    },
-                    ToFishingBait("テッポウムシ"),
-                    WeatherType.雨,
-                    "テッポウムシ⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("レインキャッチャー樹林"), new[] { ToFishingBait("スピナー") }, WeatherType.雨, "スピナー⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("ロングクライム渓谷"), new[] { ToFishingBait("テッポウムシ") }, WeatherType.雨, "テッポウムシ⇒(!!スト)"),
+                    }),
                 new Fish("ビアナックブーン", ToFishingSpot("南ブラッドショア"), ToFishingBait("シュリンプフィーダー"), 20, 23, "シュリンプフィーダー⇒(!!!スト)"),
                 new Fish("シャークトゥーナ", ToFishingSpot("コスタ・デル・ソル"), ToFishingBait("スプーンワーム"), 19, 21, WeatherType.快晴 | WeatherType.晴れ, "スプーンワーム⇒(!プレ)フルムーンサーディンHQ⇒(!!!スト)"),
                 new Fish("ボンバードフィッシュ", ToFishingSpot("北ブラッドショア"), ToFishingBait("ヘリングボール"), 9, 15, WeatherType.快晴, "ヘリングボール⇒(!!!スト)"),
                 new Fish("オールドマーリン", ToFishingSpot("ロータノ海沖合：船首"), ToFishingBait("ピルバグ"), WeatherType.雨 | WeatherType.暴雨, WeatherType.快晴, "ピルバグ⇒(!!スト)ハーバーヘリングHQ⇒(!!スト)オーガバラクーダHQ⇒(!!!スト)"),
-                new Fish("ネプトの竜", ToFishingSpot("ロータノ海沖合：船尾"), ToFishingBait("ポーラークリル"), WeatherType.雨 | WeatherType.暴雨, "(要リトルサラオス×3) ポーラークリル⇒(!!スト)\nポーラークリル⇒(!!!スト)"),
-                new Fish("ソルター", ToFishingSpot("隠れ滝"), ToFishingBait("ハニーワーム"), 17, 20, WeatherType.快晴 | WeatherType.晴れ, "ハニーワーム⇒(!!!プレ)"),
+                new Fish("ネプトの竜", ToFishingSpot("ロータノ海沖合：船尾"), ToFishingBait("ポーラークリル"), WeatherType.雨 | WeatherType.暴雨, "(要リトルサラオス×3) ポーラークリル⇒(!!スト)\nポーラークリル⇒(!!!スト); ポーラークリル⇒(!プレ)メルトールゴビーHQ⇒(!!!スト)"),
+                new Fish("ソルター", ToFishingSpot("隠れ滝"), ToFishingBait("ハニーワーム"), 17, 20, WeatherType.快晴 | WeatherType.晴れ, "@!ハニーワーム⇒(!プレ)"),
                 new Fish("ドラウンドスナイパー", ToFishingSpot("東アジェレス川"), ToFishingBait("スナーブルフライ"), WeatherType.快晴 | WeatherType.晴れ, "スナーブルフライ⇒(!!!スト)"),
                 new Fish("テルプシコレアン", ToFishingSpot("レインキャッチャー樹林"), ToFishingBait("ハニーワーム"), WeatherType.霧, "ハニーワーム⇒(!!!プレ)"),
                 new Fish("ミラースケイル", ToFishingSpot("レインキャッチャー沼沢地"), ToFishingBait("ユスリカ"), 9, 16, WeatherType.快晴 | WeatherType.晴れ, "ユスリカ⇒(!プレ)銅魚HQ⇒(!!!プレ)"),
                 new Fish("黄金魚", ToFishingSpot("レッドマンティス滝"), ToFishingBait("ハニーワーム"), WeatherType.快晴 | WeatherType.晴れ, "(要オオモリナマズ×3, 天候不問) ハニーワーム⇒(!プレ)銀魚HQ⇒(!プレ)金魚HQ⇒(!!スト)\nハニーワーム⇒(!プレ)銀魚HQ⇒(!!!スト)"),
                 new Fish("海チョコチョコボ", ToFishingSpot("常夏の島北"), ToFishingBait("ラグワーム"), 8, 16, "ラグワーム⇒(!プレ)メルトールゴビーHQ⇒(!!スト)ワフーHQ⇒(!!!スト)"),
-                new Fish("リトルペリュコス", ToFishingSpot("常夏の島北"), ToFishingBait("ラグワーム"), WeatherType.雨 | WeatherType.暴雨, "ラグワーム⇒(!プレ)メルトールゴビーHQ⇒(!!スト)ワフーHQ⇒(!!!スト)"),
+                new Fish("リトルペリュコス", ToFishingSpot("常夏の島北"), ToFishingBait("ラグワーム"), WeatherType.雨 | WeatherType.暴雨, "ラグワーム⇒(!プレ)メルトールゴビーHQ⇒(!!スト)ワフーHQ⇒(!!スト)"),
 
                 // 西ラノシア
                 new Fish("スケーリーフット", ToFishingSpot("スウィフトパーチ入植地"), ToFishingBait("ポーラークリル"), 19, 3, "ポーラークリル⇒(!!!プレ)"),
-                new Fish("ジャンクモンガー", ToFishingSpot("スカルバレー沿岸部"), ToFishingBait("ピルバグ"), 16, 2, "ピルバグ⇒(!プレ)メルトールゴビーHQ⇒(!!スト)ワフーHQ⇒(!!!スト)"),
+                new Fish("ジャンクモンガー", ToFishingSpot("スカルバレー沿岸部"), ToFishingBait("ラグワーム"), 16, 2, "ラグワーム⇒(!プレ)メルトールゴビーHQ⇒(!!スト)ワフーHQ⇒(!!!スト); ラグワーム⇒(!プレ)メルトールゴビーHQ⇒(!!!スト)"),
                 new Fish("リムレーンズソード", ToFishingSpot("ブルワーズ灯台"), ToFishingBait("弓角"), 9, 14, WeatherType.快晴 | WeatherType.晴れ, "弓角⇒(!!!スト)"),
                 new Fish("ローンリッパー", ToFishingSpot("ハーフストーン沿岸部"), ToFishingBait("ヘヴィメタルジグ"), WeatherType.暴風, "ヘヴィメタルジグ⇒(!!!スト)"),
                 new Fish("ヘルムズマンズハンド", ToFishingSpot("幻影諸島北岸"), ToFishingBait("ピルバグ"), 9, 15, WeatherType.曇り | WeatherType.風 | WeatherType.霧, "ピルバグ⇒(!プレ)オーシャンクラウドHQ⇒(!!!スト)"),
@@ -983,27 +962,29 @@ namespace FFXIVFishingScheduleViewer
                 new Fish("キャプテンズチャリス", ToFishingSpot("サプサ産卵地"), ToFishingBait("メタルジグ"), 23, 2, "メタルジグ⇒(!プレ)フルムーンサーディンHQ⇒(!!!スト)"),
                 new Fish("コエラカントゥス", ToFishingSpot("幻影諸島南岸"), ToFishingBait("スプーンワーム"), 22, 3, WeatherType.曇り | WeatherType.風 | WeatherType.霧, "スプーンワーム⇒(!プレ)フルムーンサーディンHQ⇒(!!!スト)"),
                 new Fish("エンドセラス", ToFishingSpot("幻影諸島南岸"), ToFishingBait("スプーンワーム"), 20, 4, WeatherType.快晴 | WeatherType.晴れ, WeatherType.曇り | WeatherType.風 | WeatherType.霧, "スプーンワーム⇒(!プレ)フルムーンサーディンHQ⇒(!!!スト)"),
-                new Fish("シーハッグ", ToFishingSpot("船隠しの港"), ToFishingBait("ピルバグ"), 19, 2, WeatherType.快晴 | WeatherType.晴れ, WeatherType.快晴 | WeatherType.晴れ, "ピルバグ⇒(!プレ)メルトールゴビーHQ⇒(!!スト)ワフーHQ⇒(!!!スト)"),
+                new Fish("シーハッグ", ToFishingSpot("船隠しの港"), ToFishingBait("フローティングミノー"), 19, 2, WeatherType.快晴 | WeatherType.晴れ, WeatherType.快晴 | WeatherType.晴れ, "フローティングミノー⇒(!プレ)メルトールゴビーHQ⇒(!!スト)ワフーHQ⇒(!!!スト)"),
 
                 // 高地ラノシア
                 new Fish(
                     "ジェイドイール",
                     new[]
                     {
-                        ToFishingSpot("オークウッド"),
-                        ToFishingSpot("愚か者の滝"),
-                        ToFishingSpot("ブロンズレイク北東岸"),
-                        ToFishingSpot("ブロンズレイク・シャロー"),
-                        ToFishingSpot("ブロンズレイク北西岸"),
-                    },
-                    ToFishingBait("バターワーム"),
-                    17,
-                    10,
-                    "バターワーム⇒(!!スト)"),
-                new Fish("トラマフィッシュ", ToFishingSpot("オークウッド"), ToFishingBait("スピナーベイト"), 17, 20, WeatherType.曇り | WeatherType.霧, "スピナーベイト⇒(!プレ)スカルピンHQ⇒(!!!スト)"),
+                        new FishingCondition(ToFishingSpot("オークウッド"), new[] { ToFishingBait("バターワーム") }, 17, 10, "バターワーム⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("愚か者の滝"), new[] { ToFishingBait("シルバースプーン") }, 17, 10, "シルバースプーン⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("ブロンズレイク北東岸"), new[] { ToFishingBait("フローティングミノー") }, 17, 10, "フローティングミノー⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("ブロンズレイク・シャロー"), new[] { ToFishingBait("バターワーム") }, 17, 10, "バターワーム⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("ブロンズレイク北西岸"), new[] { ToFishingBait("バターワーム") }, 17, 10, "バターワーム⇒(!!スト)"),
+                    }),
+                new Fish("トラマフィッシュ", ToFishingSpot("オークウッド"), ToFishingBait("スピナー"), 17, 20, WeatherType.曇り | WeatherType.霧, "スピナー⇒(!プレ)スカルピンHQ⇒(!!!スト)"),
                 new Fish("ジャンヌ・トラウト", ToFishingSpot("愚か者の滝"), ToFishingBait("クロウフライ"), 4, 6, "クロウフライ⇒(!!!スト)"),
                 new Fish("ワーム・オブ・ニーム", ToFishingSpot("ブロンズレイク・シャロー"), ToFishingBait("バターワーム"), 19, 22, "バターワーム⇒(!!!スト)"),
-                new Fish("スプリングキング", new []{ ToFishingSpot("ブロンズレイク北東岸"), ToFishingSpot("ブロンズレイク北西岸") }, ToFishingBait("スピナーベイト"), 16, 19, "スピナーベイト⇒(!!!スト)"),
+                new Fish(
+                    "スプリングキング",
+                    new[]
+                    {
+                        new FishingCondition(ToFishingSpot("ブロンズレイク北東岸"), new[] { ToFishingBait("スピナーベイト") }, 16, 19, "スピナーベイト⇒(!!!スト)"),
+                        new FishingCondition(ToFishingSpot("ブロンズレイク北西岸"), new[] { ToFishingBait("スピナーベイト") }, 16, 19, "スピナーベイト⇒(!!!スト)"),
+                    }),
 
                 // 外地ラノシア
                 new Fish("大鈍甲", ToFishingSpot("ロングクライム渓谷"), ToFishingBait("スピナーベイト"), 4, 9, "スピナーベイト⇒(!!スト)"),
@@ -1013,7 +994,13 @@ namespace FFXIVFishingScheduleViewer
                 new Fish("トゥイッチビアード", ToFishingSpot("ミスト・ヴィレッジ"), ToFishingBait("スプーンワーム"), 4, 6, WeatherType.快晴 | WeatherType.晴れ, "スプーンワーム⇒(!プレ)フルムーンサーディンHQ⇒(!!!スト)"),
 
                 // グリダニア
-                new Fish("雨乞魚", new[]{ ToFishingSpot("グリダニア：翡翠湖畔"), ToFishingSpot("グリダニア：囁きの渓谷") }, ToFishingBait("テッポウムシ"), 17, 2, WeatherType.雨, "テッポウムシ⇒(!!スト)"),
+                new Fish(
+                    "雨乞魚",
+                    new[]
+                    {
+                        new FishingCondition(ToFishingSpot("グリダニア：翡翠湖畔"), new FishingBait[]{ ToFishingBait("テッポウムシ") }, 17, 2, WeatherType.雨, "テッポウムシ⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("グリダニア：囁きの渓谷"), new FishingBait[]{ ToFishingBait("テッポウムシ") }, 17, 2, WeatherType.雨, "テッポウムシ⇒(!!スト)"),
+                    }),
                 new Fish("招嵐王", ToFishingSpot("グリダニア：翡翠湖畔"), ToFishingBait("テッポウムシ"), 17, 2, WeatherType.雨, "テッポウムシ⇒(!!!スト)"),
                 new Fish("ブラッディブルワー", ToFishingSpot("グリダニア：紅茶川水系下流"), ToFishingBait("ザリガニボール"), "ザリガニボール⇒(!!!スト)"),
                 new Fish("マトロンカープ", ToFishingSpot("グリダニア：囁きの渓谷"), ToFishingBait("ブラッドワーム"), 15, 21, "ブラッドワーム⇒(!!!プレ)"),
@@ -1026,17 +1013,14 @@ namespace FFXIVFishingScheduleViewer
                     "ブラックイール",
                     new[]
                     {
-                        ToFishingSpot("エバーシェイド"),
-                        ToFishingSpot("芽吹の池"),
-                        ToFishingSpot("青翠の奈落"),
-                        ToFishingSpot("ハズーバ支流：上流"),
-                        ToFishingSpot("ハズーバ支流：下流"),
-                        ToFishingSpot("ハズーバ支流：東"),
-                        ToFishingSpot("ユグラム川"),
-                    },
-                    ToFishingBait("バスボール"),
-                    17,
-                    10, "バスボール⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("エバーシェイド"), new[] { ToFishingBait("バスボール") }, 17, 10, "バスボール⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("芽吹の池"), new[] { ToFishingBait("バスボール") }, 17, 10, "バスボール⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("青翠の奈落"), new[] { ToFishingBait("バスボール") }, 17, 10, "バスボール⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("ハズーバ支流：上流"), new[] { ToFishingBait("バスボール") }, 17, 10, "バスボール⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("ハズーバ支流：下流"), new[] { ToFishingBait("バスボール") }, 17, 10, "バスボール⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("ハズーバ支流：東"), new[] { ToFishingBait("バスボール") }, 17, 10, "バスボール⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("ユグラム川"), new[] { ToFishingBait("バターワーム") }, 17, 10, "バターワーム⇒(!!スト)"),
+                    }),
                 new Fish("レヴィンライト", ToFishingSpot("エバーシェイド"), ToFishingBait("ハナアブ"), 18, 23, "ハナアブ⇒(!!!プレ)"),
                 new Fish("グリーンジェスター", ToFishingSpot("芽吹の池"), ToFishingBait("ハニーワーム"), 18, 21, "ハニーワーム⇒(!!!スト)"),
                 new Fish("ブラッドバス", ToFishingSpot("ハウケタ御用邸"), ToFishingBait("ハニーワーム"), WeatherType.雷, "ハニーワーム⇒(!プレ)銀魚HQ⇒(!!!スト)"),
@@ -1050,12 +1034,9 @@ namespace FFXIVFishingScheduleViewer
                     "オークルート",
                     new[]
                     {
-                        ToFishingSpot("シルフランド渓谷"),
-                        ToFishingSpot("プラウドクリーク"),
-                    },
-                    ToFishingBait("テッポウムシ"),
-                    17,
-                    10, "テッポウムシ⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("シルフランド渓谷"), new[] { ToFishingBait("テッポウムシ") }, 17, 10, "テッポウムシ⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("プラウドクリーク"), new[] { ToFishingBait("テッポウムシ") }, 17, 10, "テッポウムシ⇒(!!スト)"),
+                    }),
                 new Fish("マッシュルームクラブ", ToFishingSpot("シルフランド渓谷"), ToFishingBait("スピナー"), WeatherType.曇り | WeatherType.霧, "スピナー⇒(!プレ)スカルピンHQ⇒(!!スト)"),
                 new Fish("マジック・マッシュルームクラブ", ToFishingSpot("シルフランド渓谷"), ToFishingBait("スピナー"), WeatherType.雨 | WeatherType.雷, WeatherType.曇り | WeatherType.霧, "スピナー⇒(!プレ)スカルピンHQ⇒(!!!スト)"),
 
@@ -1068,13 +1049,13 @@ namespace FFXIVFishingScheduleViewer
                 new Fish("雷神魚", ToFishingSpot("根渡り沼"), ToFishingBait("カディスラーヴァ"), WeatherType.雷雨 | WeatherType.雷, "カディスラーヴァ⇒(!!スト)"),
                 new Fish("雷皇子", ToFishingSpot("根渡り沼"), ToFishingBait("カディスラーヴァ"), WeatherType.雷雨, "カディスラーヴァ⇒(!!!スト)"),
                 new Fish("オオタキタロ", ToFishingSpot("ウルズの恵み"), ToFishingBait("グロウワーム"), WeatherType.雷 | WeatherType.雷雨, "グロウワーム⇒(!!!スト)"),
-                new Fish("ナミタロ", ToFishingSpot("ウルズの恵み"), new[]{ ToFishingBait("グロウワーム"), ToFishingBait("トップウォーターフロッグ") }, WeatherType.雷 | WeatherType.雷雨, "(要オオタキタロ×1, 雷雨/雷) グロウワーム⇒(!!!スト)\n(天候不問) トップウォーターフロッグ⇒(!!!スト)"),
+                new Fish("ナミタロ", ToFishingSpot("ウルズの恵み"), new[] { ToFishingBait("グロウワーム"), ToFishingBait("トップウォーターフロッグ") }, WeatherType.雷 | WeatherType.雷雨, "(要オオタキタロ×1, 雷雨/雷) グロウワーム⇒(!!!スト)\n(天候不問) トップウォーターフロッグ⇒(!!!スト)"),
 
                 // 北部森林
                 new Fish("ブルーウィドー", ToFishingSpot("さざめき川"), ToFishingBait("フローティングミノー"), 9, 14, "フローティングミノー⇒(!!!スト)"),
                 new Fish("ジャッジレイ", ToFishingSpot("フォールゴウド秋瓜湖畔"), ToFishingBait("フェザントフライ"), 17, 21, "フェザントフライ⇒(!!!スト)"),
                 new Fish("シャドーストリーク", ToFishingSpot("プラウドクリーク"), ToFishingBait("トップウォーターフロッグ"), 4, 10, WeatherType.霧, "トップウォーターフロッグ⇒(!!!スト)"),
-                new Fish("コーネリア", ToFishingSpot("タホトトル湖畔"), new[]{ ToFishingBait("レインボースプーン"), ToFishingBait("グロウワーム") }, "(要ボクシングプレコ×5) グロウワーム⇒(!!スト)\nレインボースプーン⇒(!!!プレ)"),
+                new Fish("コーネリア", ToFishingSpot("タホトトル湖畔"), new[] { ToFishingBait("レインボースプーン"), ToFishingBait("グロウワーム") }, "(要ボクシングプレコ×5) グロウワーム⇒(!!スト)\nレインボースプーン⇒(!!!プレ)"),
 
                 // ラベンダーベッド
                 new Fish("スウィートニュート", ToFishingSpot("ラベンダーベッド"), ToFishingBait("ユスリカ"), 23, 4, WeatherType.霧, "ユスリカ⇒(!プレ)グラディエーターベタHQ⇒(!!!スト)"),
@@ -1086,8 +1067,8 @@ namespace FFXIVFishingScheduleViewer
                 new Fish("フィンガーズ", ToFishingSpot("クレセントコーヴ"), ToFishingBait("ポーラークリル"), 17, 18, "ポーラークリル⇒(!!!スト)"),
                 new Fish("ダーティーヘリング", ToFishingSpot("シルバーバザー"), ToFishingBait("ポーラークリル"), 20, 22, "ポーラークリル⇒(!!!プレ)"),
                 new Fish("タイタニックソー", ToFishingSpot("ウエストウインド岬"), ToFishingBait("ラグワーム"), 9, 15, WeatherType.快晴 | WeatherType.晴れ, "ラグワーム⇒(!プレ)メルトールゴビーHQ⇒(!!スト)ワフーHQ⇒(!!!スト)"),
-                new Fish("パイレーツハンター", ToFishingSpot("ウエストウインド岬"), ToFishingBait("ラグワーム"), "(要ワフー×6) ラグワーム⇒(!プレ)メルトールゴビーHQ⇒(!!スト)\nラグワーム⇒(!プレ)メルトールゴビーHQ⇒(!!スト)ワフーHQ⇒(!!!スト)"),
-                new Fish("ンデンデキ", ToFishingSpot("ムーンドリップ洞窟"), ToFishingBait("ハニーワーム"), 18, 5, WeatherType.霧, "ハニーワーム⇒(!プレ)銀魚HQ⇒(!!スト)アサシンベタHQ⇒(!!!スト)"),
+                new Fish("パイレーツハンター", ToFishingSpot("ウエストウインド岬"), ToFishingBait("ラグワーム"), "(要ワフー×6) ラグワーム⇒(!プレ)メルトールゴビーHQ⇒(!!スト)\nラグワーム⇒(!プレ)メルトールゴビーHQ⇒(!!スト)ワフーHQ⇒(!!!スト); ラグワーム⇒(!プレ)メルトールゴビーHQ⇒(!!!スト)"),
+                new Fish("ンデンデキ", ToFishingSpot("ムーンドリップ洞窟"), ToFishingBait("ハニーワーム"), 18, 5, WeatherType.霧, "ハニーワーム⇒(!プレ)銀魚HQ⇒(!!スト)アサシンベタHQ⇒(!!!スト); ハニーワーム⇒(!プレ)銀魚HQ⇒(!!!スト)"),
                 new Fish("ヴァンパイアウィップ", ToFishingSpot("パラタの墓所"), ToFishingBait("ハニーワーム"), WeatherType.雨, WeatherType.快晴 | WeatherType.曇り | WeatherType.晴れ | WeatherType.霧, "ハニーワーム⇒(!プレ)銀魚HQ⇒(!!!スト)"),
 
                 // 中央ザナラーン
@@ -1123,10 +1104,10 @@ namespace FFXIVFishingScheduleViewer
                 // クルザス中央高地
                 new Fish("ダナフェンズマーク", ToFishingSpot("クルザス川"), ToFishingBait("フェザントフライ"), WeatherType.吹雪, "フェザントフライ⇒(!!!スト)"),
                 new Fish("カローンズランタン", ToFishingSpot("聖ダナフェンの旅程"), ToFishingBait("グロウワーム"), 0, 4, WeatherType.吹雪 | WeatherType.雪, "グロウワーム⇒(!!!プレ)"),
-                new Fish("スターブライト", ToFishingSpot("剣ヶ峰山麓"), ToFishingBait("ハナアブ"), 21, 4, WeatherType.快晴 | WeatherType.晴れ, "ハナアブ⇒(!プレ)アバラシアスメルトHQ⇒(!!!スト)"),
+                new Fish("スターブライト", ToFishingSpot("剣ヶ峰山麓"), ToFishingBait("ストーンラーヴァ"), 21, 4, WeatherType.快晴 | WeatherType.晴れ, "ストーンラーヴァ⇒(!プレ)アバラシアスメルトHQ⇒(!!!スト)"),
                 new Fish("ドーンメイデン", ToFishingSpot("キャンプ・ドラゴンヘッド溜池"), ToFishingBait("フェザントフライ"), 5, 7, WeatherType.快晴 | WeatherType.晴れ, "フェザントフライ⇒(!!!スト)"),
-                new Fish("メイトリアーク", ToFishingSpot("調査隊の氷穴"), ToFishingBait("ハニーワーム"), "ハニーワーム⇒(!プレ)アバラシアスメルトHQ⇒(!!!プレ)"),
-                new Fish("ダークスター", ToFishingSpot("聖ダナフェンの落涙"), new[]{ ToFishingBait("ハニーワーム"), ToFishingBait("チョコボフライ") }, 19, 4, WeatherType.吹雪 | WeatherType.雪, "(要ランプマリモ×5, 時間帯不問, 天候不問) チョコボフライ⇒(!プレ)\nハニーワーム⇒(!プレ)アバラシアスメルトHQ⇒(!!!スト)"),
+                new Fish("メイトリアーク", ToFishingSpot("調査隊の氷穴"), ToFishingBait("ブルートリーチ"), "ブルートリーチ⇒(!プレ)アバラシアスメルトHQ⇒(!!!プレ)"),
+                new Fish("ダークスター", ToFishingSpot("聖ダナフェンの落涙"), new[] { ToFishingBait("ブルートリーチ"), ToFishingBait("チョコボフライ") }, 19, 4, WeatherType.吹雪 | WeatherType.雪, "(要ランプマリモ×5, 時間帯不問, 天候不問) チョコボフライ⇒(!プレ)\nブルートリーチ⇒(!プレ)アバラシアスメルトHQ⇒(!!!スト)"),
                 new Fish("ブルーコープス", ToFishingSpot("スノークローク大氷壁"), ToFishingBait("カディスラーヴァ"), WeatherType.雪 | WeatherType.吹雪, WeatherType.快晴 | WeatherType.晴れ, "カディスラーヴァ⇒(!!!プレ)"),
                 new Fish("アノマロカリス", ToFishingSpot("イシュガルド大雲海"), ToFishingBait("ホバーワーム"), 10, 15, WeatherType.快晴 | WeatherType.晴れ, "ホバーワーム⇒(!!スト)スプリットクラウドHQ⇒(!!!スト)"),
                 new Fish("マハール", ToFishingSpot("ウィッチドロップ"), ToFishingBait("ホバーワーム"), WeatherType.快晴 | WeatherType.晴れ, WeatherType.吹雪, "ホバーワーム⇒(!!スト)スプリットクラウドHQ⇒(!!!スト)"),
@@ -1135,15 +1116,15 @@ namespace FFXIVFishingScheduleViewer
                 // クルザス西部高地
                 new Fish("クルザスパファー", ToFishingSpot("リバーズミート"), ToFishingBait("ブルートリーチ"), WeatherType.雪 | WeatherType.吹雪, "ブルートリーチ⇒(!プレ)"),
                 new Fish("ファットパース", ToFishingSpot("リバーズミート"), ToFishingBait("ブルートリーチ"), "ブルートリーチ⇒(!!!プレ)"),
-                new Fish("グレイシャーコア", ToFishingSpot("グレイテール滝"), ToFishingBait("ジャンボガガンボ"), WeatherType.雪 | WeatherType.吹雪, "ジャンボガガンボ⇒(!!スト)"),
+                new Fish("グレイシャーコア", ToFishingSpot("グレイテール滝"), ToFishingBait("ジャンボガガンボ"), WeatherType.雪 | WeatherType.吹雪, "ジャンボガガンボ⇒(!!スト); ジャンボガガンボ⇒(!プレ)スカイワームHQ⇒(!!スト)"),
                 new Fish("ハイウィンドジェリー", ToFishingSpot("グレイテール滝"), ToFishingBait("ジャンボガガンボ"), WeatherType.晴れ | WeatherType.快晴, "(要フィッシュアイ) ジャンボガガンボ⇒(!プレ)スカイワームHQ⇒(!プレ)"),
-                new Fish("アイスイーター", ToFishingSpot("グレイテール滝"), ToFishingBait("ジャンボガガンボ"), WeatherType.雪 | WeatherType.吹雪, "ジャンボガガンボ⇒(!!スト)グレイシャーコアHQ⇒(!プレ)"),
-                new Fish("ヘイルイーター", ToFishingSpot("グレイテール滝"), ToFishingBait("ジャンボガガンボ"), WeatherType.吹雪, "ジャンボガガンボ⇒(!!スト)グレイシャーコアHQ⇒(!!!プレ)"),
-                new Fish("ソーサラーフィッシュ", ToFishingSpot("クルザス不凍池"), ToFishingBait("ゴブリンジグ"), 8, 20, "ゴブリンジグ⇒(!!スト)"),
-                new Fish("ホワイトオクトパス", ToFishingSpot("クルザス不凍池"), ToFishingBait("ブルートリーチ"), 8, 18, "ブルートリーチ⇒(!!スト)"),
-                new Fish("クルザスクリオネ", ToFishingSpot("クルザス不凍池"), ToFishingBait("ブルートリーチ"), 0, 4, WeatherType.吹雪, "ブルートリーチ⇒(!プレ)"),
+                new Fish("アイスイーター", ToFishingSpot("グレイテール滝"), ToFishingBait("ジャンボガガンボ"), WeatherType.雪 | WeatherType.吹雪, "ジャンボガガンボ⇒(!!スト)グレイシャーコアHQ⇒(!プレ); ジャンボガガンボ⇒(!プレ)スカイワームHQ⇒(!!スト)グレイシャーコアHQ⇒(!プレ)"),
+                new Fish("ヘイルイーター", ToFishingSpot("グレイテール滝"), ToFishingBait("ジャンボガガンボ"), WeatherType.吹雪, "ジャンボガガンボ⇒(!!スト)グレイシャーコアHQ⇒(!!!プレ); ジャンボガガンボ⇒(!プレ)スカイワームHQ⇒(!!スト)グレイシャーコアHQ⇒(!!!プレ)"),
+                new Fish("ソーサラーフィッシュ", ToFishingSpot("クルザス不凍池"), ToFishingBait("ハナアブ"), 8, 20, "ハナアブ⇒(!プレ)アバラシアスメルトHQ⇒(!!スト)"),
+                new Fish("ホワイトオクトパス", ToFishingSpot("クルザス不凍池"), ToFishingBait("ブルートリーチ"), 8, 18, "ブルートリーチ⇒(!!スト); ブルートリーチ⇒(!プレ)アバラシアスメルトHQ⇒(!!スト); ブルートリーチ⇒(!プレ)ハルオネHQ⇒(!!スト)"),
+                new Fish("クルザスクリオネ", ToFishingSpot("クルザス不凍池"), ToFishingBait("ブルートリーチ"), 0, 4, WeatherType.吹雪, "ブルートリーチ⇒(!プレ); ブルートリーチ⇒(!プレ)アバラシアスメルトHQ⇒(!プレ); ブルートリーチ⇒(!プレ)ハルオネHQ⇒(!プレ)"),
                 new Fish("フレアフィッシュ", ToFishingSpot("クルザス不凍池"), ToFishingBait("ツチグモ"), 10, 16, WeatherType.吹雪, "ツチグモ⇒(!プレ)ハルオネHQ⇒(!!!スト)"),
-                new Fish("ヒートロッド", ToFishingSpot("クリアプール"), ToFishingBait("ブルートリーチ"), WeatherType.吹雪 | WeatherType.雪, "ブルートリーチ⇒(!プレ)"),
+                new Fish("ヒートロッド", ToFishingSpot("クリアプール"), ToFishingBait("ブルートリーチ"), WeatherType.吹雪 | WeatherType.雪, "ブルートリーチ⇒(!プレ); ブルートリーチ⇒(!プレ)アバラシアスメルトHQ⇒(!プレ); ブルートリーチ⇒(!プレ)ハルオネHQ⇒(!プレ)"),
                 new Fish("カペリン", ToFishingSpot("クリアプール"), ToFishingBait("ブルートリーチ"), 0, 6, "(要フィッシュアイ)ブルートリーチ⇒(!プレ)"),
                 new Fish("プリーストフィッシュ", ToFishingSpot("クリアプール"), ToFishingBait("ブルートリーチ"), 0, 6, "(要フィッシュアイ)ブルートリーチ⇒(!!スト)"),
                 new Fish("ビショップフィッシュ", ToFishingSpot("クリアプール"), ToFishingBait("ブルートリーチ"), 10, 14, WeatherType.吹雪 | WeatherType.雪, WeatherType.快晴, "(要フィッシュアイ)ブルートリーチ⇒(!!!スト)"),
@@ -1152,8 +1133,8 @@ namespace FFXIVFishingScheduleViewer
                 new Fish("ベーンクラーケン", ToFishingSpot("ベーンプール南"), ToFishingBait("ブルートリーチ"), WeatherType.吹雪 | WeatherType.雪 | WeatherType.曇り | WeatherType.霧, "(要フィッシュアイ)ブルートリーチ⇒(!!!スト)"),
                 new Fish("ネモ", ToFishingSpot("ベーンプール南"), ToFishingBait("ブルートリーチ"), WeatherType.雪, WeatherType.吹雪, "ブルートリーチ⇒(!!!スト)"),
                 new Fish("ラ・レアル", ToFishingSpot("アッシュプール"), ToFishingBait("ブルートリーチ"), "ブルートリーチ⇒(!!!スト)"),
-                new Fish("氷神魚", ToFishingSpot("ベーンプール西"), ToFishingBait("ブルートリーチ"), WeatherType.雪 | WeatherType.吹雪, "ブルートリーチ⇒(!!スト)"),
-                new Fish("雪乞魚", ToFishingSpot("ベーンプール西"), ToFishingBait("ブルートリーチ"), WeatherType.雪 | WeatherType.吹雪, "ブルートリーチ⇒(!プレ)"),
+                new Fish("氷神魚", ToFishingSpot("ベーンプール西"), ToFishingBait("ブルートリーチ"), WeatherType.雪 | WeatherType.吹雪, "ブルートリーチ⇒(!!スト); ブルートリーチ⇒(!プレ)ハルオネHQ⇒(!!スト)"),
+                new Fish("雪乞魚", ToFishingSpot("ベーンプール西"), ToFishingBait("カディスラーヴァ"), WeatherType.雪 | WeatherType.吹雪, "カディスラーヴァ⇒(!プレ)ハルオネHQ⇒(!プレ)"),
                 new Fish("氷の巫女", ToFishingSpot("ベーンプール西"), ToFishingBait("カディスラーヴァ"), WeatherType.雪 | WeatherType.吹雪, WeatherType.吹雪, "(要フィッシュアイ)カディスラーヴァ⇒(!プレ)ハルオネHQ⇒(!!!スト)"),
 
                 // モードゥナ
@@ -1164,56 +1145,94 @@ namespace FFXIVFishingScheduleViewer
                 new Fish("ヴォイドバス", ToFishingSpot("早霜峠"), ToFishingBait("グロウワーム"), WeatherType.快晴 | WeatherType.晴れ, WeatherType.妖霧, "グロウワーム⇒(!!!スト)"),
                 new Fish("腐魚", ToFishingSpot("タングル湿林"), ToFishingBait("レインボースプーン"), WeatherType.妖霧, "レインボースプーン⇒(!!スト)"),
                 new Fish("ニンジャベタ", ToFishingSpot("タングル湿林"), ToFishingBait("ユスリカ"), 18, 9, WeatherType.妖霧, "ユスリカ⇒(!プレ)グラディエーターベタHQ⇒(!!スト)アサシンベタHQ⇒(!!!スト)"),
-                new Fish("ジャノ", ToFishingSpot("唄う裂谷北部"), ToFishingBait("ハニーワーム"), 8, 18, WeatherType.妖霧, "ハニーワーム⇒(!プレ)銀魚HQ⇒(!!スト)アサシンベタHQ⇒(!!!スト)"),
-                new Fish("クノ・ザ・キラー", ToFishingSpot("唄う裂谷北部"), ToFishingBait("ハニーワーム"), WeatherType.妖霧, "(要ジャノ×1)ハニーワーム⇒(!プレ)銀魚HQ⇒(!プレ)金魚HQ⇒(!!!スト)\nハニーワーム⇒(!プレ)銀魚HQ⇒(!!スト)アサシンベタHQ⇒(!!!スト)"),
+                new Fish("ジャノ", ToFishingSpot("唄う裂谷北部"), ToFishingBait("ハニーワーム"), 8, 18, WeatherType.妖霧, "ハニーワーム⇒(!プレ)銀魚HQ⇒(!プレ)金魚HQ⇒(!!!スト)"),
+                new Fish("クノ・ザ・キラー", ToFishingSpot("唄う裂谷北部"), ToFishingBait("ハニーワーム"), WeatherType.妖霧, "(要ジャノ×1)ハニーワーム⇒(!プレ)銀魚HQ⇒(!プレ)金魚HQ⇒(!!!スト)\nハニーワーム⇒(!プレ)銀魚HQ⇒(!!スト)アサシンベタHQ⇒(!!!スト); ハニーワーム⇒(!プレ)銀魚HQ⇒(!プレ)金魚HQ⇒(!!スト)アサシンベタHQ⇒(!!!スト)"),
 
                 // アバラシア雲海
-                new Fish("出目金", ToFishingSpot("ヴール・シアンシラン"), ToFishingBait("ブルートリーチ"), 9, 15, "ブルートリーチ⇒(!プレ)"),
-                new Fish("カイマン", new[]{ ToFishingSpot("ヴール・シアンシラン"), ToFishingSpot("餌食の台地") }, ToFishingBait("ブレーデッドジグ"), 18, 21, "ブレーデッドジグ⇒(!プレ)ブルフロッグHQ⇒(!!スト)"),
+                new Fish("出目金", ToFishingSpot("ヴール・シアンシラン"), ToFishingBait("ブルートリーチ"), 9, 15, "ブルートリーチ⇒(!プレ); ブルートリーチ⇒(!プレ)グリロタルパHQ⇒(!プレ)"),
+                new Fish(
+                    "カイマン",
+                    new[]
+                    {
+                        new FishingCondition(ToFishingSpot("ヴール・シアンシラン"), new[] { ToFishingBait("ブレーデッドジグ") }, 18, 21, "ブレーデッドジグ⇒(!プレ)ブルフロッグHQ⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("餌食の台地"), new[] { ToFishingBait("ストーンラーヴァ") }, 18, 21, "ストーンラーヴァ⇒(!プレ)マクロブラキウムHQ⇒(!!スト)"),
+                    }),
                 new Fish("水墨魚", ToFishingSpot("ヴール・シアンシラン"), ToFishingBait("ブルートリーチ"), 14, 16, WeatherType.快晴 | WeatherType.晴れ, "(要フィッシュアイ)ブルートリーチ⇒(!!!スト)"),
                 new Fish("バヌバヌヘッド", ToFishingSpot("雲溜まり"), ToFishingBait("ブレーデッドジグ"), WeatherType.晴れ | WeatherType.快晴, "ブレーデッドジグ⇒(!プレ)"),
-                new Fish("ゲイラキラー", ToFishingSpot("雲溜まり"), ToFishingBait("ブルートリーチ"), WeatherType.晴れ | WeatherType.快晴, "ブルートリーチ⇒(!!!スト)"),
+                new Fish("ゲイラキラー", ToFishingSpot("雲溜まり"), ToFishingBait("ブルートリーチ"), WeatherType.晴れ | WeatherType.快晴, "ブルートリーチ⇒(!!!スト); ブルートリーチ⇒(!プレ)グリロタルパHQ⇒(!プレ)ブルフロッグHQ⇒(!!!スト); ブルートリーチ⇒(!プレ)ブルフロッグHQ⇒(!!!スト)"),
                 new Fish("パイッサキラー", ToFishingSpot("雲溜まり"), ToFishingBait("ブレーデッドジグ"), 8, 12, WeatherType.霧, WeatherType.快晴, "ブレーデッドジグ⇒(!プレ)ブルフロッグHQ⇒(!!!スト)"),
-                new Fish("スターフラワー", new [] { ToFishingSpot("クラウドトップ"), ToFishingSpot("モック・ウーグル島") },ToFishingBait("レッドバルーン"), WeatherType.快晴 | WeatherType.晴れ, "レッドバルーン⇒(!プレ)"),
+                new Fish(
+                    "スターフラワー",
+                    new[]
+                    {
+                        new FishingCondition(ToFishingSpot("クラウドトップ"), new[] { ToFishingBait("レッドバルーン") }, WeatherType.快晴 | WeatherType.晴れ, "レッドバルーン⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("モック・ウーグル島"), new[] { ToFishingBait("レッドバルーン") }, WeatherType.快晴 | WeatherType.晴れ, "レッドバルーン⇒(!プレ)"),
+                    }),
                 new Fish("フリーシーモトロ", ToFishingSpot("クラウドトップ"), ToFishingBait("ジャンボガガンボ"), WeatherType.快晴 | WeatherType.晴れ, "ジャンボガガンボ⇒(!!スト)"),
                 new Fish("シーロストラタスモトロ", ToFishingSpot("クラウドトップ"), ToFishingBait("ジャンボガガンボ"), 10, 13, WeatherType.快晴 | WeatherType.晴れ, "ジャンボガガンボ⇒(!!!スト)"),
                 new Fish("ストームコア", ToFishingSpot("ブルーウィンドウ"), ToFishingBait("レッドバルーン"), WeatherType.風 | WeatherType.曇り | WeatherType.霧, "レッドバルーン⇒(!!スト)"),
                 new Fish("ザ・セカンドワン", ToFishingSpot("ブルーウィンドウ"), ToFishingBait("ジャンボガガンボ"), WeatherType.風, "ジャンボガガンボ⇒(!!!スト)"),
                 new Fish("天空珊瑚", ToFishingSpot("モック・ウーグル島"), ToFishingBait("ジャンボガガンボ"), 0, 6, WeatherType.快晴 | WeatherType.晴れ, "(要引っ掛け釣り)ジャンボガガンボ⇒(!!スト)"),
-                new Fish("バスキングシャーク", ToFishingSpot("モック・ウーグル島"), ToFishingBait("ジャンボガガンボ"), WeatherType.霧, WeatherType.快晴, "ジャンボガガンボ⇒(!プレ)スカイフェアリー・セレネHQ⇒(!!!スト)"),
-                new Fish("クラウドバタフライ", ToFishingSpot("モック・ウーグル島"), new[]{ ToFishingBait("ジャンボガガンボ"), ToFishingBait("レッドバルーン") }, 5, 7, WeatherType.快晴, "(要スコーピオンフライ×3) ジャンボガガンボ⇒(!!スト)\n(要スカイフェアリー・セレネ×3) レッドバルーン⇒(!プレ)\nジャンボガガンボ⇒(!!!プレ)"),
+                new Fish("バスキングシャーク", ToFishingSpot("モック・ウーグル島"), ToFishingBait("レッドバルーン"), WeatherType.霧, WeatherType.快晴, "レッドバルーン⇒(!プレ)スカイフェアリー・セレネHQ⇒(!!!スト)"),
+                new Fish("クラウドバタフライ", ToFishingSpot("モック・ウーグル島"), new[] { ToFishingBait("ジャンボガガンボ"), ToFishingBait("レッドバルーン") }, 5, 7, WeatherType.快晴, "(要スコーピオンフライ×3) ジャンボガガンボ⇒(!!スト); ジャンボガガンボ⇒(!プレ)スカイフェアリー・セレネHQ⇒(!!スト)\n(要スカイフェアリー・セレネ×3) レッドバルーン⇒(!プレ)\nジャンボガガンボ⇒(!!!プレ)"),
 
                 // アジス・ラー
-                new Fish("ブラッドスキッパー", new[]{ ToFishingSpot("アルファ管区"), ToFishingSpot("廃液溜まり") }, ToFishingBait("バイオレットワーム"), WeatherType.雷, "バイオレットワーム⇒(!プレ)"),
+                new Fish(
+                    "ブラッドスキッパー",
+                    new[]
+                    {
+                        new FishingCondition(ToFishingSpot("アルファ管区"), new[] { ToFishingBait("バイオレットワーム") }, WeatherType.雷, "バイオレットワーム⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("廃液溜まり"), new[] { ToFishingBait("バイオレットワーム") }, WeatherType.雷, "バイオレットワーム⇒(!プレ)"),
+                    }),
                 new Fish("ハイアラガンクラブ改", ToFishingSpot("アルファ管区"), ToFishingBait("バイオレットワーム"), "バイオレットワーム⇒(!プレ)白金魚HQ⇒(!!!スト)"),
                 new Fish("魔科学物質666", ToFishingSpot("廃液溜まり"), ToFishingBait("バイオレットワーム"), WeatherType.晴れ | WeatherType.曇り | WeatherType.雷, "(要フィッシュアイ)バイオレットワーム⇒(!プレ)白金魚HQ⇒(!!!プレ)"),
-                new Fish("オイルイール", new []{ ToFishingSpot("超星間交信塔"), ToFishingSpot("アジス・ラー旗艦島") }, ToFishingBait("バイオレットワーム"), WeatherType.雷, "バイオレットワーム⇒(!プレ)白金魚HQ⇒(!!スト)"),
+                new Fish(
+                    "オイルイール",
+                    new[]
+                    {
+                        new FishingCondition(ToFishingSpot("超星間交信塔"), new[] { ToFishingBait("バイオレットワーム") }, WeatherType.雷, "バイオレットワーム⇒(!プレ)白金魚HQ⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("アジス・ラー旗艦島"), new[] { ToFishingBait("バイオレットワーム") }, WeatherType.雷, "バイオレットワーム⇒(!プレ)白金魚HQ⇒(!!スト)"),
+                    }),
                 new Fish("オリファントノーズ", ToFishingSpot("超星間交信塔"), ToFishingBait("バイオレットワーム"), 18, 0, WeatherType.雷, "バイオレットワーム⇒(!!スト)"),
                 new Fish("セティ", ToFishingSpot("超星間交信塔"), ToFishingBait("バイオレットワーム"), 18, 22, WeatherType.曇り, WeatherType.雷, "(要フィッシュアイ)バイオレットワーム⇒(!!!プレ)"),
-                new Fish("バイオピラルク", ToFishingSpot("デルタ管区"), ToFishingBait("ブルートリーチ"), 18, 3, WeatherType.曇り, "ブルートリーチ⇒(!!!スト)"),
+                new Fish("バイオピラルク", ToFishingSpot("デルタ管区"), ToFishingBait("ブルートリーチ"), 18, 3, WeatherType.曇り, "ブルートリーチ⇒(!!!スト); ブルートリーチ⇒(!プレ)エーテルアイHQ⇒(!!!スト)"),
                 new Fish("バイオガピラルク", ToFishingSpot("デルタ管区"), ToFishingBait("ツチグモ"), 21, 2, WeatherType.曇り, "ツチグモ⇒(!プレ)エーテルアイHQ⇒(!!!スト)"),
-                new Fish("プチアクソロトル", ToFishingSpot("パプスの大樹"), ToFishingBait("ブルートリーチ"), 21, 0, "ブルートリーチ⇒(!プレ)"),
-                new Fish("肺魚", ToFishingSpot("パプスの大樹"), ToFishingBait("ブルートリーチ"), WeatherType.曇り, "ブルートリーチ⇒(!!スト)"),
+                new Fish("プチアクソロトル", ToFishingSpot("パプスの大樹"), ToFishingBait("ブルートリーチ"), 21, 0, "ブルートリーチ⇒(!プレ); ブルートリーチ⇒(!プレ)エーテルアイHQ⇒(!プレ)"),
+                new Fish("肺魚", ToFishingSpot("パプスの大樹"), ToFishingBait("ブルートリーチ"), WeatherType.曇り, "ブルートリーチ⇒(!!スト); ブルートリーチ⇒(!プレ)エーテルアイHQ⇒(!!スト)"),
                 new Fish("ハンドレッドアイ", ToFishingSpot("パプスの大樹"), ToFishingBait("ツチグモ"), 6, 10, WeatherType.晴れ | WeatherType.曇り | WeatherType.雷, "ツチグモ⇒(!プレ)エーテルアイHQ⇒(!!!プレ)"),
-                new Fish("トゥプクスアラ", ToFishingSpot("ハビスフィア"), ToFishingBait("ジャンボガガンボ"), 15, 18, "ジャンボガガンボ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト)"),
-                new Fish("スチュペンデミス", ToFishingSpot("ハビスフィア"), ToFishingBait("ジャンボガガンボ"), WeatherType.晴れ | WeatherType.曇り | WeatherType.雷, "ジャンボガガンボ⇒(!!!スト)"),
-                new Fish("クリスタルピジョン", ToFishingSpot("ハビスフィア"), ToFishingBait("ジャンボガガンボ"), WeatherType.晴れ, WeatherType.雷, "(要フィッシュアイ)ジャンボガガンボ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト)"),
-                new Fish("ジュエリージェリー", ToFishingSpot("アジス・ラー旗艦島"), ToFishingBait("バイオレットワーム"), 20, 3, "バイオレットワーム⇒(!!スト)"),
-                new Fish("バレルアイ", ToFishingSpot("アジス・ラー旗艦島"), ToFishingBait("バイオレットワーム"),  WeatherType.雷, "(要フィッシュアイ)バイオレットワーム⇒(!!スト)"),
-                new Fish("オプロプケン", ToFishingSpot("アジス・ラー旗艦島"), ToFishingBait("バイオレットワーム"),  WeatherType.雷, "バイオレットワーム⇒(!!スト)"),
+                new Fish("トゥプクスアラ", ToFishingSpot("ハビスフィア"), ToFishingBait("ジャンボガガンボ"), 15, 18, "ジャンボガガンボ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト); ジャンボガガンボ⇒(!プレ)スカイフェアリー・セレネHQ⇒(!!!スト); ジャンボガガンボ⇒(!プレ)スカイフェアリー・セレネHQ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト)"),
+                new Fish("スチュペンデミス", ToFishingSpot("ハビスフィア"), ToFishingBait("ジャンボガガンボ"), WeatherType.晴れ | WeatherType.曇り | WeatherType.雷, "ジャンボガガンボ⇒(!!!スト); ジャンボガガンボ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト); ジャンボガガンボ⇒(!プレ)スカイフェアリー・セレネHQ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト)"),
+                new Fish("クリスタルピジョン", ToFishingSpot("ハビスフィア"), ToFishingBait("ジャンボガガンボ"), WeatherType.晴れ, WeatherType.雷, "(要フィッシュアイ) ジャンボガガンボ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト); ジャンボガガンボ⇒(!プレ)スカイフェアリー・セレネHQ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト)"),
+                new Fish("ジュエリージェリー", ToFishingSpot("アジス・ラー旗艦島"), ToFishingBait("バイオレットワーム"), 20, 3, "バイオレットワーム⇒(!!スト); バイオレットワーム⇒(!プレ)白金魚HQ⇒(!!スト)"),
+                new Fish("バレルアイ", ToFishingSpot("アジス・ラー旗艦島"), ToFishingBait("バイオレットワーム"), WeatherType.雷, "(要フィッシュアイ)バイオレットワーム⇒(!プレ)白金魚HQ⇒(!!スト)"),
+                new Fish("オプロプケン", ToFishingSpot("アジス・ラー旗艦島"), ToFishingBait("バイオレットワーム"), WeatherType.雷, "バイオレットワーム⇒(!!スト); バイオレットワーム⇒(!プレ)白金魚HQ⇒(!!スト)"),
                 new Fish("アラガンブレード・シャーク", ToFishingSpot("アジス・ラー旗艦島"), ToFishingBait("バイオレットワーム"), WeatherType.曇り, WeatherType.雷, "バイオレットワーム⇒(!プレ)白金魚HQ⇒(!!!スト)"),
-                new Fish("オパビニア", ToFishingSpot("アジス・ラー旗艦島"), ToFishingBait("バイオレットワーム"), WeatherType.雷, "(要 オプロプケン×3, 要フィッシュアイ) バイオレットワーム⇒(!!スト)\nバイオレットワーム⇒(!プレ)白金魚HQ⇒(!!!プレ)"),
+                new Fish("オパビニア", ToFishingSpot("アジス・ラー旗艦島"), ToFishingBait("バイオレットワーム"), WeatherType.雷, "(要 オプロプケン×3, 要フィッシュアイ) バイオレットワーム⇒(!!スト); バイオレットワーム⇒(!プレ)白金魚HQ⇒(!!スト)\nバイオレットワーム⇒(!プレ)白金魚HQ⇒(!!!プレ)"),
 
                 // 高地ドラヴァニア
-                new Fish("ピピラ・ピラ", new[]{ ToFishingSpot("悲嘆の飛泉"), ToFishingSpot("ウィロームリバー"),ToFishingSpot("餌食の台地") }, ToFishingBait("ゴブリンジグ"), WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, "ゴブリンジグ⇒(!!スト)"),
+                new Fish(
+                    "ピピラ・ピラ",
+                    new[]
+                    {
+                        new FishingCondition(ToFishingSpot("悲嘆の飛泉"), new[] { ToFishingBait("ゴブリンジグ") }, WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, "ゴブリンジグ⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("ウィロームリバー"), new[] { ToFishingBait("ゴブリンジグ") }, WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, "ゴブリンジグ⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("餌食の台地"), new[] { ToFishingBait("ゴブリンジグ") }, WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, "ゴブリンジグ⇒(!!スト)"),
+                    }),
                 new Fish("草魚", ToFishingSpot("悲嘆の飛泉"), ToFishingBait("ゴブリンジグ"), WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, "ゴブリンジグ⇒(!!スト)"),
-                new Fish("アカザ", new[]{ ToFishingSpot("悲嘆の飛泉"), ToFishingSpot("ウィロームリバー"), ToFishingSpot("スモーキングウェイスト") }, ToFishingBait("ブルートリーチ"), WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, "ブルートリーチ⇒(!プレ)"),
+                new Fish(
+                    "アカザ",
+                    new[]
+                    {
+                        new FishingCondition(ToFishingSpot("悲嘆の飛泉"), new[] { ToFishingBait("ブレーデッドジグ") }, WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, "ブレーデッドジグ⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("ウィロームリバー"), new[] { ToFishingBait("ツチグモ") }, WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, "ツチグモ⇒(!プレ); ツチグモ⇒(!プレ)マクロブラキウムHQ⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("スモーキングウェイスト"), new[] { ToFishingBait("ブレーデッドジグ") }, WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, "ブレーデッドジグ⇒(!プレ)"),
+                    }),
                 new Fish("スケイルリッパー", ToFishingSpot("悲嘆の飛泉"), ToFishingBait("ブルートリーチ"), WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, "ブルートリーチ⇒(!!!スト)"),
-                new Fish("ドラヴァニアンバス", ToFishingSpot("ウィロームリバー"), ToFishingBait("ブルートリーチ"), 0, 6, WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, "ブルートリーチ⇒(!!スト)"),
+                new Fish("ドラヴァニアンバス", ToFishingSpot("ウィロームリバー"), ToFishingBait("ブルートリーチ"), 0, 6, WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, "ブルートリーチ⇒(!!スト); ブルートリーチ⇒(!プレ)マクロブラキウムHQ⇒(!!スト)"),
                 new Fish("フォークタン", ToFishingSpot("ウィロームリバー"), ToFishingBait("ブルートリーチ"), 12, 16, WeatherType.砂塵 | WeatherType.曇り, WeatherType.快晴, "ブルートリーチ⇒(!!!スト)"),
-                new Fish("ポリプテルス", ToFishingSpot("スモーキングウェイスト"), ToFishingBait("ブルートリーチ"), 21, 3, "ブルートリーチ⇒(!!スト)"),
+                new Fish("ポリプテルス", ToFishingSpot("スモーキングウェイスト"), ToFishingBait("ツチグモ"), 21, 3, "ツチグモ⇒(!!スト); ツチグモ⇒(!プレ)マクロブラキウムHQ⇒(!!スト)"),
                 new Fish("アクムノタネ", ToFishingSpot("スモーキングウェイスト"), ToFishingBait("ブルートリーチ"), 22, 2, WeatherType.砂塵 | WeatherType.霧 | WeatherType.曇り, "ブルートリーチ⇒(!!!スト)"),
-                new Fish("サンダーボルト", ToFishingSpot("餌食の台地"), ToFishingBait("ブレーデッドジグ"), 22, 4, "ブレーデッドジグ⇒(!!スト)"),
+                new Fish("サンダーボルト", ToFishingSpot("餌食の台地"), ToFishingBait("ストーンラーヴァ"), 22, 4, "ストーンラーヴァ⇒(!プレ)マクロブラキウムHQ⇒(!!スト)"),
                 new Fish("サンダースケイル", ToFishingSpot("餌食の台地"), ToFishingBait("ストーンラーヴァ"), 6, 8, WeatherType.砂塵 | WeatherType.曇り | WeatherType.霧, WeatherType.雷, "ストーンラーヴァ⇒(!プレ)マクロブラキウムHQ⇒(!!!スト)"),
                 new Fish("アンバーサラマンダー", ToFishingSpot("餌食の台地"), ToFishingBait("ブルートリーチ"), 6, 12, "ブルートリーチ⇒(!!!スト)"),
                 new Fish("メテオトータス", ToFishingSpot("モーン大岩窟"), ToFishingBait("マグマワーム"), WeatherType.快晴 | WeatherType.晴れ, "マグマワーム⇒(!プレ)グラナイトクラブHQ⇒(!!!スト)"),
@@ -1228,14 +1247,14 @@ namespace FFXIVFishingScheduleViewer
                 // 低地ドラヴァニア
                 new Fish("水瓶王", ToFishingSpot("サリャク河"), ToFishingBait("ブレーデッドジグ"), "ブレーデッドジグ⇒(!プレ)香魚HQ⇒(!!!スト)"),
                 new Fish("マダムバタフライ", ToFishingSpot("クイックスピル・デルタ"), ToFishingBait("ツチグモ"), 21, 2, WeatherType.快晴, "ツチグモ⇒(!プレ)グリロタルパHQ⇒(!!!スト)"),
-                new Fish("フィロソファーアロワナ", ToFishingSpot("サリャク河上流"), ToFishingBait("ブルートリーチ"), 13, 20, WeatherType.快晴 | WeatherType.晴れ, "ブルートリーチ⇒(!!!スト)"),
+                new Fish("フィロソファーアロワナ", ToFishingSpot("サリャク河上流"), ToFishingBait("ブルートリーチ"), 13, 20, WeatherType.快晴 | WeatherType.晴れ, "ブルートリーチ⇒(!!!スト); ブルートリーチ⇒(!プレ)グリロタルパHQ⇒(!!!スト); ブルートリーチ⇒(!プレ)香魚HQ⇒(!!!スト)"),
                 new Fish("アブトアード", ToFishingSpot("サリャク河上流"), ToFishingBait("ブルートリーチ"), WeatherType.霧 | WeatherType.曇り, "ブルートリーチ⇒(!!スト)"),
-                new Fish("スピーカー", ToFishingSpot("サリャク河上流"), ToFishingBait("ストーンラーヴァ"), 16, 8, WeatherType.曇り | WeatherType.霧, WeatherType.暴雨, "ストーンラーヴァ⇒(!プレ)グリロタルパHQ⇒(!!!スト)"),
-                new Fish("鎧魚", ToFishingSpot("サリャク河上流"), ToFishingBait("ストーンラーヴァ"), 1, 4, WeatherType.快晴, "(要グリロタルパ×6, 天候不問, 時間帯不問) ストーンラーヴァ⇒(!プレ)\nストーンラーヴァ⇒(!プレ)グリロタルパHQ⇒(!!!プレ)"),
-                new Fish("サリャクカイマン", ToFishingSpot("サリャク河中州"), ToFishingBait("ブレーデッドジグ"), 15, 18, "ブレーデッドジグ⇒(!プレ)ブルフロッグHQ⇒(!!!スト)"),
-                new Fish("バーサーカーベタ", ToFishingSpot("サリャク河中州"), ToFishingBait("ブルートリーチ"), WeatherType.快晴 | WeatherType.晴れ, "ブルートリーチ⇒(!プレ)"),
-                new Fish("ゴブリバス", ToFishingSpot("サリャク河中州"), ToFishingBait("ブルートリーチ"), 0, 6, WeatherType.曇り, WeatherType.霧, "ブルートリーチ⇒(!!スト)"),
-                new Fish("万能のゴブリバス", ToFishingSpot("サリャク河中州"), ToFishingBait("ブルートリーチ"), 2, 6, WeatherType.雨, WeatherType.暴雨, "ブルートリーチ⇒(!プレ)香魚HQ⇒(!!!スト)"),
+                new Fish("スピーカー", ToFishingSpot("サリャク河上流"), ToFishingBait("ツチグモ"), 16, 8, WeatherType.曇り | WeatherType.霧, WeatherType.暴雨, "ツチグモ⇒(!プレ)グリロタルパHQ⇒(!!!スト)"),
+                new Fish("鎧魚", ToFishingSpot("サリャク河上流"), ToFishingBait("ツチグモ"), 1, 4, WeatherType.快晴, "(要グリロタルパ×6, 天候不問, 時間帯不問) ツチグモ⇒(!プレ)\nツチグモ⇒(!プレ)グリロタルパHQ⇒(!!!プレ)"),
+                new Fish("サリャクカイマン", ToFishingSpot("サリャク河中州"), ToFishingBait("ブレーデッドジグ"), 15, 18, "ブレーデッドジグ⇒(!プレ)ブルフロッグHQ⇒(!!!スト); ブレーデッドジグ⇒(!プレ)香魚HQ⇒(!!!スト)"),
+                new Fish("バーサーカーベタ", ToFishingSpot("サリャク河中州"), ToFishingBait("ブルートリーチ"), WeatherType.快晴 | WeatherType.晴れ, "ブルートリーチ⇒(!プレ); ブルートリーチ⇒(!プレ)ブルフロッグHQ⇒(!プレ); ブルートリーチ⇒(!プレ)香魚HQ⇒(!プレ); ブルートリーチ⇒(!プレ)グリロタルパHQ⇒(!プレ)ブルフロッグHQ⇒(!プレ)"),
+                new Fish("ゴブリバス", ToFishingSpot("サリャク河中州"), ToFishingBait("ブルートリーチ"), 0, 6, WeatherType.曇り, WeatherType.霧, "ブルートリーチ⇒(!!スト); ブルートリーチ⇒(!プレ)香魚HQ⇒(!!スト)"),
+                new Fish("万能のゴブリバス", ToFishingSpot("サリャク河中州"), ToFishingBait("ゴブリンジグ"), 2, 6, WeatherType.雨, WeatherType.暴雨, "ゴブリンジグ⇒(!プレ)香魚HQ⇒(!!!スト)"),
 
                 // ドラヴァニア雲海
                 new Fish("キッシング・グラミー", ToFishingSpot("エイル・トーム"), ToFishingBait("ストーンラーヴァ"), 9, 0, "ストーンラーヴァ⇒(!プレ)"),
@@ -1246,15 +1265,22 @@ namespace FFXIVFishingScheduleViewer
                 new Fish("ボサボサ", ToFishingSpot("ウェストン・ウォーター"), ToFishingBait("ブルートリーチ"), WeatherType.曇り, WeatherType.暴風, "(要フィッシュアイ)ブルートリーチ⇒(!!!スト)"),
                 new Fish("サンセットセイル", ToFishingSpot("ランドロード遺構"), ToFishingBait("ジャンボガガンボ"), 15, 17, WeatherType.快晴 | WeatherType.晴れ, "ジャンボガガンボ⇒(!プレ)"),
                 new Fish("ラタトスクソウル", ToFishingSpot("ランドロード遺構"), ToFishingBait("ジャンボガガンボ"), 4, 6, WeatherType.快晴 | WeatherType.晴れ, "ジャンボガガンボ⇒(!!!プレ)"),
-                new Fish("プテラノドン", ToFishingSpot("ソーム・アル笠雲"), ToFishingBait("ジャンボガガンボ"), 9, 17, "ジャンボガガンボ⇒(!!!スト)"),
-                new Fish("ディモルフォドン", ToFishingSpot("ソーム・アル笠雲"), ToFishingBait("ジャンボガガンボ"), WeatherType.快晴, WeatherType.暴風, "(要フィッシュアイ)ジャンボガガンボ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト)"),
-                new Fish("マナセイル", ToFishingSpot("サルウーム・カシュ"), ToFishingBait("ジャンボガガンボ"), 10, 14, WeatherType.快晴 | WeatherType.晴れ, "ジャンボガガンボ⇒(!プレ)スカイフェアリー・セレネHQ⇒(!プレ)"),
-                new Fish("ブラウンブーメラン", ToFishingSpot("サルウーム・カシュ"), ToFishingBait("レッドバルーン"), WeatherType.曇り, "レッドバルーン⇒(!プレ)"),
+                new Fish("プテラノドン", ToFishingSpot("ソーム・アル笠雲"), ToFishingBait("ジャンボガガンボ"), 9, 17, "ジャンボガガンボ⇒(!!!スト); ジャンボガガンボ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト); ジャンボガガンボ⇒(!プレ)スカイフェアリー・セレネHQ⇒(!!!スト); ジャンボガガンボ⇒(!プレ)スカイフェアリー・セレネHQ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト)"),
+                new Fish("ディモルフォドン", ToFishingSpot("ソーム・アル笠雲"), ToFishingBait("ジャンボガガンボ"), WeatherType.快晴, WeatherType.暴風, "(要フィッシュアイ) ジャンボガガンボ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト); ジャンボガガンボ⇒(!プレ)スカイフェアリー・セレネHQ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト)"),
+                new Fish("マナセイル", ToFishingSpot("サルウーム・カシュ"), ToFishingBait("レッドバルーン"), 10, 14, WeatherType.快晴 | WeatherType.晴れ, "レッドバルーン⇒(!プレ); レッドバルーン⇒(!!スト)スカイハイフィッシュHQ⇒(!プレ); レッドバルーン⇒(!プレ)スカイフェアリー・セレネHQ⇒(!プレ); レッドバルーン⇒(!プレ)スカイフェアリー・セレネHQ⇒(!!スト)スカイハイフィッシュHQ⇒(!プレ)"),
+                new Fish("ブラウンブーメラン", ToFishingSpot("サルウーム・カシュ"), ToFishingBait("レッドバルーン"), WeatherType.曇り, "レッドバルーン⇒(!プレ); レッドバルーン⇒(!!スト)スカイハイフィッシュHQ⇒(!プレ); レッドバルーン⇒(!プレ)スカイフェアリー・セレネHQ⇒(!!スト)スカイハイフィッシュHQ⇒(!プレ)"),
                 new Fish("ストームブラッドライダー", ToFishingSpot("サルウーム・カシュ"), ToFishingBait("ジャンボガガンボ"), WeatherType.快晴, WeatherType.暴風, "(要フィッシュアイ)ジャンボガガンボ⇒(!!!スト)"),
-                new Fish("ランデロプテルス", ToFishingSpot("サルウーム・カシュ"), ToFishingBait("ジャンボガガンボ"), 5, 8, WeatherType.暴風, "(要スカイハイフィッシュ×5) ジャンボガガンボ⇒(!!スト)\nジャンボガガンボ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト)"),
+                new Fish("ランデロプテルス", ToFishingSpot("サルウーム・カシュ"), ToFishingBait("レッドバルーン"), 5, 8, WeatherType.暴風, "(要スカイハイフィッシュ×5) レッドバルーン⇒(!!スト); レッドバルーン⇒(!プレ)スカイフェアリー・セレネHQ⇒(!!スト)\nレッドバルーン⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト); レッドバルーン⇒(!プレ)スカイフェアリー・セレネHQ⇒(!!スト)スカイハイフィッシュHQ⇒(!!!スト)"),
 
                 // ラールガーズリーチ
-                new Fish("ミューヌフィッシュ", new []{ ToFishingSpot("ミラージュクリーク上流"), ToFishingSpot("ティモン川"), ToFishingSpot("夜の森") }, ToFishingBait("赤虫"), WeatherType.曇り | WeatherType.霧, "赤虫⇒(!!スト)ギラバニアントラウトHQ⇒(!!スト)"),
+                new Fish(
+                    "ミューヌフィッシュ",
+                    new[]
+                    {
+                        new FishingCondition(ToFishingSpot("ミラージュクリーク上流"), new[] { ToFishingBait("赤虫") }, WeatherType.曇り | WeatherType.霧, "赤虫⇒(!!スト)ギラバニアントラウトHQ⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("ティモン川"), new[] { ToFishingBait("ドバミミズ") }, WeatherType.曇り | WeatherType.霧, "ドバミミズ⇒(!プレ)バルーンフロッグHQ⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("夜の森"), new[] { ToFishingBait("ザザムシ") }, WeatherType.曇り | WeatherType.霧, "ザザムシ⇒(!!スト)"),
+                    }),
                 new Fish("フックスティーラー", ToFishingSpot("ミラージュクリーク上流"), ToFishingBait("赤虫"), "赤虫⇒(!!スト)ギラバニアントラウトHQ⇒(!!!プレ)"),
                 new Fish("シデンナマズ", ToFishingSpot("ラールガーズリーチ"), ToFishingBait("赤虫"), WeatherType.雷, "赤虫⇒(!!スト)ギラバニアントラウトHQ⇒(!!!スト)"),
                 new Fish("レッドテイル", ToFishingSpot("星導山寺院入口"), ToFishingBait("ドバミミズ"), WeatherType.曇り | WeatherType.霧, "ドバミミズ⇒(!プレ)バルーンフロッグHQ⇒(!!!スト)"),
@@ -1271,7 +1297,7 @@ namespace FFXIVFishingScheduleViewer
                 new Fish("カーディナルフィッシュ", ToFishingSpot("流星の尾"), ToFishingBait("サスペンドミノー"), 19, 23, WeatherType.霧 | WeatherType.曇り, "サスペンドミノー⇒(!!スト)"),
                 new Fish("アークビショップフィッシュ", ToFishingSpot("流星の尾"), ToFishingBait("サスペンドミノー"), 12, 16, "サスペンドミノー⇒(!!!スト)"),
                 new Fish("タニクダリ", ToFishingSpot("ベロジナ川"), ToFishingBait("ザザムシ"), WeatherType.霧, "ザザムシ⇒(!!!スト)"),
-                new Fish("ミラージュマヒ", ToFishingSpot("ミラージュクリーク"), ToFishingBait("サスペンドミノー"), 4, 8, WeatherType.晴れ | WeatherType.快晴, "サスペンドミノー⇒(!!!スト)"),
+                new Fish("ミラージュマヒ", ToFishingSpot("ミラージュクリーク"), ToFishingBait("ザザムシ"), 4, 8, WeatherType.晴れ | WeatherType.快晴, "ザザムシ⇒(!!!スト)"),
                 new Fish("コープスチャブ", ToFishingSpot("ミラージュクリーク"), ToFishingBait("サスペンドミノー"), 20, 0, WeatherType.快晴, "サスペンドミノー⇒(!!!プレ)"),
 
                 // ギラバニア山岳地帯
@@ -1280,10 +1306,16 @@ namespace FFXIVFishingScheduleViewer
                 new Fish("ナガレクダリ", ToFishingSpot("スロウウォッシュ"), ToFishingBait("赤虫"), 8, 12, "赤虫⇒(!!スト)ギラバニアントラウトHQ⇒(!!!スト)"),
                 new Fish("スティールシャーク", ToFishingSpot("ヒース滝"), ToFishingBait("ザザムシ"), WeatherType.快晴, "ザザムシ⇒(!プレ)"),
                 new Fish("ラストティアー", ToFishingSpot("ヒース滝"), ToFishingBait("イクラ"), WeatherType.霧, WeatherType.晴れ, "イクラ⇒(!!!プレ)"),
-                new Fish("瞑想魚", new [] { ToFishingSpot("裁定者の像"), ToFishingSpot("ブルズバス") }, ToFishingBait("ザザムシ"), WeatherType.曇り | WeatherType.風 | WeatherType.霧 | WeatherType.砂塵, "ザザムシ⇒(!!スト)"),
+                new Fish(
+                    "瞑想魚",
+                    new[]
+                    {
+                        new FishingCondition(ToFishingSpot("裁定者の像"), new[] { ToFishingBait("ザザムシ") }, WeatherType.曇り | WeatherType.風 | WeatherType.霧 | WeatherType.砂塵, "ザザムシ⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("ブルズバス"), new[] { ToFishingBait("ザザムシ") }, WeatherType.曇り | WeatherType.風 | WeatherType.霧 | WeatherType.砂塵, "ザザムシ⇒(!!スト)"),
+                    }),
                 new Fish("裁定魚", ToFishingSpot("裁定者の像"), ToFishingBait("ザザムシ"), WeatherType.風, "ザザムシ⇒(!!!スト)"),
                 new Fish("解脱魚", ToFishingSpot("裁定者の像"), ToFishingBait("サスペンドミノー"), WeatherType.曇り | WeatherType.風 | WeatherType.霧 | WeatherType.砂塵, WeatherType.快晴, "サスペンドミノー⇒(!!!スト)"),
-                new Fish("ブルズバイト", ToFishingSpot("ブルズバス"), ToFishingBait("サスペンドミノー"), WeatherType.曇り | WeatherType.風 | WeatherType.霧 | WeatherType.砂塵, "サスペンドミノー⇒(!!スト)"),
+                new Fish("ブルズバイト", ToFishingSpot("ブルズバス"), ToFishingBait("赤虫"), WeatherType.曇り | WeatherType.風 | WeatherType.霧 | WeatherType.砂塵, "赤虫⇒(!!スト)"),
                 new Fish("ワニガメ", ToFishingSpot("ブルズバス"), ToFishingBait("サスペンドミノー"), WeatherType.晴れ | WeatherType.快晴, "サスペンドミノー⇒(!!スト)"),
                 new Fish("ヘモン", ToFishingSpot("ブルズバス"), ToFishingBait("サスペンドミノー"), 16, 20, WeatherType.曇り, "サスペンドミノー⇒(!!!スト)"),
                 new Fish("イースタンパイク", ToFishingSpot("アームズ・オブ・ミード"), ToFishingBait("活海老"), WeatherType.晴れ | WeatherType.快晴, "活海老⇒(!!!スト)"),
@@ -1299,10 +1331,10 @@ namespace FFXIVFishingScheduleViewer
                 // 紅玉海
                 new Fish("クアル", ToFishingSpot("紅玉台場近海"), ToFishingBait("アオイソメ"), 0, 8, WeatherType.雷, WeatherType.曇り, "アオイソメ⇒(!!!スト)"),
                 new Fish("紅龍", ToFishingSpot("紅玉台場近海"), ToFishingBait("アオイソメ"), 4, 8, WeatherType.雷, WeatherType.曇り, "アオイソメ⇒(!!!スト)クアルHQ⇒(!!!スト)"),
-                new Fish("鰭竜", ToFishingSpot("獄之蓋近海"), ToFishingBait("活海老"), WeatherType.雷, "活海老⇒(!プレ)紅玉海老HQ⇒(!!!スト)"),
+                new Fish("鰭竜", ToFishingSpot("獄之蓋近海"), ToFishingBait("アオイソメ"), WeatherType.雷, "アオイソメ⇒(!プレ)紅玉海老HQ⇒(!!!スト)"),
                 new Fish("ウキキ", ToFishingSpot("獄之蓋近海"), ToFishingBait("アオイソメ"), 8, 12, WeatherType.風, "アオイソメ⇒(!!!スト)"),
-                new Fish("菜食王", ToFishingSpot("獄之蓋近海"), ToFishingBait("活海老"), 20, 0, WeatherType.雷, "活海老⇒(!プレ)紅玉海老HQ⇒(!!!スト)"),
-                new Fish("オオテンジクザメ", ToFishingSpot("ベッコウ島近海"), ToFishingBait("アオイソメ"), 10, 18, WeatherType.快晴, "アオイソメ⇒(!!スト)"),
+                new Fish("菜食王", ToFishingSpot("獄之蓋近海"), ToFishingBait("アオイソメ"), 20, 0, WeatherType.雷, "アオイソメ⇒(!プレ)紅玉海老HQ⇒(!!!スト)"),
+                new Fish("オオテンジクザメ", ToFishingSpot("ベッコウ島近海"), ToFishingBait("アオイソメ"), 10, 18, WeatherType.快晴, "アオイソメ⇒(!!スト); アオイソメ⇒(!プレ)紅玉海老HQ⇒(!!スト)"),
                 new Fish("ナナツボシ", ToFishingSpot("ベッコウ島近海"), ToFishingBait("アオイソメ"), 10, 18, WeatherType.雷, WeatherType.晴れ, "アオイソメ⇒(!!!スト)"),
                 new Fish("春不知", ToFishingSpot("沖之岩近海"), ToFishingBait("アオイソメ"), 16, 20, "アオイソメ⇒(!!!スト)"),
                 new Fish("メカジキ", ToFishingSpot("オノコロ島近海"), ToFishingBait("アオイソメ"), 8, 12, WeatherType.風 | WeatherType.曇り, "(要フィッシュアイ)アオイソメ⇒(!!!スト)"),
@@ -1335,7 +1367,13 @@ namespace FFXIVFishingScheduleViewer
                 new Fish("ボクデン", ToFishingSpot("ドマ城前"), ToFishingBait("ザザムシ"), 12, 14, "ザザムシ⇒(!!!プレ)"),
 
                 // アジムステップ
-                new Fish("メダカ", new[]{ ToFishingSpot("ネム・カール"), ToFishingSpot("シロガネ水路") }, ToFishingBait("ザザムシ"), WeatherType.快晴, "ザザムシ⇒(!プレ)"),
+                new Fish(
+                    "メダカ",
+                    new[]
+                    {
+                        new FishingCondition(ToFishingSpot("ネム・カール"), new[] { ToFishingBait("ザザムシ") }, WeatherType.快晴, "ザザムシ⇒(!プレ)"),
+                        new FishingCondition(ToFishingSpot("シロガネ水路"), new[] { ToFishingBait("ザザムシ") }, WeatherType.快晴, "ザザムシ⇒(!プレ)"),
+                    }),
                 new Fish("ベジースキッパー", ToFishingSpot("ネム・カール"), ToFishingBait("赤虫"), 8, 12, WeatherType.晴れ, WeatherType.快晴, "赤虫⇒(!!!プレ)"),
                 new Fish("ハクビターリング", ToFishingSpot("ハク・カール"), ToFishingBait("ザザムシ"), 0, 4, WeatherType.雨, "ザザムシ⇒(!!スト)"),
                 new Fish("明けの旗魚", ToFishingSpot("ハク・カール"), ToFishingBait("ドバミミズ"), 0, 8, WeatherType.晴れ, WeatherType.霧, "ドバミミズ⇒(!プレ)ザガスHQ⇒(!!!スト)"),
@@ -1372,7 +1410,7 @@ namespace FFXIVFishingScheduleViewer
                 new Fish("ヘノドゥス", ToFishingSpot("コルシア島沿岸東"), ToFishingBait("ショートビルミノー"), 16, 0, WeatherType.曇り | WeatherType.霧, "ショートビルミノー⇒(!プレ)スピアヘッドHQ⇒(!!!プレ)"),
 
                 // アム・アレーン
-                new Fish("カンムリカブリ", ToFishingSpot("砂の川"), ToFishingBait("オヴィムジャーキー"), 0, 6, WeatherType.砂塵, "オヴィムジャーキー⇒(!!スト)ツノカブリHQ⇒(!!!スト)"),
+                new Fish("カンムリカブリ", ToFishingSpot("砂の川"), ToFishingBait("オヴィムジャーキー"), 0, 6, WeatherType.砂塵, "オヴィムジャーキー⇒(!!スト)ツノカブリHQ⇒(!!!スト); オヴィムジャーキー⇒(!プレ)ミズカキスナヤモリHQ⇒(!!スト)ツノカブリHQ⇒(!!!スト)"),
                 new Fish("トゲトカゲ", ToFishingSpot("アンバーヒル"), ToFishingBait("デザートフロッグ"), 10, 18, WeatherType.晴れ | WeatherType.快晴 | WeatherType.灼熱波, "デザートフロッグ⇒(!プレ)ミズカキスナヤモリHQ⇒(!!!スト)"),
                 new Fish("クギトカゲ", ToFishingSpot("アンバーヒル"), ToFishingBait("デザートフロッグ"), 12, 16, WeatherType.快晴, "デザートフロッグ⇒(!プレ)ミズカキスナヤモリHQ⇒(!!!スト)"),
 
@@ -1385,12 +1423,18 @@ namespace FFXIVFishingScheduleViewer
                 new Fish("ロックワの衛士", ToFishingSpot("トゥシ・メキタ湖"), ToFishingBait("ロバーボール"), 10, 12, "ロバーボール⇒(!プレ)クラウンテトラHQ⇒(!!スト)エリオプスHQ⇒(!!!スト)"),
                 new Fish("ダイヤモンドピピラ", ToFishingSpot("血の酒坏"), ToFishingBait("ロバーボール"), 12, 20, "ロバーボール⇒(!!スト)"),
                 new Fish("ブラックジェットストリーム", ToFishingSpot("ロツァトル川"), ToFishingBait("ロバーボール"), 2, 12, WeatherType.曇り, WeatherType.晴れ, "ロバーボール⇒(!!!プレ)"),
-                new Fish("常闇魚", ToFishingSpot("ウォーヴンオウス"), ToFishingBait("ロバーボール"), 0, 8, "(要フィッシュアイ)ロバーボール⇒(!プレ)"),
+                new Fish("常闇魚", ToFishingSpot("ウォーヴンオウス"), ToFishingBait("蟲箱"), 0, 8, "(要フィッシュアイ) 蟲箱⇒(!プレ)"),
 
                 // テンペスト
                 new Fish("オンドの溜息", ToFishingSpot("フラウンダーの穴蔵"), ToFishingBait("イカの切り身"), 12, 14, WeatherType.快晴 | WeatherType.晴れ, "イカの切り身⇒(!!!プレ)"),
                 new Fish("アーポアク", ToFishingSpot("キャリバンの古巣穴西"), ToFishingBait("イカの切り身"), 12, 16, WeatherType.快晴, "(要フィッシュアイ)イカの切り身⇒(!プレ)エンシェントシュリンプHQ⇒(!!!プレ)"),
-                new Fish("フードウィンカー", new[] { ToFishingSpot("キャリバン海底谷北西"), ToFishingSpot("キャリバンの古巣穴東") }, ToFishingBait("ショートビルミノー"), WeatherType.晴れ, "ショートビルミノー⇒(!!スト)"),
+                new Fish(
+                    "フードウィンカー",
+                    new[]
+                    {
+                        new FishingCondition(ToFishingSpot("キャリバン海底谷北西"), new[] { ToFishingBait("ショートビルミノー") }, WeatherType.晴れ, "ショートビルミノー⇒(!!スト)"),
+                        new FishingCondition(ToFishingSpot("キャリバンの古巣穴東"), new[] { ToFishingBait("ショートビルミノー") }, WeatherType.晴れ, "ショートビルミノー⇒(!!スト)"),
+                    }),
                 new Fish("スターチェイサー", ToFishingSpot("プルプラ洞"), ToFishingBait("イカの切り身"), 6, 10, WeatherType.曇り, "(要フィッシュアイ)イカの切り身⇒(!!!プレ)"),
             })
             {
@@ -1420,7 +1464,7 @@ namespace FFXIVFishingScheduleViewer
                             .SelectMany(spot => spot.CheckTranslation()))
                     .Concat(
                         _fishes
-                            .SelectMany(fish => fish.FishingSpots)
+                            .SelectMany(fish => fish.FishingConditions.Select(c => c.FishingSpot))
                             .SelectMany(fishingSpot => fishingSpot.CheckTranslation()))
                     .Concat(
                         _fishingBaites
@@ -1433,6 +1477,7 @@ namespace FFXIVFishingScheduleViewer
                     .ToArray();
             if (result.Any())
                 throw new Exception(string.Format("Can't translate: {0}", string.Join(", ", result.Select(s => string.Format("'{0}'", s)))));
+            System.Threading.Tasks.Task.Run(() => new FishDataVerifier().GenerateCode(_fishingSpots));
         }
 #endif
     }

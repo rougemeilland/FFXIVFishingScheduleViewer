@@ -8,27 +8,28 @@ namespace FFXIVFishingScheduleViewer
         : IGameDataObject
     {
         private static int _serialNumber = 0;
-        private TranslationTextId _nameId;
+        private string _rawId;
         private WeatherPercentageOfArea[] _percentageOfWeather;
 
         public Area(AreaGroup areaGroup, string areaId, WeatherPercentageOfArea[] percentageOfWeather)
         {
             Order = _serialNumber++;
-            AreaGroup = areaGroup;
+            _rawId = areaId;
             Id = new GameDataObjectId(GameDataObjectCategory.Area, areaId);
-            _nameId = new TranslationTextId(TranslationCategory.Area, areaId);
+            NameId = new TranslationTextId(TranslationCategory.Area, areaId);
+            AreaGroup = areaGroup;
             FishingSpots = new FishingSpotCollection();
             _percentageOfWeather = percentageOfWeather.ToArray();
             if (_percentageOfWeather.Sum(item => item.Percentage) != 100)
                 throw new Exception();
         }
 
+        string IGameDataObject.InternalId => _rawId;
         public int Order { get; }
-
-        public AreaGroup AreaGroup { get; }
-
         public GameDataObjectId Id { get; }
-        public string Name => Translate.Instance[_nameId];
+        public TranslationTextId NameId { get; }
+        public string Name => Translate.Instance[NameId];
+        public AreaGroup AreaGroup { get; }
         public FishingSpotCollection FishingSpots { get; }
 
         public WeatherType ForecastWeather(DateTime time)
@@ -75,7 +76,7 @@ namespace FFXIVFishingScheduleViewer
 
         public IEnumerable<string> CheckTranslation()
         {
-            return Translate.Instance.CheckTranslation(_nameId);
+            return Translate.Instance.CheckTranslation(NameId);
         }
 
         public override bool Equals(object o)

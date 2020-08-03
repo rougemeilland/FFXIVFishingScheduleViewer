@@ -10220,6 +10220,10 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "generic.**ProductVersion**.en", text = "{0} Version {1}" },
                 new { id = "generic.**ProductVersion**.fr", text = "{0} Version {1}" },
                 new { id = "generic.**ProductVersion**.de", text = "{0} Version {1}" },
+                new { id = "generic.**Separater.Or**.ja", text = " または " },
+                new { id = "generic.**Separater.Or**.en", text = " or " },
+                new { id = "generic.**Separater.Or**.fr", text = " ou " },
+                new { id = "generic.**Separater.Or**.de", text = " oder " },
 #endregion
             };
             var duplicated =

@@ -5,56 +5,64 @@ namespace FFXIVFishingScheduleViewer
 {
     class FishingCondition
     {
+        private Fish _fish;
         private ITimeFishingConditionElement _timeCondition;
         private IWeatherFishingConditionElement _weatherCondition;
 
-        public FishingCondition(FishingSpot fishingSpot)
-            : this(fishingSpot, new AlwaysTimeCondition(), new AnyWeatherCondition())
+        public FishingCondition(FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, string memo)
+            : this(fishingSpot, fishingBaits, new AlwaysTimeCondition(), new AnyWeatherCondition(), memo)
         {
         }
 
-        public FishingCondition(FishingSpot fishingSpot, WeatherType weather)
-            : this(fishingSpot, new AlwaysTimeCondition(), new SimpleWeatherCondition(fishingSpot.Area, weather))
+        public FishingCondition(FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, WeatherType weather, string memo)
+            : this(fishingSpot, fishingBaits, new AlwaysTimeCondition(), new SimpleWeatherCondition(fishingSpot.Area, weather), memo)
         {
         }
 
-        public FishingCondition(FishingSpot fishingSpot, WeatherType weatherBefore, WeatherType weatherAfter)
-            : this(fishingSpot, new AlwaysTimeCondition(), new ChangedWeatherCondition(fishingSpot.Area, weatherBefore, weatherAfter))
+        public FishingCondition(FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
+            : this(fishingSpot, fishingBaits, new AlwaysTimeCondition(), new ChangedWeatherCondition(fishingSpot.Area, weatherBefore, weatherAfter), memo)
         {
         }
 
-        public FishingCondition(FishingSpot fishingSpot, int hourOfStart, int hourOfEnd)
-            : this(fishingSpot, new SimpleTimeRegionCondition(hourOfStart, hourOfEnd), new AnyWeatherCondition())
+        public FishingCondition(FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, string memo)
+            : this(fishingSpot, fishingBaits, new SimpleTimeRegionCondition(hourOfStart, hourOfEnd), new AnyWeatherCondition(), memo)
         {
         }
 
-        public FishingCondition(FishingSpot fishingSpot, int hourOfStart, int hourOfEnd, WeatherType weathers)
-            : this(fishingSpot, new SimpleTimeRegionCondition(hourOfStart, hourOfEnd), new SimpleWeatherCondition(fishingSpot.Area, weathers))
+        public FishingCondition(FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, WeatherType weathers, string memo)
+            : this(fishingSpot, fishingBaits, new SimpleTimeRegionCondition(hourOfStart, hourOfEnd), new SimpleWeatherCondition(fishingSpot.Area, weathers), memo)
         {
         }
 
-        public FishingCondition(FishingSpot fishingSpot, int hourOfStart, int hourOfEnd, WeatherType weatherBefore, WeatherType weatherAfter)
-            : this(fishingSpot, new SimpleTimeRegionCondition(hourOfStart, hourOfEnd), new ChangedWeatherCondition(fishingSpot.Area, weatherBefore, weatherAfter))
+        public FishingCondition(FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
+            : this(fishingSpot, fishingBaits, new SimpleTimeRegionCondition(hourOfStart, hourOfEnd), new ChangedWeatherCondition(fishingSpot.Area, weatherBefore, weatherAfter), memo)
         {
         }
 
-        private FishingCondition(FishingSpot fishingSpot, ITimeFishingConditionElement timeCondition, IWeatherFishingConditionElement weatherCondition)
+        private FishingCondition(FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, ITimeFishingConditionElement timeCondition, IWeatherFishingConditionElement weatherCondition, string memo)
         {
-            DifficultyValue = timeCondition.DifficultyValue * weatherCondition.DifficultyValue;
+            _fish = null;
             FishingSpot = fishingSpot;
+            FishingBaits = fishingBaits.ToArray();
             _timeCondition = timeCondition;
             _weatherCondition = weatherCondition;
             ConditionElements = new[]
             {
                 (IFishingConditionElement)_timeCondition,
                 (IFishingConditionElement)_weatherCondition,
-            }
-            .ToArray();
+            };
+            DifficultyValue = timeCondition.DifficultyValue * weatherCondition.DifficultyValue;
+            RawMemoText = memo;
         }
 
+        public Fish Fish => _fish;
         public FishingSpot FishingSpot { get; }
+        public IEnumerable<FishingBait> FishingBaits { get; }
         public IEnumerable<IFishingConditionElement> ConditionElements { get; }
         public double DifficultyValue { get; }
+        public string RawMemoText { get; }
+        public string DefaultMemoText => Translate.Instance[DefaultMemoId];
+        internal TranslationTextId DefaultMemoId { get; private set; }
 
         public EorzeaDateTimeHourRegions GetFishingChance(EorzeaDateTimeHourRegions wholeRange)
         {
@@ -62,6 +70,17 @@ namespace FFXIVFishingScheduleViewer
             var region2 = _weatherCondition.FindRegions(wholeRange);
             var region = region1.Intersect(region2);
             return region;
+        }
+
+        internal void SetParent(Fish fish)
+        {
+            _fish = fish;
+            DefaultMemoId = new TranslationTextId(TranslationCategory.FishMemo, string.Format("{0}**{1}", ((IGameDataObject)fish).InternalId, ((IGameDataObject)FishingSpot).InternalId));
+        }
+
+        internal IEnumerable<string> CheckTranslation()
+        {
+            return Translate.Instance.CheckTranslation(DefaultMemoId);
         }
     }
 }

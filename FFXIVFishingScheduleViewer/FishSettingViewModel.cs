@@ -16,26 +16,26 @@ namespace FFXIVFishingScheduleViewer
         private string _edittingMemo;
         private ICollection<MenuItemViewModel> _menuItems;
 
-        public FishSettingViewModel(Fish fish, FishingSpot fishingSpot, string cellPositionType, ISettingProvider settingProvider)
+        public FishSettingViewModel(FishingCondition condition, string cellPositionType, ISettingProvider settingProvider)
         {
             _isDisposed = false;
-            _fishingSpot = fishingSpot;
+            _fishingSpot = condition.FishingSpot;
             _settingProvider = settingProvider;
-            Fish = fish;
+            Condition = condition;
             _settingProvider.FishFilterChanded += _settingProvider_FishFilterChanded;
             _settingProvider.FishMemoChanged += _settingProvider_FishMemoChanged;
             _settingProvider.UserLanguageChanged += _settingProvider_UserLanguageChanged;
             var brushConverer = new BrushConverter();
-            Background = Fish.DifficultySymbol.GetBackgroundColor();
+            Background = condition.Fish.DifficultySymbol.GetBackgroundColor();
             CellPositionType = cellPositionType;
             _menuItems = new List<MenuItemViewModel>();
-            _menuItems.Add(MenuItemViewModel.CreateShowFishInCBHMenuItem(fish));
-            _menuItems.Add(MenuItemViewModel.CreateShowSpotInCBHMenuItem(fishingSpot));
-            foreach (var bait in fish.FishingBaits.OrderBy(bait => bait.Order))
+            _menuItems.Add(MenuItemViewModel.CreateShowFishInCBHMenuItem(condition.Fish));
+            _menuItems.Add(MenuItemViewModel.CreateShowSpotInCBHMenuItem(condition.FishingSpot));
+            foreach (var bait in condition.FishingBaits.OrderBy(bait => bait.Order))
                 _menuItems.Add(MenuItemViewModel.CreateShowBaitInCBHMenuItem(bait));
             _menuItems.Add(MenuItemViewModel.CreateSeparatorMenuItem());
-            _menuItems.Add(MenuItemViewModel.CreateShowFishInEDBMenuItem(fish));
-            foreach (var bait in fish.FishingBaits.OrderBy(bait => bait.Order))
+            _menuItems.Add(MenuItemViewModel.CreateShowFishInEDBMenuItem(condition.Fish));
+            foreach (var bait in condition.FishingBaits.OrderBy(bait => bait.Order))
                 _menuItems.Add(MenuItemViewModel.CreateShowBaitInEDBMenuItem(bait));
             _menuItems.Add(MenuItemViewModel.CreateSeparatorMenuItem());
             _menuItems.Add(MenuItemViewModel.CreateCancelMenuItem());
@@ -62,20 +62,20 @@ namespace FFXIVFishingScheduleViewer
            });
         }
 
-        public Fish Fish { get; }
+        public FishingCondition Condition { get; }
 
-        public string FishName => Fish.Name;
+        public string FishName => Condition.Fish.Name;
 
         public bool IsEnabledFilter
         {
-            get => _settingProvider.GetIsEnabledFishFilter(Fish);
-            set => _settingProvider.SetIsEnabledFishFilter(Fish, value);
+            get => _settingProvider.GetIsEnabledFishFilter(Condition.Fish);
+            set => _settingProvider.SetIsEnabledFishFilter(Condition.Fish, value);
         }
 
         public string Memo
         {
-            get => _settingProvider.GetFishMemo(Fish);
-            set => _settingProvider.SetFishMemo(Fish, value);
+            get => _settingProvider.GetFishMemo(Condition.Fish, Condition.FishingSpot);
+            set => _settingProvider.SetFishMemo(Condition.Fish, Condition.FishingSpot, value);
         }
 
         public string EdittingMemo
@@ -109,22 +109,18 @@ namespace FFXIVFishingScheduleViewer
             }
         }
 
-        public string DiscoveryDifficulty => Fish.DifficultySymbol.GetShortText();
+        public string DiscoveryDifficulty => Condition.Fish.DifficultySymbol.GetShortText();
         public string TimeCondition =>
             string.Join(
                 ", ",
-                Fish.FishingConditions
-                    .Where(condition => condition.FishingSpot == _fishingSpot)
-                    .SelectMany(condition => condition.ConditionElements)
+                Condition.ConditionElements
                     .Where(element => element is ITimeFishingConditionElement)
                     .Select(element => element.Description)
                     .Distinct());
         public string WeatherCondition =>
             string.Join(
                 ", ",
-                Fish.FishingConditions
-                    .Where(condition => condition.FishingSpot == _fishingSpot)
-                    .SelectMany(condition => condition.ConditionElements)
+                Condition.ConditionElements
                     .Where(element => element is IWeatherFishingConditionElement)
                     .Select(element => element.Description)
                     .Distinct());
@@ -153,13 +149,13 @@ namespace FFXIVFishingScheduleViewer
 
         private void _settingProvider_FishFilterChanded(object sender, Fish e)
         {
-            if (e == Fish)
+            if (e == Condition.Fish)
                 RaisePropertyChangedEvent(nameof(IsEnabledFilter));
         }
 
-        private void _settingProvider_FishMemoChanged(object sender, Fish e)
+        private void _settingProvider_FishMemoChanged(object sender, FishMemoChangedEventArgs e)
         {
-            if (e == Fish)
+            if (e.Fish == Condition.Fish && e.FishingSpot == Condition.FishingSpot)
                 RaisePropertyChangedEvent(nameof(Memo));
         }
 

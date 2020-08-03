@@ -93,6 +93,8 @@
       <DependentUpon>FishChanceListUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="FishCollection.cs" />
+    <Compile Include="FishDataVerifier.cs" />
+    <Compile Include="FishDetailOfFishingSpotViewModel.cs" />
     <Compile Include="FishDetailViewModel.cs" />
     <Compile Include="FishDetailWindow.xaml.cs">
       <DependentUpon>FishDetailWindow.xaml</DependentUpon>
@@ -102,6 +104,7 @@
     <Compile Include="FishingBaitExtensions.cs" />
     <Compile Include="FishingSpotCollection.cs" />
     <Compile Include="FishingSpotExtensions.cs" />
+    <Compile Include="FishMemoChangedEventArgs.cs" />
     <Compile Include="FishMemoSettingUserControl.xaml.cs">
       <DependentUpon>FishMemoSettingUserControl.xaml</DependentUpon>
     </Compile>

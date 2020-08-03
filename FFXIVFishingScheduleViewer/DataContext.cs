@@ -16,12 +16,14 @@ namespace FFXIVFishingScheduleViewer
         {
             public bool Equals(FishChanceTimeRegions x, FishChanceTimeRegions y)
             {
-                return x.Fish.Id.Equals(y.Fish.Id);
+                return
+                    x.FishingCondition.Fish.Equals(y.FishingCondition.Fish) &&
+                    x.FishingCondition.FishingSpot.Equals(y.FishingCondition.FishingSpot);
             }
 
             public int GetHashCode(FishChanceTimeRegions obj)
             {
-                return obj.Fish.Id.GetHashCode();
+                return obj.FishingCondition.Fish.GetHashCode() ^ obj.FishingCondition.FishingSpot.GetHashCode();
             }
         }
 
@@ -46,8 +48,8 @@ namespace FFXIVFishingScheduleViewer
             _brushConverter = new BrushConverter();
             var source =
                 _fishes
-                .SelectMany(fish => fish.FishingSpots, (fish, fishingSpot) => new { fish, fishingSpot })
-                .Select(item => new { item.fish, item.fishingSpot, area = item.fishingSpot.Area, areaGroup = item.fishingSpot.Area.AreaGroup });
+                .SelectMany(fish => fish.FishingConditions)
+                .Select(item => new { fish = item.Fish, fishingSpot = item.FishingSpot, area = item.FishingSpot.Area, areaGroup = item.FishingSpot.Area.AreaGroup });
             var areaList =
                 source
                 .GroupBy(item => item.area)
@@ -123,8 +125,7 @@ namespace FFXIVFishingScheduleViewer
                                                         cellPositionType = "";
                                                     return
                                                         new FishSettingViewModel(
-                                                            fish,
-                                                            fishingSpotInfo.fishingSpot,
+                                                            fish.FishingConditions.Where(c => c.FishingSpot == fishingSpotInfo.fishingSpot).Single(),
                                                             cellPositionType,
                                                             _settingProvider);
                                                 }),
@@ -244,17 +245,17 @@ namespace FFXIVFishingScheduleViewer
             _settingProvider.SetIsEnabledFishFilter(fish, isEnabled);
         }
 
-        public string GetFishMemo(Fish fish)
+        public string GetFishMemo(Fish fish, FishingSpot fishingSpot)
         {
-            return _settingProvider.GetFishMemo(fish);
+            return _settingProvider.GetFishMemo(fish, fishingSpot);
         }
 
-        public void SetFishMemo(Fish fish, string memo)
+        public void SetFishMemo(Fish fish, FishingSpot fishingSpot, string memo)
         {
-            _settingProvider.SetFishMemo(fish, memo);
+            _settingProvider.SetFishMemo(fish, fishingSpot, memo);
         }
 
-        public event EventHandler<Fish> FishMemoChanged;
+        public event EventHandler<FishMemoChangedEventArgs> FishMemoChanged;
 
         public bool IsEnabledToCheckNewVersionReleased
         {
@@ -265,6 +266,11 @@ namespace FFXIVFishingScheduleViewer
         public string NewVersionReleasedText { get; private set; }
 
         public string UrlOfDownloadPage => _settingProvider.UrlOfDownloadPage;
+
+        public FishDetailViewModel GetDetailViewModel(Fish fish, FishingSpot fishingSpot)
+        {
+            return new FishDetailViewModel(fish, fishingSpot, spot => GetFishMemo(fish, spot), _settingProvider);
+        }
 
         protected override void Dispose(bool disposing)
         {
@@ -330,7 +336,7 @@ namespace FFXIVFishingScheduleViewer
             RaisePropertyChangedEvent(nameof(FishChanceList));
         }
 
-        private void _settingProvider_FishMemoChanged(object sender, Fish e)
+        private void _settingProvider_FishMemoChanged(object sender, FishMemoChangedEventArgs e)
         {
             var now = DateTime.UtcNow;
             UpdateFishChanceList(now);
@@ -566,7 +572,7 @@ namespace FFXIVFishingScheduleViewer
                 _fishes
                 .Where(fish => _settingProvider.GetIsEnabledFishFilter(fish))
                 .OrderByDescending(fish => fish.DifficultyValue)
-                .Select(fish => fish.GetFishingChance(wholePeriod, eorzeaNow))
+                .SelectMany(fish => fish.GetFishingChance(wholePeriod))
                 .Where(result => result != null && !result.Regions.Intersect(forecastPeriod).IsEmpty)
                 .ToArray();
             var comparer = new FishChanceTimeRegionsComparer();
@@ -578,7 +584,8 @@ namespace FFXIVFishingScheduleViewer
                 FishChanceTimeList
                 .Select(time => founds
                     .Where(result => result.Regions.Contains(time))
-                    .OrderByDescending(result => result.Fish.DifficultyValue)
+                    .OrderByDescending(result => result.FishingCondition.Fish.DifficultyValue) // 時間帯がかぶっている魚がいる場合は発見しにくい魚を選ぶ
+                    .ThenBy(result => result.FishingCondition.GetExpectedCountOfCasting()) // 発見のしにくさが同じ場合は釣りにかかる手間が小さい方を選ぶ
                     .ThenBy(result => result.FishingCondition.FishingSpot.Area.AreaGroup.Order)
                     .ThenBy(result => result.FishingCondition.FishingSpot.Area.Order)
                     .ThenBy(result => result.FishingCondition.FishingSpot.Order)

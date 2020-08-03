@@ -8,173 +8,98 @@ namespace FFXIVFishingScheduleViewer
         : IGameDataObject
     {
         private static int _serialNumber = 0;
+        private string _rawId;
 
         public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, string memo)
-            : this(fishId, new[] { fishingBait }, memo, new[] { new FishingCondition(fishingSpot) })
+            : this(fishId, new[] { new FishingCondition(fishingSpot, new[] { fishingBait }, memo) })
         {
         }
 
         public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, WeatherType weather, string memo)
-            : this(fishId, new[] { fishingBait }, memo, new[] { new FishingCondition(fishingSpot, weather) })
+            : this(fishId, new[] { new FishingCondition(fishingSpot, new[] { fishingBait }, weather, memo) })
         {
         }
 
         public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
-            : this(fishId, new[] { fishingBait }, memo, new[] { new FishingCondition(fishingSpot, weatherBefore, weatherAfter) })
+            : this(fishId, new[] { new FishingCondition(fishingSpot, new[] { fishingBait }, weatherBefore, weatherAfter, memo) })
         {
         }
 
         public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, int hourOfStart, int hourOfEnd, string memo)
-            : this(fishId, new[] { fishingBait }, memo, new[] { new FishingCondition(fishingSpot, hourOfStart, hourOfEnd) })
+            : this(fishId, new[] { new FishingCondition(fishingSpot, new[] { fishingBait }, hourOfStart, hourOfEnd, memo) })
         {
         }
 
         public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, int hourOfStart, int hourOfEnd, WeatherType weather, string memo)
-            : this(fishId, new[] { fishingBait }, memo, new[] { new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weather) })
+            : this(fishId, new[] { new FishingCondition(fishingSpot, new[] { fishingBait }, hourOfStart, hourOfEnd, weather, memo) })
         {
         }
 
         public Fish(string fishId, FishingSpot fishingSpot, FishingBait fishingBait, int hourOfStart, int hourOfEnd, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
-            : this(fishId, new[] { fishingBait }, memo, new[] { new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weatherBefore, weatherAfter) })
-        {
-        }
-
-        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, string memo)
-            : this(fishId, new[] { fishingBait }, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot)))
-        {
-        }
-
-        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, WeatherType weather, string memo)
-            : this(fishId, new[] { fishingBait }, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, weather)))
-        {
-        }
-
-        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
-            : this(fishId, new[] { fishingBait }, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, weatherBefore, weatherAfter)))
-        {
-        }
-
-        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, int hourOfStart, int hourOfEnd, string memo)
-            : this(fishId, new[] { fishingBait }, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, hourOfStart, hourOfEnd)))
-        {
-        }
-
-        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, int hourOfStart, int hourOfEnd, WeatherType weather, string memo)
-            : this(fishId, new[] { fishingBait }, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weather)))
-        {
-        }
-
-        public Fish(string fishId, FishingSpot[] fishingSpots, FishingBait fishingBait, int hourOfStart, int hourOfEnd, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
-            : this(fishId, new[] { fishingBait }, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weatherBefore, weatherAfter)))
+            : this(fishId, new[] { new FishingCondition(fishingSpot, new[] { fishingBait }, hourOfStart, hourOfEnd, weatherBefore, weatherAfter, memo) })
         {
         }
 
         public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, string memo)
-            : this(fishId, fishingBaits, memo, new[] { new FishingCondition(fishingSpot) })
+            : this(fishId, new[] { new FishingCondition(fishingSpot, fishingBaits, memo) })
         {
         }
 
         public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, WeatherType weather, string memo)
-            : this(fishId, fishingBaits, memo, new[] { new FishingCondition(fishingSpot, weather) })
+            : this(fishId, new[] { new FishingCondition(fishingSpot, fishingBaits, weather, memo) })
         {
         }
 
         public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
-            : this(fishId, fishingBaits, memo, new[] { new FishingCondition(fishingSpot, weatherBefore, weatherAfter) })
+            : this(fishId, new[] { new FishingCondition(fishingSpot, fishingBaits, weatherBefore, weatherAfter, memo) })
         {
         }
 
         public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, string memo)
-            : this(fishId, fishingBaits, memo, new[] { new FishingCondition(fishingSpot, hourOfStart, hourOfEnd) })
+            : this(fishId, new[] { new FishingCondition(fishingSpot, fishingBaits, hourOfStart, hourOfEnd, memo) })
         {
         }
 
         public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, WeatherType weather, string memo)
-            : this(fishId, fishingBaits, memo, new[] { new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weather) })
+            : this(fishId, new[] { new FishingCondition(fishingSpot, fishingBaits, hourOfStart, hourOfEnd, weather, memo) })
         {
         }
 
         public Fish(string fishId, FishingSpot fishingSpot, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
-            : this(fishId, fishingBaits, memo, new[] { new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weatherBefore, weatherAfter) })
+            : this(fishId, new[] { new FishingCondition(fishingSpot, fishingBaits, hourOfStart, hourOfEnd, weatherBefore, weatherAfter, memo) })
         {
         }
 
-        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, string memo)
-            : this(fishId, fishingBaits, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot)))
-        {
-        }
-
-        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, WeatherType weather, string memo)
-            : this(fishId, fishingBaits, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, weather)))
-        {
-        }
-
-        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
-            : this(fishId, fishingBaits, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, weatherBefore, weatherAfter)))
-        {
-        }
-
-        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, string memo)
-            : this(fishId, fishingBaits, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, hourOfStart, hourOfEnd)))
-        {
-        }
-
-        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, WeatherType weather, string memo)
-            : this(fishId, fishingBaits, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weather)))
-        {
-        }
-
-        public Fish(string fishId, FishingSpot[] fishingSpots, IEnumerable<FishingBait> fishingBaits, int hourOfStart, int hourOfEnd, WeatherType weatherBefore, WeatherType weatherAfter, string memo)
-            : this(fishId, fishingBaits, memo, fishingSpots.Select(fishingSpot => new FishingCondition(fishingSpot, hourOfStart, hourOfEnd, weatherBefore, weatherAfter)))
-        {
-        }
-
-        private Fish(string fishId, IEnumerable<FishingBait> fishingBaits, string memo, IEnumerable<FishingCondition> conditions)
+        public Fish(string fishId, IEnumerable<FishingCondition> conditions)
         {
             if (fishId.Trim() != fishId)
                 throw new ArgumentException();
+            _rawId = fishId;
             Order = _serialNumber++;
             Id = new GameDataObjectId(GameDataObjectCategory.Fish, fishId);
             NameId = new TranslationTextId(TranslationCategory.Fish, fishId);
-            DefaultMemoId = new TranslationTextId(TranslationCategory.FishMemo, fishId);
-            FishingSpots = conditions.Select(c => c.FishingSpot).ToArray();
-            var baits = fishingBaits.ToArray();
-            FishingBaits = baits;
-            RawMemoText = memo;
             FishingConditions = conditions.ToArray();
             DifficultyValue = conditions.Min(item => item.DifficultyValue);
             DifficultySymbol = DifficultySymbol.None;
+            foreach (var condition in FishingConditions)
+                condition.SetParent(this);
         }
 
+        string IGameDataObject.InternalId => _rawId;
         public int Order { get; }
         public GameDataObjectId Id { get; }
         public TranslationTextId NameId { get; }
         public string Name => Translate.Instance[NameId];
-        public IEnumerable<FishingSpot> FishingSpots { get; }
-        public IEnumerable<FishingBait> FishingBaits { get; }
         public double DifficultyValue { get; }
         public DifficultySymbol DifficultySymbol { get; private set; }
         public IEnumerable<FishingCondition> FishingConditions { get; }
-        public string RawMemoText { get; }
-        public string DefaultMemoText => Translate.Instance[DefaultMemoId];
-        internal TranslationTextId DefaultMemoId { get; }
 
-        public FishChanceTimeRegions GetFishingChance(EorzeaDateTimeHourRegions wholeRegion, EorzeaDateTime now)
+        public IEnumerable<FishChanceTimeRegions> GetFishingChance(EorzeaDateTimeHourRegions wholeRegion)
         {
-            EorzeaDateTimeHourRegions foundRegion = null;
-            FishingCondition foundCondition = null;
-            foreach (var condition in FishingConditions)
-            {
-                var temp = condition.GetFishingChance(wholeRegion);
-                if (foundRegion == null || foundRegion.Begin > temp.Begin)
-                {
-                    foundRegion = temp;
-                    foundCondition = condition;
-                }
-            }
-            if (foundRegion == null || foundRegion.IsEmpty || foundCondition == null)
-                return null;
-            return new FishChanceTimeRegions(this, foundCondition, foundRegion, now);
+            return
+                FishingConditions
+                .Select(condition => new FishChanceTimeRegions(condition, condition.GetFishingChance(wholeRegion)))
+                .ToArray();
         }
 
         public static void RandDifficulty(IEnumerable<Fish> fishes)
@@ -204,8 +129,8 @@ namespace FFXIVFishingScheduleViewer
         public IEnumerable<string> CheckTranslation()
         {
             return
-                Translate.Instance.CheckTranslation(NameId)
-                .Concat(Translate.Instance.CheckTranslation(DefaultMemoId));
+                FishingConditions.SelectMany(condition => condition.CheckTranslation())
+                .Concat(Translate.Instance.CheckTranslation(NameId));
         }
 
         public override bool Equals(object o)
