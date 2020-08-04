@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Media.Effects;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,6 +23,12 @@ namespace FFXIVFishingScheduleViewer
         private IList<Action> _dataContextEventHandlerRemovers;
         private bool _isPendedUpdatingIndicator;
         private bool _isPendedUpdatingChanceListView;
+        private BrushConverter _brushConverter;
+        private Brush _borderColor;
+        private Brush _headerCackgroundColor;
+        private Brush _currentTimeIndicatorColor;
+        private Brush _whiteBrush;
+        private Brush _transparentBrush;
 
         public FishChanceListUserControl()
         {
@@ -32,6 +39,18 @@ namespace FFXIVFishingScheduleViewer
             _isPendedUpdatingChanceListView = false;
 
             InitializeComponent();
+
+            _brushConverter = new BrushConverter();
+            _borderColor = (Brush)_brushConverter.ConvertFromString("#222222");
+            _borderColor.Freeze();
+            _headerCackgroundColor = (Brush)_brushConverter.ConvertFromString("#888888");
+            _headerCackgroundColor.Freeze();
+            _currentTimeIndicatorColor = (Brush)_brushConverter.ConvertFromString("springgreen");
+            _currentTimeIndicatorColor.Freeze();
+            _whiteBrush = (Brush)_brushConverter.ConvertFromString("white");
+            _whiteBrush.Freeze();
+            _transparentBrush = new SolidColorBrush(Colors.Transparent);
+            _transparentBrush.Freeze();
 
             SetDataContext(DataContext);
             if (_dataContext != null)
@@ -157,11 +176,6 @@ namespace FFXIVFishingScheduleViewer
             }
             else
             {
-                var converter = new BrushConverter();
-                var borderColor = (Brush)converter.ConvertFromString("#222222");
-                var headerCackgroundColor = (Brush)converter.ConvertFromString("#888888");
-                var currentTimeIndicatorColor = (Brush)converter.ConvertFromString("springgreen");
-                var transparentBrush = new SolidColorBrush(Colors.Transparent);
                 FishChanceGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 FishChanceGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 var dataColumnCount = _dataContext.ForecastWeatherDays * 24 + 8;
@@ -182,11 +196,11 @@ namespace FFXIVFishingScheduleViewer
                                 TextAlignment = TextAlignment.Center,
                                 Margin = new Thickness(5),
                             },
-                            BorderBrush = borderColor,
+                            BorderBrush = _borderColor,
                             BorderThickness = new Thickness(2, 2, 1, 2),
                             HorizontalAlignment = HorizontalAlignment.Stretch,
                             VerticalAlignment = VerticalAlignment.Stretch,
-                            Background = headerCackgroundColor,
+                            Background = _headerCackgroundColor,
                         };
                         Grid.SetColumn(c, 0);
                         Grid.SetRow(c, 0);
@@ -204,11 +218,11 @@ namespace FFXIVFishingScheduleViewer
                                 TextAlignment = TextAlignment.Left,
                                 Margin = new Thickness(5),
                             },
-                            BorderBrush = borderColor,
+                            BorderBrush = _borderColor,
                             HorizontalAlignment = HorizontalAlignment.Stretch,
                             VerticalAlignment = VerticalAlignment.Stretch,
                             BorderThickness = new Thickness(0, 2, 2, 1),
-                            Background = headerCackgroundColor,
+                            Background = _headerCackgroundColor,
                         };
                         Grid.SetColumn(c, 1);
                         Grid.SetRow(c, 0);
@@ -225,11 +239,11 @@ namespace FFXIVFishingScheduleViewer
                                 TextAlignment = TextAlignment.Left,
                                 Margin = new Thickness(5),
                             },
-                            BorderBrush = borderColor,
+                            BorderBrush = _borderColor,
                             BorderThickness = new Thickness(0, 0, 2, 2),
                             HorizontalAlignment = HorizontalAlignment.Stretch,
                             VerticalAlignment = VerticalAlignment.Stretch,
-                            Background = headerCackgroundColor,
+                            Background = _headerCackgroundColor,
                         };
                         Grid.SetColumn(c, 1);
                         Grid.SetRow(c, 1);
@@ -246,11 +260,11 @@ namespace FFXIVFishingScheduleViewer
                                 TextAlignment = TextAlignment.Left,
                                 Margin = new Thickness(5),
                             },
-                            BorderBrush = borderColor,
+                            BorderBrush = _borderColor,
                             BorderThickness = new Thickness(0, 2, 2, 1),
                             HorizontalAlignment = HorizontalAlignment.Stretch,
                             VerticalAlignment = VerticalAlignment.Stretch,
-                            Background = headerCackgroundColor,
+                            Background = _headerCackgroundColor,
                         };
                         Grid.SetColumn(c, 2);
                         Grid.SetColumnSpan(c, FishChanceGrid.ColumnDefinitions.Count - 2);
@@ -260,7 +274,7 @@ namespace FFXIVFishingScheduleViewer
                     var currentCulumnIndex = 2;
                     foreach (var time in _dataContext.FishChanceTimeList)
                     {
-                        Brush backgroundColor = GetBackgroundColorOfTime(converter, time);
+                        Brush backgroundColor = GetBackgroundColorOfTime(time);
                         {
                             var borderThickness =
                                 currentCulumnIndex == FishChanceGrid.ColumnDefinitions.Count - 1
@@ -268,7 +282,7 @@ namespace FFXIVFishingScheduleViewer
                                     : new Thickness(0, 0, 0, 2);
                             var c = new Border
                             {
-                                BorderBrush = borderColor,
+                                BorderBrush = _borderColor,
                                 BorderThickness = borderThickness,
                                 HorizontalAlignment = HorizontalAlignment.Stretch,
                                 VerticalAlignment = VerticalAlignment.Stretch,
@@ -280,14 +294,11 @@ namespace FFXIVFishingScheduleViewer
                         }
                         if (time.Hour % 4 == 0)
                         {
-                            var c = new TextBlock
-                            {
-                                Text = time.Hour.ToString(),
-                                HorizontalAlignment = HorizontalAlignment.Stretch,
-                                VerticalAlignment = VerticalAlignment.Center,
-                                TextAlignment = TextAlignment.Center,
-                                Background = transparentBrush,
-                            };
+                            var c = CreateFishDetailBox(time.Hour.ToString(), TextAlignment.Center);
+                            c.HorizontalAlignment = HorizontalAlignment.Stretch;
+                            c.VerticalAlignment = VerticalAlignment.Center;
+                            c.Background = _transparentBrush;
+                            c.Margin = new Thickness(2);
                             if (currentCulumnIndex <= 2)
                             {
                                 Grid.SetColumn(c, currentCulumnIndex);
@@ -305,14 +316,11 @@ namespace FFXIVFishingScheduleViewer
                     }
                     {
                         var time = _dataContext.FishChanceTimeList.Last() + EorzeaTimeSpan.FromHours(1);
-                        var c = new TextBlock
-                        {
-                            Text = time.Hour.ToString(),
-                            HorizontalAlignment = HorizontalAlignment.Left,
-                            VerticalAlignment = VerticalAlignment.Center,
-                            TextAlignment = TextAlignment.Center,
-                            Background = transparentBrush,
-                        };
+                        var c = CreateFishDetailBox(time.Hour.ToString(), TextAlignment.Center);
+                        c.HorizontalAlignment = HorizontalAlignment.Left;
+                        c.VerticalAlignment = VerticalAlignment.Center;
+                        c.Background = _transparentBrush;
+                        c.Margin = new Thickness(2);
                         Grid.SetColumn(c, currentCulumnIndex - 1);
                         Grid.SetRow(c, 1);
                         FishChanceGrid.Children.Add(c);
@@ -338,7 +346,7 @@ namespace FFXIVFishingScheduleViewer
                             Child = vStack,
                             HorizontalAlignment = HorizontalAlignment.Stretch,
                             VerticalAlignment = VerticalAlignment.Stretch,
-                            BorderBrush = borderColor,
+                            BorderBrush = _borderColor,
                             BorderThickness = new Thickness(2, 0, 1, 2),
                             Background = backgroundColorOfFish,
                             ContextMenu = contextMenu,
@@ -394,7 +402,7 @@ namespace FFXIVFishingScheduleViewer
                             },
                             HorizontalAlignment = HorizontalAlignment.Stretch,
                             VerticalAlignment = VerticalAlignment.Stretch,
-                            BorderBrush = borderColor,
+                            BorderBrush = _borderColor,
                             BorderThickness = new Thickness(0, 0, 1, 1),
                             Background = backgroundColorOfFish,
                             ContextMenu = contextMenu,
@@ -415,7 +423,7 @@ namespace FFXIVFishingScheduleViewer
                             },
                             HorizontalAlignment = HorizontalAlignment.Stretch,
                             VerticalAlignment = VerticalAlignment.Stretch,
-                            BorderBrush = borderColor,
+                            BorderBrush = _borderColor,
                             BorderThickness = new Thickness(0, 0, 1, 2),
                             Background = backgroundColorOfFish,
                             ContextMenu = contextMenu,
@@ -433,7 +441,7 @@ namespace FFXIVFishingScheduleViewer
                         {
                             c = new Border
                             {
-                                BorderBrush = borderColor,
+                                BorderBrush = _borderColor,
                                 BorderThickness = new Thickness(0, 0, 0, 0),
                                 Background = backgroundColorOfFish,
                             };
@@ -442,9 +450,9 @@ namespace FFXIVFishingScheduleViewer
                         {
                             c = new Border
                             {
-                                BorderBrush = borderColor,
+                                BorderBrush = _borderColor,
                                 BorderThickness = new Thickness(0, 0, 0, 0),
-                                Background = GetBackgroundColorOfTime(converter, time),
+                                Background = GetBackgroundColorOfTime(time),
                             };
                         }
                         Grid.SetColumn(c, currentCulumnIndex);
@@ -458,7 +466,7 @@ namespace FFXIVFishingScheduleViewer
                 {
                     _currentTimeIndicatorGrid = new Grid
                     {
-                        Background = transparentBrush,
+                        Background = _transparentBrush,
                         HorizontalAlignment = HorizontalAlignment.Stretch,
                         VerticalAlignment = VerticalAlignment.Stretch,
                         Visibility = Visibility.Collapsed,
@@ -471,9 +479,9 @@ namespace FFXIVFishingScheduleViewer
                     {
 
                         Width = 5,
-                        BorderBrush = currentTimeIndicatorColor,
+                        BorderBrush = _currentTimeIndicatorColor,
                         BorderThickness = new Thickness(2, 2, 2, 2),
-                        Background = currentTimeIndicatorColor,
+                        Background = _currentTimeIndicatorColor,
                     };
                     Grid.SetColumn(c, 1);
                     Grid.SetRow(c, 0);
@@ -521,44 +529,35 @@ namespace FFXIVFishingScheduleViewer
                                 : conditionText,
                             string.IsNullOrEmpty(fishMemo)
                                 ? ""
-                                : string.Format("\n{0}\n{1}",
-                                    GUITextTranslate.Instance["Label.Memo"],
-#if true
-                                    fishMemo
-#else
-                                    string.Join("\n",
-                                        fishMemo.Split(
-                                            "\n".ToCharArray(),
-                                            StringSplitOptions.RemoveEmptyEntries)
-                                        .Select(s => string.Format("- {0}", s)))
-#endif
-                                    ));
+                                : string.Format("\n{0}\n{1}", GUITextTranslate.Instance["Label.Memo"], fishMemo));
                     };
-                    var detailTextBlock = new TextBlock
-                    {
-                        Text = detailTextBlockFormatter(),
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        VerticalAlignment = VerticalAlignment.Center,
-                        Background = transparentBrush,
-                        Margin = new Thickness(5),
-                    };
+                    var detailTextBlockContainer = CreateFishDetailBox(detailTextBlockFormatter());
+                    detailTextBlockContainer.HorizontalAlignment = HorizontalAlignment.Left;
+                    detailTextBlockContainer.VerticalAlignment = VerticalAlignment.Center;
+                    detailTextBlockContainer.Background = _transparentBrush;
+                    detailTextBlockContainer.Margin = new Thickness(5);
                     EventHandler<FishMemoChangedEventArgs> fishMemoChangedEventHandler = new EventHandler<FishMemoChangedEventArgs>((s, e) =>
                     {
                         if (e.Fish == chance.FishingCondition.Fish && e.FishingSpot == chance.FishingCondition.FishingSpot)
                         {
-                            detailTextBlock.Text = detailTextBlockFormatter();
+                            var text = detailTextBlockFormatter();
+                            foreach (var control in detailTextBlockContainer.Children)
+                            {
+                                if (control is TextBlock)
+                                    ((TextBlock)control).Text = text;
+                            }
                         }
                     });
                     _dataContext.FishMemoChanged += fishMemoChangedEventHandler;
                     _dataContextEventHandlerRemovers.Insert(0, () => _dataContext.FishMemoChanged -= fishMemoChangedEventHandler);
                     var c = new Border
                     {
-                        Child = detailTextBlock,
+                        Child = detailTextBlockContainer,
                         HorizontalAlignment = HorizontalAlignment.Stretch,
                         VerticalAlignment = VerticalAlignment.Stretch,
-                        BorderBrush = borderColor,
+                        BorderBrush = _borderColor,
                         BorderThickness = new Thickness(0, 0, 2, 2),
-                        Background = transparentBrush,
+                        Background = _transparentBrush,
                         ContextMenu = contextMenu,
                     };
                     Grid.SetColumn(c, 2);
@@ -586,17 +585,19 @@ namespace FFXIVFishingScheduleViewer
                         var toolTipText =
                             eorzeaTimeRegion != "" && localTimeRegion != ""
                             ? string.Format(
-                                "{0}\nET {1}\nLT {2}",
+                                "{0}\n{1} {2}\n{3} {4}",
                                 chance.FishingCondition.Fish.Name,
+                                Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "ET.Short")],
                                 region.FormatEorzeaTimeRegion(wholeRegion),
+                                Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "LT.Short")],
                                 region.FormatLocalTimeRegion(wholeRegion))
                             : null;
                         var c = new Border
                         {
                             ToolTip = toolTipText,
-                            BorderBrush = transparentBrush,
+                            BorderBrush = _transparentBrush,
                             BorderThickness = new Thickness(0, 0, 0, 0),
-                            Background = transparentBrush,
+                            Background = _transparentBrush,
                             ContextMenu = contextMenu,
                         };
                         Grid.SetColumn(c, startColumnIndex);
@@ -609,6 +610,38 @@ namespace FFXIVFishingScheduleViewer
                 }
             }
             UpdateCurrentTimeIndicator();
+        }
+
+        private Grid CreateFishDetailBox(string text, TextAlignment textAlignment = TextAlignment.Left)
+        {
+            var maxOffet = 2.0;
+            var container = new Grid
+            {
+            };
+            for (var xOffset = -maxOffet; xOffset <= maxOffet; xOffset += 1.0)
+            {
+                for (var yOffset = -maxOffet; yOffset <= maxOffet; yOffset += 1.0)
+                {
+                    if (xOffset <= -maxOffet / 2 || xOffset >= maxOffet / 2 || yOffset <= -maxOffet / 2 || yOffset >= maxOffet / 2)
+                    {
+                        container.Children.Add(new TextBlock
+                        {
+                            Text = text,
+                            TextAlignment = textAlignment,
+                            Background = _transparentBrush,
+                            Foreground = _whiteBrush,
+                            RenderTransform = new TranslateTransform { X = xOffset, Y = yOffset },
+                        });
+                    }
+                }
+            }
+            container.Children.Add(new TextBlock
+            {
+                Text = text,
+                TextAlignment = textAlignment,
+                Background = _transparentBrush,
+            });
+            return container;
         }
 
         private void UpdateCurrentTimeIndicator()
@@ -739,7 +772,7 @@ namespace FFXIVFishingScheduleViewer
             showDetailMenuItem.Click += (s, e) => action();
         }
 
-        private static Brush GetBackgroundColorOfTime(BrushConverter converter, EorzeaDateTime time)
+        private Brush GetBackgroundColorOfTime(EorzeaDateTime time)
         {
             string backgroundColorName;
             switch (time.Hour)
@@ -790,7 +823,8 @@ namespace FFXIVFishingScheduleViewer
                     backgroundColorName = "white";
                     break;
             }
-            var backgroundColor = (Brush)converter.ConvertFromString(backgroundColorName);
+            var backgroundColor = (Brush)_brushConverter.ConvertFromString(backgroundColorName);
+            backgroundColor.Freeze();
             return backgroundColor;
         }
     }
