@@ -584,9 +584,11 @@ namespace FFXIVFishingScheduleViewer
                 FishChanceTimeList
                 .Select(time => founds
                     .Where(result => result.Regions.Contains(time))
+                    .GroupBy(result => result.FishingCondition.Fish) // 魚毎にまとめる
+                    .Select(g => g.OrderBy(item => item.FishingCondition.GetExpectedCountOfCasting()).First()) // 同じ魚が複数の場所に見つかった場合は釣るのにいちばん手間のかからない場所を選ぶ
                     .OrderByDescending(result => result.FishingCondition.Fish.DifficultyValue) // 時間帯がかぶっている魚がいる場合は発見しにくい魚を選ぶ
-                    .ThenBy(result => result.FishingCondition.GetExpectedCountOfCasting()) // 発見のしにくさが同じ場合は釣りにかかる手間が小さい方を選ぶ
-                    .ThenBy(result => result.FishingCondition.FishingSpot.Area.AreaGroup.Order)
+                    .ThenByDescending(result => result.FishingCondition.GetExpectedCountOfCasting()) // 発見のしにくさが同じ場合は釣りにかかる手間が大きい方を選ぶ
+                    .ThenBy(result => result.FishingCondition.FishingSpot.Area.AreaGroup.Order) // 以降の並べ替えは特に重要な意味はない。(整列順序を一意に定めるだけ)
                     .ThenBy(result => result.FishingCondition.FishingSpot.Area.Order)
                     .ThenBy(result => result.FishingCondition.FishingSpot.Order)
                     .FirstOrDefault())
