@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using System.Reflection;
 using System.Collections.Generic;
@@ -11,34 +12,37 @@ namespace FFXIVFishingScheduleViewer
     class AboutViewModel
         : ViewModel
     {
+        private static Assembly _mainAssembly;
         private bool _isDisposed;
+        private string _parentWindowTitle;
         private ISettingProvider _settingProvider;
 
-        public AboutViewModel(ISettingProvider settingProvider)
+        static AboutViewModel()
+        {
+            _mainAssembly = typeof(MainWindow).Assembly;
+        }
+
+        public AboutViewModel(string parentWindowTitle, ISettingProvider settingProvider)
         {
             _isDisposed = false;
+            _parentWindowTitle = parentWindowTitle;
             _settingProvider = settingProvider;
             _settingProvider.UserLanguageChanged += _settingProvider_UserLanguageChanged;
-            var assembly = typeof(MainWindow).Assembly;
-            Product = ((AssemblyProductAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyProductAttribute))).Product;
+            Product = _settingProvider.ProductName;
             Version = _settingProvider.CurrentVersionOfApplication;
-            Company = ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCompanyAttribute))).Company;
-            Copyright = ((AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyCopyrightAttribute))).Copyright;
-            AboutMenuCommand = null;
+            Company = ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(_mainAssembly, typeof(AssemblyCompanyAttribute))).Company;
+            Copyright = ((AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(_mainAssembly, typeof(AssemblyCopyrightAttribute))).Copyright;
         }
 
         public string Product { get; }
         public string Version { get; }
         public string Company { get; }
         public string Copyright { get; }
-        public string AboutMenuText => string.Format(GUITextTranslate.Instance["Menu.About"], Product);
-        public string AboutWindowTitleText => string.Format(GUITextTranslate.Instance["Title.About"], Product);
+        public string WindowTitleText => string.Format(GUITextTranslate.Instance["Title.AboutWindow"], Product, _parentWindowTitle);
         public string ProductVersionText => string.Format(Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "ProductVersion")], Product, Version);
         public string FFXIVLicenseText => Translate.Instance[new TranslationTextId(TranslationCategory.License, "FFXIVLicense")];
-        public string READMEUrlText => Translate.Instance[new TranslationTextId(TranslationCategory.Url, "README")];
         public GUITextTranslate GUIText => GUITextTranslate.Instance;
-        public ICommand ViewREADMEMenuCommand { get; set; }
-        public ICommand AboutMenuCommand { get; set; }
+
         protected override void Dispose(bool disposing)
         {
             if (!_isDisposed)
@@ -51,9 +55,7 @@ namespace FFXIVFishingScheduleViewer
 
         private void _settingProvider_UserLanguageChanged(object sender, EventArgs e)
         {
-            RaisePropertyChangedEvent(nameof(READMEUrlText));
-            RaisePropertyChangedEvent(nameof(AboutMenuText));
-            RaisePropertyChangedEvent(nameof(AboutWindowTitleText));
+            RaisePropertyChangedEvent(nameof(WindowTitleText));
             RaisePropertyChangedEvent(nameof(ProductVersionText));
             RaisePropertyChangedEvent(nameof(FFXIVLicenseText));
             RaisePropertyChangedEvent(nameof(GUIText));

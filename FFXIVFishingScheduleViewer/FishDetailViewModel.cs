@@ -10,15 +10,17 @@ namespace FFXIVFishingScheduleViewer
         : ViewModel
     {
         private bool _isDisposed;
+        private string _parentWindowTitle;
         private Fish _fish;
         private ICollection<MenuItemViewModel> _menuItems;
         private ICollection<FishDetailOfFishingSpotViewModel> _fishingSpots;
         private ISettingProvider _settingProvider;
         private int _selectedTabIndex;
 
-        public FishDetailViewModel(Fish fish, FishingSpot selectedFishingSpot, Func<FishingSpot, string> memoGetter, ISettingProvider settingProvider)
+        public FishDetailViewModel(string parentWindowTitle, Fish fish, FishingSpot selectedFishingSpot, Func<FishingSpot, string> memoGetter, ISettingProvider settingProvider)
         {
             _isDisposed = false;
+            _parentWindowTitle = parentWindowTitle;
             _settingProvider = settingProvider;
             _settingProvider.UserLanguageChanged += _settingProvider_UserLanguageChanged;
             _fish = fish;
@@ -56,7 +58,7 @@ namespace FFXIVFishingScheduleViewer
             });
         }
 
-        public string Title => string.Format(GUIText["Title.FishDetailWindow"], _fish.Name);
+        public string WindowTitleText => string.Format(GUIText["Title.FishDetailWindow"], _fish.Name, _parentWindowTitle);
         public IEnumerable<FishDetailOfFishingSpotViewModel> FishingSpots => _fishingSpots;
         public IEnumerable<MenuItemViewModel> ContextMenuItems => _menuItems;
         public GUITextTranslate GUIText { get; }
@@ -98,7 +100,7 @@ namespace FFXIVFishingScheduleViewer
 
         private void _settingProvider_UserLanguageChanged(object sender, EventArgs e)
         {
-            RaisePropertyChangedEvent(nameof(Title));
+            RaisePropertyChangedEvent(nameof(WindowTitleText));
             RaisePropertyChangedEvent(nameof(ContextMenuItems));
             RaisePropertyChangedEvent(nameof(GUIText));
         }

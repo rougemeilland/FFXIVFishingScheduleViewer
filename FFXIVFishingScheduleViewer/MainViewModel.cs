@@ -8,7 +8,7 @@ using System.Windows.Threading;
 
 namespace FFXIVFishingScheduleViewer
 {
-    class DataContext
+    class MainViewModel
         : ViewModel
     {
         private class FishChanceTimeRegionsComparer
@@ -28,18 +28,19 @@ namespace FFXIVFishingScheduleViewer
         }
 
         private bool _isDisposed;
+        private string _windowTitleText;
         private Dispatcher _dispatcher;
         private AreaGroupCollection _areaGroups;
         private FishCollection _fishes;
-        private WeatherListViewModel[] _weatherList;
         private ISettingProvider _settingProvider;
         private DateTime _currentTime;
-        private bool _isPendingFishFilterChandedEvent;
         private BrushConverter _brushConverter;
+        private bool _isPendingFishFilterChandedEvent;
 
-        public DataContext(Dispatcher dispatcher, AreaGroupCollection areaGroups, FishCollection fishes, ISettingProvider settingProvider)
+        public MainViewModel(string windowTitleText, Dispatcher dispatcher, AreaGroupCollection areaGroups, FishCollection fishes, ISettingProvider settingProvider)
         {
             _isDisposed = false;
+            _windowTitleText = windowTitleText;
             _dispatcher = dispatcher;
             _areaGroups = areaGroups;
             _fishes = fishes;
@@ -94,87 +95,55 @@ namespace FFXIVFishingScheduleViewer
                         .AsEnumerable()
                 })
                 .ToDictionary(item => item.fishingSpot, item => item.fishes);
-            FishSettingOfWorld =
-                source
-                .GroupBy(item => item.areaGroup)
-                .Select(g => new { areaGroup = g.Key, fishCount = g.Count() })
-                .OrderBy(areaGroupInfo => areaGroupInfo.areaGroup.Order)
-                .Select(areaGroupInfo => new FishSettingOfAreaGroupViewModel(
-                    areaGroupInfo.areaGroup,
-                    areaList[areaGroupInfo.areaGroup]
-                        .Select(areaInfo => new FishSettingOfAreaViewModel(
-                            areaInfo.area,
-                            fishingSpotList[areaInfo.area]
-                                .Select(fishingSpotInfo =>
-                                {
-                                    var fishesOfSpot = fishListOfFishingSpot[fishingSpotInfo.fishingSpot];
-                                    var firstFish = fishesOfSpot.First();
-                                    var lastFish = fishesOfSpot.Last();
-                                    return
-                                        new FishSettingOfFishingSpotViewModel(
-                                            fishingSpotInfo.fishingSpot,
-                                            fishesOfSpot
-                                                .Select(fish =>
-                                                {
-                                                    string cellPositionType;
-                                                    if (fish == firstFish)
-                                                        cellPositionType = "Top";
-                                                    else if (fish == lastFish)
-                                                        cellPositionType = "Bottom";
-                                                    else
-                                                        cellPositionType = "";
-                                                    return
-                                                        new FishSettingViewModel(
-                                                            fish.FishingConditions.Where(c => c.FishingSpot == fishingSpotInfo.fishingSpot).Single(),
-                                                            cellPositionType,
-                                                            _settingProvider);
-                                                }),
-                                            _settingProvider);
-                                }),
-                            _settingProvider)),
-                    _settingProvider))
-                .ToArray();
-            _weatherList = new WeatherListViewModel[11];
+            WeatherList = new WeatherListViewModel[0];
             GUIText = GUITextTranslate.Instance;
-            About = new AboutViewModel(_settingProvider);
             UpdatedDateTime = DateTime.UtcNow;
-            FishChanceList = new FishChanceTimeRegions[0];
+            FishingChanceList = new FishChanceTimeRegions[0];
+
+            ShowDownloadPageCommand = null;
             OptionMenuCommand = null;
             ExitMenuCommand = null;
-            About.AboutMenuCommand = null;
-            _settingProvider = settingProvider;
+            ViewREADMEMenuCommand = null;
+            AboutMenuCommand = null;
 
-            _settingProvider.MainWindowTabSelected += _settingProvider_MainWindowTabSelected;
+            _settingProvider = settingProvider;
+            _settingProvider.SelectedMainViewTabIndexChanged += _settingProvider_SelectedMainViewTabIndexChanged;
             _settingProvider.UserLanguageChanged += _settingProvider_UserLanguageChanged;
             _settingProvider.ForecastWeatherDaysChanged += _settingProvider_ForecastWeatherDaysChanged;
             _settingProvider.FishMemoChanged += _settingProvider_FishMemoChanged;
             _settingProvider.FishFilterChanded += _settingProvider_FishFilterChanded;
-            _settingProvider.IsEnabledToCheckNewVersionReleasedChanged += _settingProvider_IsEnabledToCheckNewVersionReleasedChanged;
             _settingProvider.NewVersionOfApplicationChanged += _settingProvider_NewVersionOfApplicationChanged;
-            _isPendingFishFilterChandedEvent = false;
+            _settingProvider.FishingChanceListTextEffectChanged += _settingProvider_FishingChanceListTextEffectChanged;
 
             CurrentTime = DateTime.UtcNow;
             CurrentDateTimeText = "";
             NewVersionReleasedText = null;
+            _isPendingFishFilterChandedEvent = false;
             _settingProvider.CheckNewVersionReleased();
         }
 
-        public IEnumerable<FishSettingOfAreaGroupViewModel> FishSettingOfWorld { get; }
         public GUITextTranslate GUIText { get; }
-        public WeatherListViewModel WeatherListOfLaNoscea => _weatherList[0];
-        public WeatherListViewModel WeatherListOfTheBlackShroud => _weatherList[1];
-        public WeatherListViewModel WeatherListOfThanalan => _weatherList[2];
-        public WeatherListViewModel WeatherListOfCoerthas => _weatherList[3];
-        public WeatherListViewModel WeatherListOfAbalathia => _weatherList[4];
-        public WeatherListViewModel WeatherListOfDravania => _weatherList[5];
-        public WeatherListViewModel WeatherListOfGyrAbania => _weatherList[6];
-        public WeatherListViewModel WeatherListOfHingashi => _weatherList[7];
-        public WeatherListViewModel WeatherListOfOthard => _weatherList[8];
-        public WeatherListViewModel WeatherListOfNorvrandt => _weatherList[9];
-        public WeatherListViewModel WeatherListOfMorDhona => _weatherList[10];
-        public IEnumerable<FishChanceTimeRegions> FishChanceList { get; private set; }
-        public IEnumerable<EorzeaDateTime> FishChanceTimeList { get; private set; }
-        public DateTime UpdatedDateTime { get; private set; }
+        public string CurrentDateTimeText { get; private set; }
+        public string NewVersionReleasedText { get; private set; }
+        public string AboutMenuText => string.Format(GUITextTranslate.Instance["Menu.About"], _settingProvider.ProductName);
+
+        public int SelectedMainViewTabIndex
+        {
+            get => _settingProvider.SelectedMainViewTabIndex;
+            set => _settingProvider.SelectedMainViewTabIndex = value;
+        }
+
+        public FishingChanceListTextEffectType FishingChanceListTextEffect
+        {
+            get => _settingProvider.FishingChanceListTextEffect;
+        }
+
+        public IEnumerable<WeatherListViewModel> WeatherList { get; private set; }
+        public ICommand ShowDownloadPageCommand { get; set; }
+        public ICommand OptionMenuCommand { get; set; }
+        public ICommand ExitMenuCommand { get; set; }
+        public ICommand ViewREADMEMenuCommand { get; set; }
+        public ICommand AboutMenuCommand { get; set; }
 
         public DateTime CurrentTime
         {
@@ -192,7 +161,7 @@ namespace FFXIVFishingScheduleViewer
                     if (previousTime == DateTime.MinValue || value - previousTime >= TimeSpan.FromMinutes(70.0 / 3))
                     {
                         UpdateWeatherList(_currentTime);
-                        UpdateFishChanceList(_currentTime);
+                        UpdateFishingChanceList(_currentTime);
                     }
                     else
                     {
@@ -201,7 +170,7 @@ namespace FFXIVFishingScheduleViewer
                         if (previousEorzeaTime.EpochHours / 8 != currentEorzeaTime.EpochHours / 8)
                         {
                             UpdateWeatherList(_currentTime);
-                            UpdateFishChanceList(_currentTime);
+                            UpdateFishingChanceList(_currentTime);
                         }
                     }
                     UpdateCurrentDateTimeText(_currentTime);
@@ -210,35 +179,14 @@ namespace FFXIVFishingScheduleViewer
             }
         }
 
-        public string CurrentDateTimeText { get; private set; }
-        public AboutViewModel About { get; set; }
-        public ICommand ShowDownloadPageCommand { get; set; }
-        public ICommand OptionMenuCommand { get; set; }
-        public ICommand ExitMenuCommand { get; set; }
+        public int ForecastWeatherDays => _settingProvider.ForecastWeatherDays;
 
-        public bool IsSelectedForecastWeatherTab
-        {
-            get => _settingProvider.GetIsSelectedMainWindowTab(MainWindowTabType.ForecastWeather);
-            set => _settingProvider.SetIsSelectedMainWindowTab(MainWindowTabType.ForecastWeather, value);
-        }
+        public IEnumerable<FishChanceTimeRegions> FishingChanceList { get; private set; }
+        public IEnumerable<EorzeaDateTime> FishingChanceTimeList { get; private set; }
+        public DateTime UpdatedDateTime { get; private set; }
+        public string UrlOfDownloadPage => _settingProvider.UrlOfDownloadPage;
+        public event EventHandler<FishMemoChangedEventArgs> FishMemoChanged;
 
-        public bool IsSelectedChanceTab
-        {
-            get => _settingProvider.GetIsSelectedMainWindowTab(MainWindowTabType.Chance);
-            set => _settingProvider.SetIsSelectedMainWindowTab(MainWindowTabType.Chance, value);
-        }
-
-        public int ForecastWeatherDays
-        {
-            get => _settingProvider.ForecastWeatherDays;
-            set => _settingProvider.ForecastWeatherDays = value;
-        }
-
-        public string UserLanguage
-        {
-            get => _settingProvider.UserLanguage;
-            set => _settingProvider.UserLanguage = value;
-        }
 
         public void SetFishFilter(Fish fish, bool isEnabled)
         {
@@ -255,54 +203,23 @@ namespace FFXIVFishingScheduleViewer
             _settingProvider.SetFishMemo(fish, fishingSpot, memo);
         }
 
-        public event EventHandler<FishMemoChangedEventArgs> FishMemoChanged;
-
-        public bool IsEnabledToCheckNewVersionReleased
-        {
-            get => _settingProvider.IsEnabledToCheckNewVersionReleased;
-            set => _settingProvider.IsEnabledToCheckNewVersionReleased = value;
-        }
-
-        public string NewVersionReleasedText { get; private set; }
-
-        public string UrlOfDownloadPage => _settingProvider.UrlOfDownloadPage;
-
         public FishDetailViewModel GetDetailViewModel(Fish fish, FishingSpot fishingSpot)
         {
-            return new FishDetailViewModel(fish, fishingSpot, spot => GetFishMemo(fish, spot), _settingProvider);
+            return new FishDetailViewModel(_windowTitleText, fish, fishingSpot, spot => GetFishMemo(fish, spot), _settingProvider);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (!_isDisposed)
             {
-                foreach (var item in FishSettingOfWorld)
-                    item?.Dispose();
-                About.Dispose();
-                _settingProvider.MainWindowTabSelected -= _settingProvider_MainWindowTabSelected;
+                _settingProvider.SelectedMainViewTabIndexChanged -= _settingProvider_SelectedMainViewTabIndexChanged;
                 _settingProvider.UserLanguageChanged -= _settingProvider_UserLanguageChanged;
                 _settingProvider.ForecastWeatherDaysChanged -= _settingProvider_ForecastWeatherDaysChanged;
                 _settingProvider.FishMemoChanged -= _settingProvider_FishMemoChanged;
                 _settingProvider.FishFilterChanded -= _settingProvider_FishFilterChanded;
                 _settingProvider.NewVersionOfApplicationChanged -= _settingProvider_NewVersionOfApplicationChanged;
-                _settingProvider.IsEnabledToCheckNewVersionReleasedChanged += _settingProvider_IsEnabledToCheckNewVersionReleasedChanged;
                 _isDisposed = true;
                 base.Dispose(disposing);
-            }
-        }
-
-        private void _settingProvider_MainWindowTabSelected(object sender, MainWindowTabType e)
-        {
-            switch (e)
-            {
-                case MainWindowTabType.ForecastWeather:
-                    RaisePropertyChangedEvent(nameof(IsSelectedForecastWeatherTab));
-                    break;
-                case MainWindowTabType.Chance:
-                    RaisePropertyChangedEvent(nameof(IsSelectedChanceTab));
-                    break;
-                default:
-                    break;
             }
         }
 
@@ -310,57 +227,9 @@ namespace FFXIVFishingScheduleViewer
         {
             UpdateCurrentDateTimeText(DateTime.UtcNow);
             UpdateNewVersionReleasedText();
-            RaisePropertyChangedEvent(nameof(FishChanceList));
+            RaisePropertyChangedEvent(nameof(FishingChanceList));
+            RaisePropertyChangedEvent(nameof(AboutMenuText));
             RaisePropertyChangedEvent(nameof(GUIText));
-            RaisePropertyChangedEvent(nameof(UserLanguage));
-        }
-
-        private void _settingProvider_ForecastWeatherDaysChanged(object sender, EventArgs e)
-        {
-            var now = DateTime.UtcNow;
-            UpdateWeatherList(now);
-            UpdateFishChanceList(now);
-            RaisePropertyChangedEvent(nameof(ForecastWeatherDays));
-            RaisePropertyChangedEvent(nameof(WeatherListOfLaNoscea));
-            RaisePropertyChangedEvent(nameof(WeatherListOfTheBlackShroud));
-            RaisePropertyChangedEvent(nameof(WeatherListOfThanalan));
-            RaisePropertyChangedEvent(nameof(WeatherListOfCoerthas));
-            RaisePropertyChangedEvent(nameof(WeatherListOfAbalathia));
-            RaisePropertyChangedEvent(nameof(WeatherListOfDravania));
-            RaisePropertyChangedEvent(nameof(WeatherListOfGyrAbania));
-            RaisePropertyChangedEvent(nameof(WeatherListOfHingashi));
-            RaisePropertyChangedEvent(nameof(WeatherListOfOthard));
-            RaisePropertyChangedEvent(nameof(WeatherListOfNorvrandt));
-            RaisePropertyChangedEvent(nameof(WeatherListOfMorDhona));
-            RaisePropertyChangedEvent(nameof(FishChanceTimeList));
-            RaisePropertyChangedEvent(nameof(FishChanceList));
-        }
-
-        private void _settingProvider_FishMemoChanged(object sender, FishMemoChangedEventArgs e)
-        {
-            var now = DateTime.UtcNow;
-            UpdateFishChanceList(now);
-            RaisePropertyChangedEvent(nameof(FishChanceList));
-            FishMemoChanged(this, e);
-        }
-
-        private void _settingProvider_FishFilterChanded(object sender, Fish e)
-        {
-            _isPendingFishFilterChandedEvent = true;
-            _dispatcher.InvokeAsync(() =>
-            {
-                if (_isPendingFishFilterChandedEvent)
-                {
-                    var now = DateTime.UtcNow;
-                    UpdateFishChanceList(now);
-                    _isPendingFishFilterChandedEvent = false;
-                }
-            });
-        }
-
-        private void _settingProvider_IsEnabledToCheckNewVersionReleasedChanged(object sender, EventArgs e)
-        {
-            RaisePropertyChangedEvent(nameof(IsEnabledToCheckNewVersionReleased));
         }
 
         private void _settingProvider_NewVersionOfApplicationChanged(object sender, EventArgs e)
@@ -369,6 +238,11 @@ namespace FFXIVFishingScheduleViewer
             {
                 UpdateNewVersionReleasedText();
             });
+        }
+
+        private void _settingProvider_FishingChanceListTextEffectChanged(object sender, EventArgs e)
+        {
+            RaisePropertyChangedEvent(nameof(FishingChanceListTextEffect));
         }
 
         private void UpdateCurrentDateTimeText(DateTime currentDateTime)
@@ -386,6 +260,19 @@ namespace FFXIVFishingScheduleViewer
                     localTimeNow.Minute,
                     localTimeNow.Second);
             RaisePropertyChangedEvent(nameof(CurrentDateTimeText));
+        }
+
+        private void UpdateNewVersionReleasedText()
+        {
+            var format = GUITextTranslate.Instance["Label.NewVersionReleased"];
+            NewVersionReleasedText =
+                _settingProvider.NewVersionOfApplication != null
+                ? string.Format(
+                    GUITextTranslate.Instance["Label.NewVersionReleased"],
+                    _settingProvider.NewVersionOfApplication,
+                    _settingProvider.CurrentVersionOfApplication)
+                : null;
+            RaisePropertyChangedEvent(nameof(NewVersionReleasedText));
         }
 
         private void UpdateWeatherList(DateTime now)
@@ -411,9 +298,9 @@ namespace FFXIVFishingScheduleViewer
                                     return new { index, headerText, startTime, isLastTime };
                                 })
                                 .ToArray();
-            foreach (var item in _weatherList)
+            foreach (var item in WeatherList)
                 item?.Dispose();
-            _weatherList =
+            WeatherList =
                 _areaGroups
                 .Select(areaGroup =>
                 {
@@ -426,7 +313,7 @@ namespace FFXIVFishingScheduleViewer
                                     () => item.headerText,
                                     _settingProvider)
                                 {
-                                    Background = (Brush)_brushConverter.ConvertFromString( item.index == 0 ? "#ffd700" : "#eeeeee"),
+                                    Background = (Brush)_brushConverter.ConvertFromString(item.index == 0 ? "#ffd700" : "#eeeeee"),
                                     CellPositionType = item.isLastTime ? "TopRight" : "Top",
                                 }),
                             areaGroup.Areas
@@ -444,17 +331,7 @@ namespace FFXIVFishingScheduleViewer
                 })
                 .ToArray();
             RaisePropertyChangedEvent(nameof(UpdatedDateTime));
-            RaisePropertyChangedEvent(nameof(WeatherListOfLaNoscea));
-            RaisePropertyChangedEvent(nameof(WeatherListOfTheBlackShroud));
-            RaisePropertyChangedEvent(nameof(WeatherListOfThanalan));
-            RaisePropertyChangedEvent(nameof(WeatherListOfCoerthas));
-            RaisePropertyChangedEvent(nameof(WeatherListOfAbalathia));
-            RaisePropertyChangedEvent(nameof(WeatherListOfDravania));
-            RaisePropertyChangedEvent(nameof(WeatherListOfGyrAbania));
-            RaisePropertyChangedEvent(nameof(WeatherListOfHingashi));
-            RaisePropertyChangedEvent(nameof(WeatherListOfOthard));
-            RaisePropertyChangedEvent(nameof(WeatherListOfNorvrandt));
-            RaisePropertyChangedEvent(nameof(WeatherListOfMorDhona));
+            RaisePropertyChangedEvent(nameof(WeatherList));
         }
 
         private WeatherListCellViewModel GetCellForWeather(int columnIndex, WeatherType weather, bool isLastTime, bool isLastArea)
@@ -550,7 +427,7 @@ namespace FFXIVFishingScheduleViewer
                 };
         }
 
-        private void UpdateFishChanceList(DateTime now)
+        private void UpdateFishingChanceList(DateTime now)
         {
             var eorzeaNow = now.ToEorzeaDateTime().GetStartOf8Hour();
             // 開始時刻の8時間前から、開始時刻の[Properties.Settings.Default.DaysOfForecast]日後まで
@@ -576,12 +453,12 @@ namespace FFXIVFishingScheduleViewer
                 .Where(result => result != null && !result.Regions.Intersect(forecastPeriod).IsEmpty)
                 .ToArray();
             var comparer = new FishChanceTimeRegionsComparer();
-            FishChanceTimeList =
+            FishingChanceTimeList =
                 Enumerable.Range(0, 24 * _settingProvider.ForecastWeatherDays + 8)
                 .Select(index => eorzeaNow + EorzeaTimeSpan.FromHours(index - 8))
                 .ToArray();
-            FishChanceList =
-                FishChanceTimeList
+            FishingChanceList =
+                FishingChanceTimeList
                 .Select(time => founds
                     .Where(result => result.Regions.Contains(time))
                     .GroupBy(result => result.FishingCondition.Fish) // 魚毎にまとめる
@@ -599,21 +476,46 @@ namespace FFXIVFishingScheduleViewer
                 .ThenBy(item => item.firstRegion.End)
                 .Select(item => item.result)
                 .ToArray();
-            RaisePropertyChangedEvent(nameof(FishChanceTimeList));
-            RaisePropertyChangedEvent(nameof(FishChanceList));
+            RaisePropertyChangedEvent(nameof(FishingChanceTimeList));
+            RaisePropertyChangedEvent(nameof(FishingChanceList));
         }
 
-        private void UpdateNewVersionReleasedText()
+        private void _settingProvider_SelectedMainViewTabIndexChanged(object sender, EventArgs e)
         {
-            var format = GUITextTranslate.Instance["Label.NewVersionReleased"];
-            NewVersionReleasedText =
-                _settingProvider.NewVersionOfApplication != null
-                ? string.Format(
-                    GUITextTranslate.Instance["Label.NewVersionReleased"],
-                    _settingProvider.NewVersionOfApplication,
-                    _settingProvider.CurrentVersionOfApplication)
-                : null;
-            RaisePropertyChangedEvent(nameof(NewVersionReleasedText));
+            RaisePropertyChangedEvent(nameof(SelectedMainViewTabIndex));
+        }
+
+        private void _settingProvider_ForecastWeatherDaysChanged(object sender, EventArgs e)
+        {
+            var now = DateTime.UtcNow;
+            UpdateWeatherList(now);
+            UpdateFishingChanceList(now);
+            RaisePropertyChangedEvent(nameof(ForecastWeatherDays));
+            RaisePropertyChangedEvent(nameof(WeatherList));
+            RaisePropertyChangedEvent(nameof(FishingChanceTimeList));
+            RaisePropertyChangedEvent(nameof(FishingChanceList));
+        }
+
+        private void _settingProvider_FishMemoChanged(object sender, FishMemoChangedEventArgs e)
+        {
+            var now = DateTime.UtcNow;
+            UpdateFishingChanceList(now);
+            RaisePropertyChangedEvent(nameof(FishingChanceList));
+            FishMemoChanged(this, e);
+        }
+
+        private void _settingProvider_FishFilterChanded(object sender, Fish e)
+        {
+            _isPendingFishFilterChandedEvent = true;
+            _dispatcher.InvokeAsync(() =>
+            {
+                if (_isPendingFishFilterChandedEvent)
+                {
+                    var now = DateTime.UtcNow;
+                    UpdateFishingChanceList(now);
+                    _isPendingFishFilterChandedEvent = false;
+                }
+            });
         }
     }
 }

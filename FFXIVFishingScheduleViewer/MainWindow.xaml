@@ -1,14 +1,16 @@
-﻿<Window x:Class="FFXIVFishingScheduleViewer.MainWindow"
+﻿<local:WindowBase x:Class="FFXIVFishingScheduleViewer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FFXIVFishingScheduleViewer"
         mc:Ignorable="d"
+        MinWidth="640"
+        MinHeight="480"
         Title="FFXIV Fishing Schedule Viewer">
-    <Window.InputBindings>
+    <local:WindowBase.InputBindings>
         <KeyBinding Command="{Binding Path=OptionMenuCommand}" Gesture="Ctrl+O"/>
-    </Window.InputBindings>
+    </local:WindowBase.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="{Binding Path=GUIText[Menu.File]}">
@@ -17,9 +19,9 @@
                 <MenuItem Header="{Binding Path=GUIText[Menu.Exit]}" InputGestureText="ALT+F4" Command="{Binding Path=ExitMenuCommand}"/>
             </MenuItem>
             <MenuItem Header="{Binding Path=GUIText[Menu.Help]}">
-                <MenuItem Header="{Binding Path=GUIText[Menu.ViewREADME]}" Command="{Binding Path=About.ViewREADMEMenuCommand}" InputGestureText="F1"/>
+                <MenuItem Header="{Binding Path=GUIText[Menu.ViewREADME]}" Command="{Binding Path=ViewREADMEMenuCommand}" InputGestureText="F1"/>
                 <Separator/>
-                <MenuItem Header="{Binding Path=About.AboutMenuText}" Command="{Binding Path=About.AboutMenuCommand}"/>
+                <MenuItem Header="{Binding Path=AboutMenuText}" Command="{Binding Path=AboutMenuCommand}"/>
             </MenuItem>
         </Menu>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="5">
@@ -41,29 +43,28 @@
                 <Button Content="{Binding Path=GUIText[ButtonText.ShowDownloadPage]}" Command="{Binding Path=ShowDownloadPageCommand}" Margin="5" Padding="10" VerticalAlignment="Center"/>
             </StackPanel>
         </Border>
-        <TabControl>
-            <TabItem Header="{Binding Path=GUIText[Label.ForecastWeather]}" IsSelected="{Binding Path=IsSelectedForecastWeatherTab, Mode=TwoWay}">
+        <TabControl SelectedIndex="{Binding Path=SelectedMainViewTabIndex, Mode=TwoWay}">
+            <TabItem Header="{Binding Path=GUIText[Label.ForecastWeather]}">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <StackPanel Orientation="Vertical">
-                        <local:WeathersOfAreaGroupUserControl Margin="10" DataContext="{Binding Path=WeatherListOfLaNoscea}"/>
-                        <local:WeathersOfAreaGroupUserControl Margin="10" DataContext="{Binding Path=WeatherListOfTheBlackShroud}"/>
-                        <local:WeathersOfAreaGroupUserControl Margin="10" DataContext="{Binding Path=WeatherListOfThanalan}"/>
-                        <local:WeathersOfAreaGroupUserControl Margin="10" DataContext="{Binding Path=WeatherListOfCoerthas}"/>
-                        <local:WeathersOfAreaGroupUserControl Margin="10" DataContext="{Binding Path=WeatherListOfAbalathia}"/>
-                        <local:WeathersOfAreaGroupUserControl Margin="10" DataContext="{Binding Path=WeatherListOfDravania}"/>
-                        <local:WeathersOfAreaGroupUserControl Margin="10" DataContext="{Binding Path=WeatherListOfGyrAbania}"/>
-                        <local:WeathersOfAreaGroupUserControl Margin="10" DataContext="{Binding Path=WeatherListOfHingashi}"/>
-                        <local:WeathersOfAreaGroupUserControl Margin="10" DataContext="{Binding Path=WeatherListOfOthard}"/>
-                        <local:WeathersOfAreaGroupUserControl Margin="10" DataContext="{Binding Path=WeatherListOfNorvrandt}"/>
-                        <local:WeathersOfAreaGroupUserControl Margin="10" DataContext="{Binding Path=WeatherListOfMorDhona}"/>
-                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding Path=WeatherList}">
+                        <ItemsControl.Template>
+                            <ControlTemplate>
+                                <StackPanel Orientation="Vertical" IsItemsHost="True" />
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <local:WeathersOfAreaGroupUserControl Margin="10"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Header="{Binding Path=GUIText[Label.FishingChanceList]}" IsSelected="{Binding Path=IsSelectedChanceTab, Mode=TwoWay}">
+            <TabItem Header="{Binding Path=GUIText[Label.FishingChanceList]}">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <local:FishChanceListUserControl x:Name="FishChanceGrid" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                    <local:FishingChanceListUserControl x:Name="FishChanceGrid" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
                 </ScrollViewer>
             </TabItem>
         </TabControl>
     </DockPanel>
-</Window>
+</local:WindowBase>

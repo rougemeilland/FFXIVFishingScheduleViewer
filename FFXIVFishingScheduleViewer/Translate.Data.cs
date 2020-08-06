@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace FFXIVFishingScheduleViewer
 {
-    class Translate
+    partial class Translate
     {
-        private const string _defaultText = "**???**";
-        private IDictionary<string, string> _translateTable;
-        private string _lang;
-
-        static Translate()
-        {
-            Instance = new Translate();
+        private class TranslationElement
+            {
+            public string id { get; set; }
+            public string text { get; set; }
         }
 
-        public Translate()
-        {
-            var source = new[]
+        private static IEnumerable<TranslationElement> GetSource()
+        { 
+            return new[]
             {
 #region 言語
                 new { id = "lang.**日本語**.ja", text = "日本語" },
@@ -7292,9 +7288,9 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "action.**十二神の加護**.fr", text = "Bénédiction des Douze" },
                 new { id = "action.**十二神の加護**.de", text = "Gunst der Zwölf" },
                 new { id = "action.**釣り餌**.ja", text = "釣り餌" },
-                new { id = "action.**釣り餌**.en", text = "Bait" },
-                new { id = "action.**釣り餌**.fr", text = "Appât" },
-                new { id = "action.**釣り餌**.de", text = "Köder" },
+                new { id = "action.**釣り餌**.en", text = "Fishing Tackle" },
+                new { id = "action.**釣り餌**.fr", text = "Appât de pêche" },
+                new { id = "action.**釣り餌**.de", text = "Angelköder" },
                 new { id = "action.**キャスティング**.ja", text = "キャスティング" },
                 new { id = "action.**キャスティング**.en", text = "Cast" },
                 new { id = "action.**キャスティング**.fr", text = "Pêche" },
@@ -9942,19 +9938,53 @@ namespace FFXIVFishingScheduleViewer
 #endif
 #endregion
 
+#region ライセンス
+                new { id = "license.**FFXIVLicense**.ja", text = "Copyright (C) SQUARE ENIX CO., LTD. All Rights Reserved." },
+                new { id = "license.**FFXIVLicense**.en", text = "FINAL FANTASY XIV © 2010 - 2020 SQUARE ENIX CO., LTD. All Rights Reserved." },
+                new { id = "license.**FFXIVLicense**.fr", text = "FINAL FANTASY XIV (C) 2010 - 2020 SQUARE ENIX CO., Ltd. FINAL FANTASY est une marque déposée de Square Enix Holdings Co., Ltd. Tous les matériels sont utilisés sous licence." },
+                new { id = "license.**FFXIVLicense**.de", text = "FINAL FANTASY XIV (C) 2010 - 2020 SQUARE ENIX CO. LTD. FINAL FANTASY ist ein eingetragenes Markenzeichen von Square Enix Holdings Co., Ltd. Alle Materialien werden unter Lizenz genutzt." },
+#endregion
+
+#region URL
+                new { id = "url.**README**.ja", text = "https://github.com/rougemeilland/FFXIVFishingScheduleViewer/blob/master/docs/README.md#top_of_content" },
+                new { id = "url.**README**.en", text = "https://github.com/rougemeilland/FFXIVFishingScheduleViewer/blob/master/docs/README_en.md#top_of_content" },
+                new { id = "url.**README**.fr", text = "https://github.com/rougemeilland/FFXIVFishingScheduleViewer/blob/master/docs/README_fr.md#top_of_content" },
+                new { id = "url.**README**.de", text = "https://github.com/rougemeilland/FFXIVFishingScheduleViewer/blob/master/docs/README_de.md#top_of_content" },
+                new { id = "url.**CBH.FishPage**.ja", text = "https://jp.ff14angler.com/?spot=0&fish={0}&bait=0&cmd=search" },
+                new { id = "url.**CBH.FishPage**.en", text = "https://en.ff14angler.com/?spot=0&fish={0}&bait=0&cmd=search" },
+                new { id = "url.**CBH.FishPage**.fr", text = "https://fr.ff14angler.com/?spot=0&fish={0}&bait=0&cmd=search" },
+                new { id = "url.**CBH.FishPage**.de", text = "https://de.ff14angler.com/?spot=0&fish={0}&bait=0&cmd=search" },
+                new { id = "url.**CBH.SpotPage**.ja", text = "https://jp.ff14angler.com/?spot={0}&fish=0&bait=0&cmd=search" },
+                new { id = "url.**CBH.SpotPage**.en", text = "https://en.ff14angler.com/?spot={0}&fish=0&bait=0&cmd=search" },
+                new { id = "url.**CBH.SpotPage**.fr", text = "https://fr.ff14angler.com/?spot={0}&fish=0&bait=0&cmd=search" },
+                new { id = "url.**CBH.SpotPage**.de", text = "https://de.ff14angler.com/?spot={0}&fish=0&bait=0&cmd=search" },
+                new { id = "url.**CBH.BaitPage**.ja", text = "https://jp.ff14angler.com/?spot=0&fish=0&bait={0}&cmd=search" },
+                new { id = "url.**CBH.BaitPage**.en", text = "https://en.ff14angler.com/?spot=0&fish=0&bait={0}&cmd=search" },
+                new { id = "url.**CBH.BaitPage**.fr", text = "https://fr.ff14angler.com/?spot=0&fish=0&bait={0}&cmd=search" },
+                new { id = "url.**CBH.BaitPage**.de", text = "https://de.ff14angler.com/?spot=0&fish=0&bait={0}&cmd=search" },
+                new { id = "url.**EDB.FishPage**.ja", text = "https://jp.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+                new { id = "url.**EDB.FishPage**.en", text = "https://na.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+                new { id = "url.**EDB.FishPage**.fr", text = "https://fr.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+                new { id = "url.**EDB.FishPage**.de", text = "https://de.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+                new { id = "url.**EDB.BaitPage**.ja", text = "https://jp.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+                new { id = "url.**EDB.BaitPage**.en", text = "https://na.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+                new { id = "url.**EDB.BaitPage**.fr", text = "https://fr.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+                new { id = "url.**EDB.BaitPage**.de", text = "https://de.finalfantasyxiv.com/lodestone/playguide/db/item/{0}/" },
+#endregion
+
 #region GUI
-                new { id = "guiText.**Title.Option**.ja", text = "オプション" },
-                new { id = "guiText.**Title.Option**.en", text = "Options" },
-                new { id = "guiText.**Title.Option**.fr", text = "Options" },
-                new { id = "guiText.**Title.Option**.de", text = "Optionen" },
-                new { id = "guiText.**Title.FishDetailWindow**.ja", text = "「{0}」の情報の確認/変更" },
-                new { id = "guiText.**Title.FishDetailWindow**.en", text = "Confirmation/change of information of \"{0}\"" },
-                new { id = "guiText.**Title.FishDetailWindow**.fr", text = "Confirmation / modification des informations de \"{0}\"" },
-                new { id = "guiText.**Title.FishDetailWindow**.de", text = "Bestätigung / Änderung der Informationen von \"{0}\"" },
-                new { id = "guiText.**Title.About**.ja", text = "{0} のバージョン情報" },
-                new { id = "guiText.**Title.About**.en", text = "About {0}" },
-                new { id = "guiText.**Title.About**.fr", text = "À propos de {0}" },
-                new { id = "guiText.**Title.About**.de", text = "Info über {0}" },
+                new { id = "guiText.**Title.OptionWindow**.ja", text = "オプション - {0}" },
+                new { id = "guiText.**Title.OptionWindow**.en", text = "Options - {0}" },
+                new { id = "guiText.**Title.OptionWindow**.fr", text = "Options - {0}" },
+                new { id = "guiText.**Title.OptionWindow**.de", text = "Optionen - {0}" },
+                new { id = "guiText.**Title.FishDetailWindow**.ja", text = "「{0}」の情報の確認/変更 - {1}" },
+                new { id = "guiText.**Title.FishDetailWindow**.en", text = "Confirmation/change of information of \"{0}\" - {1}" },
+                new { id = "guiText.**Title.FishDetailWindow**.fr", text = "Confirmation / modification des informations de \"{0}\" - {1}" },
+                new { id = "guiText.**Title.FishDetailWindow**.de", text = "Bestätigung / Änderung der Informationen von \"{0}\" - {1}" },
+                new { id = "guiText.**Title.AboutWindow**.ja", text = "{0} のバージョン情報 - {1}" },
+                new { id = "guiText.**Title.AboutWindow**.en", text = "About {0} - {1}" },
+                new { id = "guiText.**Title.AboutWindow**.fr", text = "À propos de {0} - {1}" },
+                new { id = "guiText.**Title.AboutWindow**.de", text = "Info über {0} - {1}" },
                 new { id = "guiText.**Menu.File**.ja", text = "ファイル(_F)" },
                 new { id = "guiText.**Menu.File**.en", text = "_File" },
                 new { id = "guiText.**Menu.File**.fr", text = "_Fichier" },
@@ -9971,7 +10001,11 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "guiText.**Menu.Help**.en", text = "_Help" },
                 new { id = "guiText.**Menu.Help**.fr", text = "_Aide" },
                 new { id = "guiText.**Menu.Help**.de", text = "_Hilfe" },
-                new { id = "guiText.**Menu.About**.ja", text = "{0} のバージョン情報(_H)..." },
+                new { id = "guiText.**Menu.ViewREADME**.ja", text = "READMEの表示(_V)" },
+                new { id = "guiText.**Menu.ViewREADME**.en", text = "_View README" },
+                new { id = "guiText.**Menu.ViewREADME**.fr", text = "_Afficher README" },
+                new { id = "guiText.**Menu.ViewREADME**.de", text = "_README anzeigen" },
+                new { id = "guiText.**Menu.About**.ja", text = "{0} のバージョン情報(_A)..." },
                 new { id = "guiText.**Menu.About**.en", text = "_About {0}..." },
                 new { id = "guiText.**Menu.About**.fr", text = "_À propos de {0}..." },
                 new { id = "guiText.**Menu.About**.de", text = "_Info über {0}..." },
@@ -9979,10 +10013,58 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "guiText.**Menu.DontShowFish**.en", text = "Do not show '{0}'" },
                 new { id = "guiText.**Menu.DontShowFish**.fr", text = "N'affiche pas '{0}'" },
                 new { id = "guiText.**Menu.DontShowFish**.de", text = "'{0}' nicht anzeigen" },
-                new { id = "guiText.**Menu.ShowFishDetail**.ja", text = "「{0}」の情報の確認/変更(_I)..." },
-                new { id = "guiText.**Menu.ShowFishDetail**.en", text = "Confirmation/change of _information of \"{0}\"..." },
-                new { id = "guiText.**Menu.ShowFishDetail**.fr", text = "Confirmation / modification des _informations de \"{0}\"..." },
-                new { id = "guiText.**Menu.ShowFishDetail**.de", text = "Bestätigung / Änderung der _Informationen von \"{0}\"..." },
+                new { id = "guiText.**Menu.ShowFishDetail**.ja", text = "「{0}」の情報の確認/変更..." },
+                new { id = "guiText.**Menu.ShowFishDetail**.en", text = "Confirmation/change of information of \"{0}\"..." },
+                new { id = "guiText.**Menu.ShowFishDetail**.fr", text = "Confirmation / modification des informations de \"{0}\"..." },
+                new { id = "guiText.**Menu.ShowFishDetail**.de", text = "Bestätigung / Änderung der Informationen von \"{0}\"..." },
+                new { id = "guiText.**Menu.ViewPageInCBH**.ja", text = "「猫はお腹がすいた」の「{0}」のページを表示する..." },
+                new { id = "guiText.**Menu.ViewPageInCBH**.en", text = "View the page of \"{0}\" in \"Cat became hungry\"...." },
+                new { id = "guiText.**Menu.ViewPageInCBH**.fr", text = "Afficher la page de «{0}» dans «Le chat a faim»...." },
+                new { id = "guiText.**Menu.ViewPageInCBH**.de", text = "Anzeigen der Page von \"{0}\" in \"Katze wurde hungrig\"..." },
+                new { id = "guiText.**Menu.ViewPageInEDB**.ja", text = "「エオルゼアデータベース」の「{0}」のページを表示する..." },
+                new { id = "guiText.**Menu.ViewPageInEDB**.en", text = "View the page of \"{0}\" in \"Eorzea Database\"...." },
+                new { id = "guiText.**Menu.ViewPageInEDB**.fr", text = "Afficher la page de «{0}» dans «Base de données d'Éorzéa»...." },
+                new { id = "guiText.**Menu.ViewPageInEDB**.de", text = "Anzeigen der Page von \"{0}\" in \"Eorzea-Datenbank\"..." },
+                new { id = "guiText.**Menu.Cancel**.ja", text = "キャンセル" },
+                new { id = "guiText.**Menu.Cancel**.en", text = "Cancel" },
+                new { id = "guiText.**Menu.Cancel**.fr", text = "Annuler" },
+                new { id = "guiText.**Menu.Cancel**.de", text = "Abbrechen" },
+                new { id = "guiText.**ButtonText.OK**.ja", text = "OK" },
+                new { id = "guiText.**ButtonText.OK**.en", text = "OK" },
+                new { id = "guiText.**ButtonText.OK**.fr", text = "OK" },
+                new { id = "guiText.**ButtonText.OK**.de", text = "OK" },
+                new { id = "guiText.**ButtonText.Save**.ja", text = "保存" },
+                new { id = "guiText.**ButtonText.Save**.en", text = "Save" },
+                new { id = "guiText.**ButtonText.Save**.fr", text = "Enregistrer" },
+                new { id = "guiText.**ButtonText.Save**.de", text = "Speichern" },
+                new { id = "guiText.**ButtonText.Cancel**.ja", text = "キャンセル" },
+                new { id = "guiText.**ButtonText.Cancel**.en", text = "Cancel" },
+                new { id = "guiText.**ButtonText.Cancel**.fr", text = "Annuler" },
+                new { id = "guiText.**ButtonText.Cancel**.de", text = "Abbrechen" },
+                new { id = "guiText.**ButtonText.Reset**.ja", text = "リセット" },
+                new { id = "guiText.**ButtonText.Reset**.en", text = "Reset" },
+                new { id = "guiText.**ButtonText.Reset**.fr", text = "Rétablir" },
+                new { id = "guiText.**ButtonText.Reset**.de", text = "Zurücksetzen" },
+                new { id = "guiText.**ButtonText.Close**.ja", text = "閉じる" },
+                new { id = "guiText.**ButtonText.Close**.en", text = "Close" },
+                new { id = "guiText.**ButtonText.Close**.fr", text = "Fermer" },
+                new { id = "guiText.**ButtonText.Close**.de", text = "Schließen" },
+                new { id = "guiText.**ButtonText.EditMemo**.ja", text = "メモを編集する" },
+                new { id = "guiText.**ButtonText.EditMemo**.en", text = "Edit node" },
+                new { id = "guiText.**ButtonText.EditMemo**.fr", text = "Modifier la note" },
+                new { id = "guiText.**ButtonText.EditMemo**.de", text = "Notiz bearbeiten" },
+                new { id = "guiText.**ButtonText.CheckAllFishOf**.ja", text = "「{0}」のすべての魚のチェックを入れる" },
+                new { id = "guiText.**ButtonText.CheckAllFishOf**.en", text = "Check all fish in \"{0}\"" },
+                new { id = "guiText.**ButtonText.CheckAllFishOf**.fr", text = "Vérifiez tous les poissons dans \"{0}\"" },
+                new { id = "guiText.**ButtonText.CheckAllFishOf**.de", text = "Überprüfen Sie alle Fische in \"{0}\"" },
+                new { id = "guiText.**ButtonText.UncheckAllFishOf**.ja", text = "「{0}」のすべての魚のチェックを外す" },
+                new { id = "guiText.**ButtonText.UncheckAllFishOf**.en", text = "Uncheck all fish in \"{0}\"" },
+                new { id = "guiText.**ButtonText.UncheckAllFishOf**.fr", text = "Décochez tous les poissons dans \"{0}\"" },
+                new { id = "guiText.**ButtonText.UncheckAllFishOf**.de", text = "Deaktivieren Sie alle Fische in \"{0}\"" },
+                new { id = "guiText.**ButtonText.ShowDownloadPage**.ja", text = "ダウンロードページを開く" },
+                new { id = "guiText.**ButtonText.ShowDownloadPage**.en", text = "Open download page" },
+                new { id = "guiText.**ButtonText.ShowDownloadPage**.fr", text = "Ouvrir la page de téléchargement" },
+                new { id = "guiText.**ButtonText.ShowDownloadPage**.de", text = "Download-Seite öffnen" },
                 new { id = "guiText.**Label.ForecastWeather**.ja", text = "天気予報" },
                 new { id = "guiText.**Label.ForecastWeather**.en", text = "Forecast weather" },
                 new { id = "guiText.**Label.ForecastWeather**.fr", text = "Prévisions météorologiques" },
@@ -10020,33 +10102,17 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "guiText.**Label.FishingSpot**.fr", text = "Spot de pêche" },
                 new { id = "guiText.**Label.FishingSpot**.de", text = "Angelplatz" },
                 new { id = "guiText.**Label.RequiredFishingBaits**.ja", text = "必要な釣り餌" },
-                new { id = "guiText.**Label.RequiredFishingBaits**.en", text = "Required fishing baits" },
+                new { id = "guiText.**Label.RequiredFishingBaits**.en", text = "Required fishing tackles" },
                 new { id = "guiText.**Label.RequiredFishingBaits**.fr", text = "Appâts de pêche requis" },
-                new { id = "guiText.**Label.RequiredFishingBaits**.de", text = "Erforderliche Fischköder" },
+                new { id = "guiText.**Label.RequiredFishingBaits**.de", text = "Erforderliche Angelköder" },
                 new { id = "guiText.**Label.EorzeaTime**.ja", text = "エオルゼア時刻" },
                 new { id = "guiText.**Label.EorzeaTime**.en", text = "Eorzea time" },
                 new { id = "guiText.**Label.EorzeaTime**.fr", text = "Heure d'Éorzéa" },
                 new { id = "guiText.**Label.EorzeaTime**.de", text = "Eorzea Zeit" },
-                new { id = "guiText.**ToolTip.FishName**.ja", text = "魚の名前です。" },
-                new { id = "guiText.**ToolTip.FishName**.en", text = "This is the name of the fish." },
-                new { id = "guiText.**ToolTip.FishName**.fr", text = "C'est le nom du poisson." },
-                new { id = "guiText.**ToolTip.FishName**.de", text = "Dies ist der Name des Fisches." },
                 new { id = "guiText.**Label.DiscoveryDifficulty**.ja", text = "発見の難易度:" },
                 new { id = "guiText.**Label.DiscoveryDifficulty**.en", text = "Discovery difficulty:" },
                 new { id = "guiText.**Label.DiscoveryDifficulty**.fr", text = "Difficulté de découverte:" },
                 new { id = "guiText.**Label.DiscoveryDifficulty**.de", text = "Entdeckungsschwierigkeiten:" },
-                new { id = "guiText.**ToolTip.DiscoveryDifficulty**.ja", text = "その魚を釣るための時間や天候の条件を満たすことがどれぐらい困難であるかの目安です。\n必ずしも魚を釣ること自体の難易度とは一致していません。" },
-                new { id = "guiText.**ToolTip.DiscoveryDifficulty**.en", text = "This is a measure of how difficult it is to meet the time and weather conditions for catching the fish.\nIt doesn't always match the difficulty of catching a fish." },
-                new { id = "guiText.**ToolTip.DiscoveryDifficulty**.fr", text = "Il s'agit d'une mesure de la difficulté de respecter les conditions météorologiques et météorologiques pour attraper le poisson.\nCela ne correspond pas toujours à la difficulté d'attraper un poisson." },
-                new { id = "guiText.**ToolTip.DiscoveryDifficulty**.de", text = "Dies ist ein Maß dafür, wie schwierig es ist, die Zeit- und Wetterbedingungen für den Fischfang einzuhalten.\nEs entspricht nicht immer der Schwierigkeit, einen Fisch zu fangen." },
-                new { id = "guiText.**ToolTip.FishingSpot**.ja", text = "その魚を釣るための釣り場です。" },
-                new { id = "guiText.**ToolTip.FishingSpot**.en", text = "This is a fishing spot for catching the fish." },
-                new { id = "guiText.**ToolTip.FishingSpot**.fr", text = "Ceci est un lieu de pêche pour attraper le poisson." },
-                new { id = "guiText.**ToolTip.FishingSpot**.de", text = "Dies ist ein Angelplatz zum Fangen der Fische." },
-                new { id = "guiText.**ToolTip.FishingBaits**.ja", text = "これはその魚を釣るために必要な釣り餌の例です。\n「漁師の直感」が必要な魚の場合、そのための魚を釣るための釣り餌も含みます。" },
-                new { id = "guiText.**ToolTip.FishingBaits**.en", text = "This is an example of the fishing bait needed to catch the fish.\nIf the fish requires \"Fisher's intuition\", it also includes fishing baits for that purpose." },
-                new { id = "guiText.**ToolTip.FishingBaits**.fr", text = "Ceci est un exemple de l'appât de pêche nécessaire pour attraper le poisson.\nSi le poisson nécessite \"Instinct du pêcheur\", il comprend également des appâts de pêche à cet effet." },
-                new { id = "guiText.**ToolTip.FishingBaits**.de", text = "Dies ist ein Beispiel für den Fischköder, der zum Fangen des Fisches benötigt wird.\nWenn der Fisch die \"Petri Heil\" erfordert, umfasst er auch Fischköder für diesen Zweck." },
                 new { id = "guiText.**Label.Conditions**.ja", text = "条件" },
                 new { id = "guiText.**Label.Conditions**.en", text = "conditions" },
                 new { id = "guiText.**Label.Conditions**.fr", text = "conditions" },
@@ -10071,38 +10137,6 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "guiText.**Label.7Days**.en", text = "7 days in ET (8 hours and 10 minutes in LT)" },
                 new { id = "guiText.**Label.7Days**.fr", text = "7 jours au HE (8 heures et 10 minutes au HL)" },
                 new { id = "guiText.**Label.7Days**.de", text = "7 Tage in EZ (8 Stunden und 10 Minuten in OZ)" },
-                new { id = "guiText.**Label.EditMemo**.ja", text = "メモを編集する" },
-                new { id = "guiText.**Label.EditMemo**.en", text = "Edit node" },
-                new { id = "guiText.**Label.EditMemo**.fr", text = "Modifier la note" },
-                new { id = "guiText.**Label.EditMemo**.de", text = "Notiz bearbeiten" },
-                new { id = "guiText.**Label.OK**.ja", text = "OK" },
-                new { id = "guiText.**Label.OK**.en", text = "OK" },
-                new { id = "guiText.**Label.OK**.fr", text = "OK" },
-                new { id = "guiText.**Label.OK**.de", text = "OK" },
-                new { id = "guiText.**Label.Save**.ja", text = "保存" },
-                new { id = "guiText.**Label.Save**.en", text = "Save" },
-                new { id = "guiText.**Label.Save**.fr", text = "Enregistrer" },
-                new { id = "guiText.**Label.Save**.de", text = "Speichern" },
-                new { id = "guiText.**Label.Cancel**.ja", text = "キャンセル" },
-                new { id = "guiText.**Label.Cancel**.en", text = "Cancel" },
-                new { id = "guiText.**Label.Cancel**.fr", text = "Annuler" },
-                new { id = "guiText.**Label.Cancel**.de", text = "Abbrechen" },
-                new { id = "guiText.**Label.Reset**.ja", text = "リセット" },
-                new { id = "guiText.**Label.Reset**.en", text = "Reset" },
-                new { id = "guiText.**Label.Reset**.fr", text = "Rétablir" },
-                new { id = "guiText.**Label.Reset**.de", text = "Zurücksetzen" },
-                new { id = "guiText.**Label.Close**.ja", text = "閉じる" },
-                new { id = "guiText.**Label.Close**.en", text = "Close" },
-                new { id = "guiText.**Label.Close**.fr", text = "Fermer" },
-                new { id = "guiText.**Label.Close**.de", text = "Schließen" },
-                new { id = "guiText.**Label.CheckAllFishOf**.ja", text = "「{0}」のすべての魚のチェックを入れる" },
-                new { id = "guiText.**Label.CheckAllFishOf**.en", text = "Check all fish in \"{0}\"" },
-                new { id = "guiText.**Label.CheckAllFishOf**.fr", text = "Vérifiez tous les poissons dans \"{0}\"" },
-                new { id = "guiText.**Label.CheckAllFishOf**.de", text = "Überprüfen Sie alle Fische in \"{0}\"" },
-                new { id = "guiText.**Label.UncheckAllFishOf**.ja", text = "「{0}」のすべての魚のチェックを外す" },
-                new { id = "guiText.**Label.UncheckAllFishOf**.en", text = "Uncheck all fish in \"{0}\"" },
-                new { id = "guiText.**Label.UncheckAllFishOf**.fr", text = "Décochez tous les poissons dans \"{0}\"" },
-                new { id = "guiText.**Label.UncheckAllFishOf**.de", text = "Deaktivieren Sie alle Fische in \"{0}\"" },
                 new { id = "guiText.**Label.TimeCondition**.ja", text = "時刻:" },
                 new { id = "guiText.**Label.TimeCondition**.en", text = "Time:" },
                 new { id = "guiText.**Label.TimeCondition**.fr", text = "Heure:" },
@@ -10112,9 +10146,61 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "guiText.**Label.WeatherCondition**.fr", text = "Météo:" },
                 new { id = "guiText.**Label.WeatherCondition**.de", text = "Wetter:" },
                 new { id = "guiText.**Label.NoCheckedFishes**.ja", text = "表示する魚がひとつも指定されていません。\n「Ctrl+O」キーを押して「オプション」ウィンドウを開き、表示させたい魚にチェックを入れてください。" },
-                new { id = "guiText.**Label.NoCheckedFishes**.en", text = "No fish have been specified for display. Open the \"Options\" window by pressing \"Ctrl+O\" and check the fish you want to display." },
-                new { id = "guiText.**Label.NoCheckedFishes**.fr", text = "Aucun poisson n'a été spécifié pour l'affichage. Ouvrez la fenêtre \"Options\" en appuyant sur \"Ctrl + O\" et cochez le poisson que vous souhaitez afficher." },
-                new { id = "guiText.**Label.NoCheckedFishes**.de", text = "Für die Anzeige wurden keine Fische angegeben. Öffnen Sie das Fenster \"Optionen\" durch Drücken von \"Strg + O\" und überprüfen Sie den Fisch, den Sie anzeigen möchten." },
+                new { id = "guiText.**Label.NoCheckedFishes**.en", text = "No fish have been specified for display.\nOpen the \"Options\" window by pressing \"Ctrl+O\" and check the fish you want to display." },
+                new { id = "guiText.**Label.NoCheckedFishes**.fr", text = "Aucun poisson n'a été spécifié pour l'affichage.\nOuvrez la fenêtre \"Options\" en appuyant sur \"Ctrl + O\" et cochez le poisson que vous souhaitez afficher." },
+                new { id = "guiText.**Label.NoCheckedFishes**.de", text = "Für die Anzeige wurden keine Fische angegeben.\nÖffnen Sie das Fenster \"Optionen\" durch Drücken von \"Strg + O\" und überprüfen Sie den Fisch, den Sie anzeigen möchten." },
+                new { id = "guiText.**Label.IsEnabledToCheckNewVersionReleased**.ja", text = "毎回アプリケーションの起動時に新しいバージョンがリリースされているか自動的に確認する。" },
+                new { id = "guiText.**Label.IsEnabledToCheckNewVersionReleased**.en", text = "Automatically check for new versions every time the application starts." },
+                new { id = "guiText.**Label.IsEnabledToCheckNewVersionReleased**.fr", text = "Vérifiez automatiquement les nouvelles versions à chaque démarrage de l'application." },
+                new { id = "guiText.**Label.IsEnabledToCheckNewVersionReleased**.de", text = "Bei jedem Start der Anwendung automatisch nach neuen Versionen suchen." },
+                new { id = "guiText.**Label.NewVersionReleased**.ja", text = "本アプリケーションの新しいバージョンがリリースされています。\nリリースされたバージョン：v{0}\n現在のバージョン：v{1}" },
+                new { id = "guiText.**Label.NewVersionReleased**.en", text = "A new version of this application has been released.\nReleased Version: v{0}\nCurrent Version: v{1}" },
+                new { id = "guiText.**Label.NewVersionReleased**.fr", text = "Une nouvelle version de cette application a été publiée.\nVersion publiée: v{0}\nVersion actuelle: v{1}" },
+                new { id = "guiText.**Label.NewVersionReleased**.de", text = "Eine neue Version dieser Anwendung wurde veröffentlicht.\nFreigegebene Version: v{0}\nAktuelle Version: v{1}" },
+                new { id = "guiText.**Label.EffectNormal**.ja", text = "なし" },
+                new { id = "guiText.**Label.EffectNormal**.en", text = "None" },
+                new { id = "guiText.**Label.EffectNormal**.fr", text = "Aucun" },
+                new { id = "guiText.**Label.EffectNormal**.de", text = "Keine" },
+                new { id = "guiText.**Label.Effect1**.ja", text = "A タイプ" },
+                new { id = "guiText.**Label.Effect1**.en", text = "Type A" },
+                new { id = "guiText.**Label.Effect1**.fr", text = "Type A" },
+                new { id = "guiText.**Label.Effect1**.de", text = "Tippe A" },
+                new { id = "guiText.**Label.Effect2**.ja", text = "B タイプ" },
+                new { id = "guiText.**Label.Effect2**.en", text = "Type B" },
+                new { id = "guiText.**Label.Effect2**.fr", text = "Type B" },
+                new { id = "guiText.**Label.Effect2**.de", text = "Tippe B" },
+                new { id = "guiText.**Label.FishingChanceListTextEffect**.ja", text = "グラフ中の文字に適用されるエフェクト:" },
+                new { id = "guiText.**Label.FishingChanceListTextEffect**.en", text = "Effects applied to characters in the graph:" },
+                new { id = "guiText.**Label.FishingChanceListTextEffect**.fr", text = "Effets appliqués aux caractères du graphique:" },
+                new { id = "guiText.**Label.FishingChanceListTextEffect**.de", text = "Effekte angewendet, um Zeichen in der Grafik:" },
+                new { id = "guiText.**Label.GenericTabItem**.ja", text = "全般" },
+                new { id = "guiText.**Label.GenericTabItem**.en", text = "General" },
+                new { id = "guiText.**Label.GenericTabItem**.fr", text = "Général" },
+                new { id = "guiText.**Label.GenericTabItem**.de", text = "Allgemein" },
+                new { id = "guiText.**Label.FishingChanceListTabItem**.ja", text = "釣りチャンス一覧" },
+                new { id = "guiText.**Label.FishingChanceListTabItem**.en", text = "Fishing chance List" },
+                new { id = "guiText.**Label.FishingChanceListTabItem**.fr", text = "Liste des possibilités de pêche" },
+                new { id = "guiText.**Label.FishingChanceListTabItem**.de", text = "Angelchancenliste" },
+                new { id = "guiText.**Label.ProgramUpdateTabItem**.ja", text = "プログラムの更新" },
+                new { id = "guiText.**Label.ProgramUpdateTabItem**.en", text = "Program update" },
+                new { id = "guiText.**Label.ProgramUpdateTabItem**.fr", text = "Mise à jour du programme" },
+                new { id = "guiText.**Label.ProgramUpdateTabItem**.de", text = "Programmaktualisierung" },
+                new { id = "guiText.**ToolTip.FishName**.ja", text = "魚の名前です。" },
+                new { id = "guiText.**ToolTip.FishName**.en", text = "This is the name of the fish." },
+                new { id = "guiText.**ToolTip.FishName**.fr", text = "C'est le nom du poisson." },
+                new { id = "guiText.**ToolTip.FishName**.de", text = "Dies ist der Name des Fisches." },
+                new { id = "guiText.**ToolTip.DiscoveryDifficulty**.ja", text = "その魚を釣るための時間や天候の条件を満たすことがどれぐらい困難であるかの目安です。\n必ずしも魚を釣ること自体の難易度とは一致していません。" },
+                new { id = "guiText.**ToolTip.DiscoveryDifficulty**.en", text = "This is a measure of how difficult it is to meet the time and weather conditions for catching the fish.\nIt doesn't always match the difficulty of catching a fish." },
+                new { id = "guiText.**ToolTip.DiscoveryDifficulty**.fr", text = "Il s'agit d'une mesure de la difficulté de respecter les conditions météorologiques et météorologiques pour attraper le poisson.\nCela ne correspond pas toujours à la difficulté d'attraper un poisson." },
+                new { id = "guiText.**ToolTip.DiscoveryDifficulty**.de", text = "Dies ist ein Maß dafür, wie schwierig es ist, die Zeit- und Wetterbedingungen für den Fischfang einzuhalten.\nEs entspricht nicht immer der Schwierigkeit, einen Fisch zu fangen." },
+                new { id = "guiText.**ToolTip.FishingSpot**.ja", text = "その魚を釣るための釣り場です。" },
+                new { id = "guiText.**ToolTip.FishingSpot**.en", text = "This is a fishing spot for catching the fish." },
+                new { id = "guiText.**ToolTip.FishingSpot**.fr", text = "Ceci est un lieu de pêche pour attraper le poisson." },
+                new { id = "guiText.**ToolTip.FishingSpot**.de", text = "Dies ist ein Angelplatz zum Fangen der Fische." },
+                new { id = "guiText.**ToolTip.FishingBaits**.ja", text = "これはその魚を釣るために必要な釣り餌の例です。\n「漁師の直感」が必要な魚の場合、そのための魚を釣るための釣り餌も含みます。" },
+                new { id = "guiText.**ToolTip.FishingBaits**.en", text = "This is an example of the fishing tackle needed to catch the fish.\nIf the fish requires \"Fisher's intuition\", it also includes fishing tackles for that purpose." },
+                new { id = "guiText.**ToolTip.FishingBaits**.fr", text = "Ceci est un exemple de l'appât de pêche nécessaire pour attraper le poisson.\nSi le poisson nécessite \"Instinct du pêcheur\", il comprend également des appâts de pêche à cet effet." },
+                new { id = "guiText.**ToolTip.FishingBaits**.de", text = "Dies ist ein Beispiel für den Angelköder, der zum Fangen des Fisches benötigt wird.\nWenn der Fisch die \"Petri Heil\" erfordert, umfasst er auch Angelköder für diesen Zweck." },
 #endregion
 
 #region 一般
@@ -10158,71 +10244,13 @@ namespace FFXIVFishingScheduleViewer
                 new { id = "generic.**ProductVersion**.en", text = "{0} Version {1}" },
                 new { id = "generic.**ProductVersion**.fr", text = "{0} Version {1}" },
                 new { id = "generic.**ProductVersion**.de", text = "{0} Version {1}" },
-                new { id = "generic.**FFXIVLicense**.ja", text = "Copyright (C) SQUARE ENIX CO., LTD. All Rights Reserved." },
-                new { id = "generic.**FFXIVLicense**.en", text = "FINAL FANTASY XIV © 2010 - 2020 SQUARE ENIX CO., LTD. All Rights Reserved." },
-                new { id = "generic.**FFXIVLicense**.fr", text = "FINAL FANTASY XIV (C) 2010 - 2020 SQUARE ENIX CO., Ltd. FINAL FANTASY est une marque déposée de Square Enix Holdings Co., Ltd. Tous les matériels sont utilisés sous licence." },
-                new { id = "generic.**FFXIVLicense**.de", text = "FINAL FANTASY XIV (C) 2010 - 2020 SQUARE ENIX CO. LTD. FINAL FANTASY ist ein eingetragenes Markenzeichen von Square Enix Holdings Co., Ltd. Alle Materialien werden unter Lizenz genutzt." },
+                new { id = "generic.**Separater.Or**.ja", text = " または " },
+                new { id = "generic.**Separater.Or**.en", text = " or " },
+                new { id = "generic.**Separater.Or**.fr", text = " ou " },
+                new { id = "generic.**Separater.Or**.de", text = " oder " },
 #endregion
-            };
-            var duplicated =
-                source
-                    .GroupBy(item => item.id)
-                    .Where(g => g.Count() > 1)
-                    .Select(g => g.Key)
-                    .ToArray();
-            if (duplicated.Any())
-                throw new Exception(string.Format("duplicated: {0}", string.Join(", ", duplicated)));
-
-            _translateTable = source.ToDictionary(item => item.id, item => item.text);
-            _lang = "en";
-        }
-
-        public static Translate Instance { get; }
-
-        public static IEnumerable<string> SupportedLanguages = new[] { "ja", "en", "fr", "de" };
-
-        public void SetLanguage(string lang)
-        {
-            _lang = lang;
-        }
-
-        public IEnumerable<string> CheckTranslation(TranslationTextId id)
-        {
-#if DEBUG
-            return
-                SupportedLanguages
-                .Select(lang => new { id, lang, text = this[id, lang] })
-                .Where(item => item.text == _defaultText)
-                .Select(item => BuildInternalTableKey(item.id, item.lang));
-#else
-            return new string[0];
-#endif
-        }
-
-        public string this[TranslationTextId id] => this[id, _lang];
-
-        public string this[TranslationTextId id, string lang]
-        {
-            get
-            {
-                string text;
-                if (!_translateTable.TryGetValue(BuildInternalTableKey(id, lang), out text) &&
-                    !_translateTable.TryGetValue(BuildInternalTableKey(id, "en"), out text))
-                        return _defaultText;
-                return text;
             }
-        }
-
-        public void Add(TranslationTextId id, string lang, string text)
-        {
-            if (text.Contains(_defaultText))
-                throw new Exception();
-            _translateTable.Add(BuildInternalTableKey(id, lang), text);
-        }
-
-        private static string BuildInternalTableKey(TranslationTextId id, string lang)
-        {
-            return string.Format("{0}.{1}", id.ToString(), lang);
+            .Select(item => new TranslationElement { id = item.id, text = item.text });
         }
     }
 }

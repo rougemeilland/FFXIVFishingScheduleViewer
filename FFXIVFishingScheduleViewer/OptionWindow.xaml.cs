@@ -10,51 +10,112 @@ namespace FFXIVFishingScheduleViewer
     /// <summary>
     /// OptionWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class OptionWindow : Window
+    public partial class OptionWindow
+        : WindowBase
     {
-        private DataContext _dataContext;
         private ICollection<Action> _removeEventActions;
         private SelectionChangedEventHandler _userLanguageChangedEventHandler;
         private SelectionChangedEventHandler _forecastPeriodDaysChangedEventHandler;
+        private SelectionChangedEventHandler _fishingChanceListTextEffectChangedEventHandler;
 
         public OptionWindow()
         {
             InitializeComponent();
 
-            _dataContext = null;
-            DataContext = _dataContext;
-
             _removeEventActions = new List<Action>();
             _userLanguageChangedEventHandler = null;
             _forecastPeriodDaysChangedEventHandler = null;
-
-            SetDataContext(DataContext);
-            if (_dataContext != null)
-            {
-                UpdateWindowTitle();
-                UpdateUserLanguageView();
-                UpdateForecastPeriodDaysView();
-            }
+            _fishingChanceListTextEffectChangedEventHandler = null;
+            RecoverWindowBounds();
         }
 
         protected override void OnClosed(EventArgs e)
         {
             foreach (var removeEventAction in _removeEventActions)
-                removeEventAction();
-            if (_dataContext != null)
-                _dataContext.PropertyChanged -= _dataContext_PropertyChanged;
+            {
+                try
+                {
+                    removeEventAction();
+                }
+                catch (Exception)
+                {
+                }
+            }
             base.OnClosed(e);
         }
 
-        private void Window_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        protected override Point? WindowPositionInSettings
         {
-            SetDataContext(e.NewValue);
-            if (_dataContext != null)
+            get
             {
-                UpdateWindowTitle();
-                UpdateUserLanguageView();
-                UpdateForecastPeriodDaysView();
+                try
+                {
+                    return Point.Parse(Properties.Settings.Default.OptionWindowPosition);
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
+
+            set => Properties.Settings.Default.OptionWindowPosition = value?.ToString() ?? "";
+        }
+
+        protected override Size? WindowSizeInSettings
+        {
+            get
+            {
+                try
+                {
+                    return Size.Parse(Properties.Settings.Default.OptionWindowSize);
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
+
+            set => Properties.Settings.Default.OptionWindowSize = value?.ToString() ?? "";
+        }
+
+        protected override WindowState WindowStateInSettings
+        {
+            get => Properties.Settings.Default.OptionWindwIsMaximized ? WindowState.Maximized : WindowState.Normal;
+            set => Properties.Settings.Default.OptionWindwIsMaximized = value == WindowState.Maximized;
+        }
+
+        protected override void SaveWindowSettings()
+        {
+            Properties.Settings.Default.Save();
+        }
+
+        protected override void ViewModelChanged(object sender, EventArgs e)
+        {
+            UpdateUserLanguageView();
+            UpdateForecastPeriodDaysView();
+            UpdateFishingChanceListTextEffectView();
+            base.ViewModelChanged(sender, e);
+        }
+
+        protected override void ViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(TypedViewModel.GUIText):
+                    UpdateUserLanguageView();
+                    UpdateForecastPeriodDaysView();
+                    UpdateFishingChanceListTextEffectView();
+                    break;
+                default:
+                    break;
+            }
+            base.ViewModelPropertyChanged(sender, e);
+        }
+
+        internal OptionViewModel TypedViewModel
+        {
+            get => (OptionViewModel)ViewModel;
+            set => ViewModel = value;
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -63,43 +124,11 @@ namespace FFXIVFishingScheduleViewer
             Close();
         }
 
-        private void _dataContext_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case nameof(_dataContext.GUIText):
-                    UpdateWindowTitle();
-                    UpdateUserLanguageView();
-                    UpdateForecastPeriodDaysView();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void SetDataContext(object o)
-        {
-            if (_dataContext != null)
-                _dataContext.PropertyChanged -= _dataContext_PropertyChanged;
-            if (o != null && o is DataContext)
-            {
-                _dataContext = (DataContext)o;
-                _dataContext.PropertyChanged += _dataContext_PropertyChanged;
-            }
-            else
-                _dataContext = null;
-        }
-
-        private void UpdateWindowTitle()
-        {
-            Title = string.Format("{0} - {1}", _dataContext.GUIText["Title.Option"], Owner.Title);
-        }
-
         private void UpdateUserLanguageView()
         {
             if (_userLanguageChangedEventHandler != null)
-                UserLanguage.SelectionChanged -= _userLanguageChangedEventHandler;
-            var languagePeriodSelectionItems = new[]
+                UserLanguageSelectionControl.SelectionChanged -= _userLanguageChangedEventHandler;
+            var selectionItems = new[]
             {
                     new
                     {
@@ -135,63 +164,98 @@ namespace FFXIVFishingScheduleViewer
                     },
                 };
 
-            UserLanguage.ItemsSource = languagePeriodSelectionItems;
-            UserLanguage.DisplayMemberPath = "Text";
-            UserLanguage.SelectedValuePath = "Value";
+            UserLanguageSelectionControl.ItemsSource = selectionItems;
+            UserLanguageSelectionControl.DisplayMemberPath = "Text";
+            UserLanguageSelectionControl.SelectedValuePath = "Value";
             var found =
-                Enumerable.Range(0, languagePeriodSelectionItems.Length)
-                    .Select(index => new { index, text_value = languagePeriodSelectionItems[index] })
-                    .Where(item => _dataContext == null ? item.index == 0 : item.text_value.Value == _dataContext.UserLanguage)
+                Enumerable.Range(0, selectionItems.Length)
+                    .Select(index => new { index, text_value = selectionItems[index] })
+                    .Where(item => ViewModel == null ? item.index == 0 : item.text_value.Value == TypedViewModel.UserLanguage)
                     .SingleOrDefault();
-            UserLanguage.SelectedIndex = found == null ? 0 : found.index;
+            UserLanguageSelectionControl.SelectedIndex = found == null ? 0 : found.index;
             _userLanguageChangedEventHandler = new SelectionChangedEventHandler((s, e) =>
             {
                 try
                 {
-                    _dataContext.UserLanguage = languagePeriodSelectionItems[UserLanguage.SelectedIndex].Value;
+                    TypedViewModel.UserLanguage = selectionItems[UserLanguageSelectionControl.SelectedIndex].Value;
                 }
                 catch (ArgumentOutOfRangeException)
                 {
-                    UserLanguage.SelectedIndex = 0;
-                    _dataContext.UserLanguage = "en";
+                    UserLanguageSelectionControl.SelectedIndex = 0;
+                    TypedViewModel.UserLanguage = "en";
                 }
             });
-            UserLanguage.SelectionChanged += _userLanguageChangedEventHandler;
+            UserLanguageSelectionControl.SelectionChanged += _userLanguageChangedEventHandler;
         }
 
         private void UpdateForecastPeriodDaysView()
         {
             if (_forecastPeriodDaysChangedEventHandler != null)
-                ForecastPeriodDays.SelectionChanged -= _forecastPeriodDaysChangedEventHandler;
-            var forecastPeriodSelectionItems = new[]
+                ForecastPeriodDaysSelectionControl.SelectionChanged -= _forecastPeriodDaysChangedEventHandler;
+            var selectionItems = new[]
             {
-                new { Text = _dataContext.GUIText["Label.1Days"], Value = 1 },
-                new { Text = _dataContext.GUIText["Label.3Days"], Value = 3 },
-                new { Text = _dataContext.GUIText["Label.7Days"], Value = 7 },
+                new { Text = TypedViewModel.GUIText["Label.1Days"], Value = 1 },
+                new { Text = TypedViewModel.GUIText["Label.3Days"], Value = 3 },
+                new { Text = TypedViewModel.GUIText["Label.7Days"], Value = 7 },
             };
 
-            ForecastPeriodDays.ItemsSource = forecastPeriodSelectionItems;
-            ForecastPeriodDays.DisplayMemberPath = "Text";
-            ForecastPeriodDays.SelectedValuePath = "Value";
+            ForecastPeriodDaysSelectionControl.ItemsSource = selectionItems;
+            ForecastPeriodDaysSelectionControl.DisplayMemberPath = "Text";
+            ForecastPeriodDaysSelectionControl.SelectedValuePath = "Value";
             var found =
-                Enumerable.Range(0, forecastPeriodSelectionItems.Length)
-                    .Select(index => new { index, text_value = forecastPeriodSelectionItems[index] })
-                    .Where(item => item.text_value.Value == _dataContext.ForecastWeatherDays)
+                Enumerable.Range(0, selectionItems.Length)
+                    .Select(index => new { index, text_value = selectionItems[index] })
+                    .Where(item => item.text_value.Value == TypedViewModel.ForecastWeatherDays)
                     .SingleOrDefault();
-            ForecastPeriodDays.SelectedIndex = found == null ? 0 : found.index;
+            ForecastPeriodDaysSelectionControl.SelectedIndex = found == null ? 0 : found.index;
             _forecastPeriodDaysChangedEventHandler = new SelectionChangedEventHandler((s, e) =>
             {
                 try
                 {
-                    _dataContext.ForecastWeatherDays = forecastPeriodSelectionItems[ForecastPeriodDays.SelectedIndex].Value;
+                    TypedViewModel.ForecastWeatherDays = selectionItems[ForecastPeriodDaysSelectionControl.SelectedIndex].Value;
                 }
                 catch (ArgumentOutOfRangeException)
                 {
-                    ForecastPeriodDays.SelectedIndex = 0;
-                    _dataContext.ForecastWeatherDays = 1;
+                    ForecastPeriodDaysSelectionControl.SelectedIndex = 0;
+                    TypedViewModel.ForecastWeatherDays = 1;
                 }
             });
-            ForecastPeriodDays.SelectionChanged += _forecastPeriodDaysChangedEventHandler;
+            ForecastPeriodDaysSelectionControl.SelectionChanged += _forecastPeriodDaysChangedEventHandler;
+        }
+
+        private void UpdateFishingChanceListTextEffectView()
+        {
+            if (_fishingChanceListTextEffectChangedEventHandler != null)
+                FishingChanceListTextEffectSelectionControl.SelectionChanged -= _fishingChanceListTextEffectChangedEventHandler;
+            var selectionItems = new[]
+            {
+                new { Text = TypedViewModel.GUIText["Label.EffectNormal"], Value = FishingChanceListTextEffectType.Normal },
+                new { Text = TypedViewModel.GUIText["Label.Effect1"], Value = FishingChanceListTextEffectType.Effect1 },
+                new { Text = TypedViewModel.GUIText["Label.Effect2"], Value = FishingChanceListTextEffectType.Effect2 },
+            };
+
+            FishingChanceListTextEffectSelectionControl.ItemsSource = selectionItems;
+            FishingChanceListTextEffectSelectionControl.DisplayMemberPath = "Text";
+            FishingChanceListTextEffectSelectionControl.SelectedValuePath = "Value";
+            var found =
+                Enumerable.Range(0, selectionItems.Length)
+                    .Select(index => new { index, text_value = selectionItems[index] })
+                    .Where(item => item.text_value.Value == TypedViewModel.FishingChanceListTextEffect)
+                    .SingleOrDefault();
+            FishingChanceListTextEffectSelectionControl.SelectedIndex = found == null ? 0 : found.index;
+            _fishingChanceListTextEffectChangedEventHandler = new SelectionChangedEventHandler((s, e) =>
+            {
+                try
+                {
+                    TypedViewModel.FishingChanceListTextEffect = selectionItems[FishingChanceListTextEffectSelectionControl.SelectedIndex].Value;
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    FishingChanceListTextEffectSelectionControl.SelectedIndex = 0;
+                    TypedViewModel.FishingChanceListTextEffect = FishingChanceListTextEffectType.Normal;
+                }
+            });
+            FishingChanceListTextEffectSelectionControl.SelectionChanged += _fishingChanceListTextEffectChangedEventHandler;
         }
     }
 }

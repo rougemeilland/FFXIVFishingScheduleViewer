@@ -1,82 +1,72 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace FFXIVFishingScheduleViewer
 {
     /// <summary>
     /// FishDetailWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class FishDetailWindow : Window
+    public partial class FishDetailWindow
+        : WindowBase
     {
-        private FishDetailViewModel _dataContext;
-
         public FishDetailWindow()
         {
             InitializeComponent();
 
-            _dataContext = null;
-            DataContext = _dataContext;
-
-            SetDataContext(DataContext);
-            if (_dataContext != null)
-                UpdateWindowTitle();
+            RecoverWindowBounds();
         }
 
-        protected override void OnClosed(EventArgs e)
+        protected override Point? WindowPositionInSettings
         {
-            if (_dataContext != null)
-                _dataContext.PropertyChanged -= _dataContext_PropertyChanged;
-            base.OnClosed(e);
-        }
-
-        private void _dataContext_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
+            get
             {
-                case nameof(_dataContext.GUIText):
-                    UpdateWindowTitle();
-                    break;
-                default:
-                    break;
+                try
+                {
+                    return Point.Parse(Properties.Settings.Default.DetailWindowPosition);
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
+
+            set => Properties.Settings.Default.DetailWindowPosition = value?.ToString() ?? "";
         }
 
-        private void Window_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        protected override Size? WindowSizeInSettings
         {
-            SetDataContext(e.NewValue);
-            if (_dataContext != null)
+            get
             {
-                UpdateWindowTitle();
+                try
+                {
+                    return Size.Parse(Properties.Settings.Default.DetailWindowSize);
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
-        }
-        private void UpdateWindowTitle()
-        {
-            Title = string.Format("{0} - {1}", _dataContext.Title, Owner.Title);
+
+            set => Properties.Settings.Default.DetailWindowSize = value?.ToString() ?? "";
         }
 
-        private void SetDataContext(object o)
+        protected override WindowState WindowStateInSettings
         {
-            if (_dataContext != null)
-                _dataContext.PropertyChanged -= _dataContext_PropertyChanged;
-            if (o != null && o is FishDetailViewModel)
-            {
-                _dataContext = (FishDetailViewModel)o;
-                _dataContext.PropertyChanged += _dataContext_PropertyChanged;
-            }
-            else
-                _dataContext = null;
+            get => Properties.Settings.Default.DetailWindwIsMaximized ? WindowState.Maximized : WindowState.Normal;
+            set => Properties.Settings.Default.DetailWindwIsMaximized = value == WindowState.Maximized;
         }
+
+        protected override void SaveWindowSettings()
+        {
+            Properties.Settings.Default.Save();
+        }
+
+        internal FishDetailViewModel TypedViewModel
+        {
+            get => (FishDetailViewModel)ViewModel;
+            set => ViewModel = value;
+        }
+
+
     }
 }

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Web;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace FFXIVFishingScheduleViewer
 {
@@ -16,9 +13,10 @@ namespace FFXIVFishingScheduleViewer
         : ISettingProvider
     {
         private static Regex _locationOfReleasePattern = new Regex(@"^*./releases/tag/v(?<version>[0-9\.]+)$", RegexOptions.Compiled);
-        private static Regex _versionTextPattern = new Regex(@"^(?<version>[0-9\.]+)$", RegexOptions.Compiled);
-        private event EventHandler<MainWindowTabType> _mainWindowTabSelected;
-        private event EventHandler<MainWindowTabType> _mainWindowTabUnselected;
+         private static Regex _versionTextPattern = new Regex(@"^(?<version>[0-9\.]+)$", RegexOptions.Compiled);
+        private event EventHandler _selectedMainViewTabIndexChanged;
+        private event EventHandler _selectedOptionCategoryTabIndexChanged;
+        private event EventHandler _selectedOptionAreaGroupTabIndexChanged;
         private event EventHandler<AreaGroup> _areaGroupOnForecastWeatherExpanded;
         private event EventHandler<AreaGroup> _areaGroupOnForecastWeatherContracted;
         private event EventHandler<Fish> _fishFilterChanded;
@@ -27,35 +25,33 @@ namespace FFXIVFishingScheduleViewer
         private event EventHandler _userLanguageChanged;
         private event EventHandler _newVersionOfApplicationChanged;
         private event EventHandler _isEnabledToCheckNewVersionReleasedChanged;
-
+        private event EventHandler _fishingChanceListTextEffectChanged;
+        private AreaGroupCollection _areaGroups;
         private FishCollection _fishes;
         private IDictionary<string, string> _filteredfishNames;
         private IDictionary<string, string> _expandedAreaGroupNames;
-        private IDictionary<string, string> _selectedTabNames;
         private IDictionary<string, string> _fishMemoList;
         private string _newVersionOfApplication;
         private string _currentVersionText;
+        private string _productName;
 
-        public SettingProvider(FishCollection fishes)
+        public SettingProvider(AreaGroupCollection areaGroups, FishCollection fishes)
         {
+            _areaGroups = areaGroups;
             _fishes = fishes;
+
             _filteredfishNames =
                 Properties.Settings.Default.FilteredFishNames
                 .Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
                 .Distinct()
                 .ToDictionary(s => s, s => "*");
+
             _expandedAreaGroupNames =
                 Properties.Settings.Default.ExpandedAreaGroupNames
                 .Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
                 .Distinct()
                 .ToDictionary(s => s, s => "*");
-            _selectedTabNames =
-                Properties.Settings.Default.SelectedTabNames
-                .Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
-                .Distinct()
-                .ToDictionary(s => s, s => "*");
-            if (!_selectedTabNames.Any())
-                _selectedTabNames[MainWindowTabType.ForecastWeather.ToString()] = "*";
+
             _fishMemoList =
                 Properties.Settings.Default.FishMemoList
                 .Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
@@ -84,65 +80,108 @@ namespace FFXIVFishingScheduleViewer
             _newVersionOfApplication = null;
             var m = _versionTextPattern.Match(GetType().Assembly.GetName().Version.ToString());
             _currentVersionText = m.Success ? m.Groups["version"].Value : null;
+            _productName = ((AssemblyProductAttribute)Attribute.GetCustomAttribute(GetType().Assembly, typeof(AssemblyProductAttribute))).Product;
         }
 
-        bool ISettingProvider.GetIsSelectedMainWindowTab(MainWindowTabType tab)
+        int ISettingProvider.SelectedMainViewTabIndex
         {
-            return _selectedTabNames.ContainsKey(tab.ToString());
-        }
+            get => Properties.Settings.Default.SelectedMainViewTabIndex;
 
-        void ISettingProvider.SetIsSelectedMainWindowTab(MainWindowTabType tab, bool value)
-        {
-            var tabName = tab.ToString();
-            if (value)
+            set
             {
-                if (_selectedTabNames.ContainsKey(tabName))
-                    return;
-                _selectedTabNames[tabName] = "*";
-            }
-            else
-            {
-                if (!_selectedTabNames.ContainsKey(tabName))
-                    return;
-                _selectedTabNames.Remove(tabName);
-            }
-            Properties.Settings.Default.SelectedTabNames = string.Join("\n", _selectedTabNames.Keys);
-            Properties.Settings.Default.Save();
-            try
-            {
-                if (value)
-                    _mainWindowTabSelected?.Invoke(this, tab);
-                else
-                    _mainWindowTabUnselected?.Invoke(this, tab);
-            }
-            catch (Exception)
-            {
+                if (value != Properties.Settings.Default.SelectedMainViewTabIndex)
+                {
+                    Properties.Settings.Default.SelectedMainViewTabIndex = value;
+                    Properties.Settings.Default.Save();
+                    try
+                    {
+                        _selectedMainViewTabIndexChanged(this, EventArgs.Empty);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
             }
         }
 
-        event EventHandler<MainWindowTabType> ISettingProvider.MainWindowTabSelected
+        event EventHandler ISettingProvider.SelectedMainViewTabIndexChanged
         {
             add
             {
-                _mainWindowTabSelected += value;
+                _selectedMainViewTabIndexChanged += value;
+            }
+            
+            remove
+            {
+                _selectedMainViewTabIndexChanged -= value;
+            }
+        }
+
+        int ISettingProvider.SelectedOptionCategoryTabIndex
+        {
+            get => Properties.Settings.Default.SelectedOptionCategoryTabIndex;
+
+            set
+            {
+                if (value != Properties.Settings.Default.SelectedOptionCategoryTabIndex)
+                {
+                    Properties.Settings.Default.SelectedOptionCategoryTabIndex = value;
+                    Properties.Settings.Default.Save();
+                    try
+                    {
+                        _selectedOptionCategoryTabIndexChanged(this, EventArgs.Empty);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+        }
+
+        event EventHandler ISettingProvider.SelectedOptionCategoryTabIndexChanged
+        {
+            add
+            {
+                _selectedOptionCategoryTabIndexChanged += value;
             }
 
             remove
             {
-                _mainWindowTabSelected -= value;
+                _selectedOptionCategoryTabIndexChanged -= value;
             }
         }
 
-        event EventHandler<MainWindowTabType> ISettingProvider.MainWindowTabUnselected
+        int ISettingProvider.SelectedOptionAreaGroupTabIndex
+        {
+            get => Properties.Settings.Default.SelectedOptionAreaGroupTabIndex;
+
+            set
+            {
+                if (value != Properties.Settings.Default.SelectedOptionAreaGroupTabIndex)
+                {
+                    Properties.Settings.Default.SelectedOptionAreaGroupTabIndex = value;
+                    Properties.Settings.Default.Save();
+                    try
+                    {
+                        _selectedOptionAreaGroupTabIndexChanged(this, EventArgs.Empty);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+        }
+
+        event EventHandler ISettingProvider.SelectedOptionAreaGroupTabIndexChanged
         {
             add
             {
-                _mainWindowTabUnselected += value;
+                _selectedOptionAreaGroupTabIndexChanged += value;
             }
 
             remove
             {
-                _mainWindowTabUnselected -= value;
+                _selectedOptionAreaGroupTabIndexChanged -= value;
             }
         }
 
@@ -505,13 +544,15 @@ namespace FFXIVFishingScheduleViewer
             }
         }
 
+        string ISettingProvider.CurrentVersionOfApplication => _currentVersionText;
+
         public string NewVersionOfApplication
         {
             get => _newVersionOfApplication;
 
             private set
             {
-                if ( value != _newVersionOfApplication)
+                if (value != _newVersionOfApplication)
                 {
                     _newVersionOfApplication = value;
                     try
@@ -524,8 +565,6 @@ namespace FFXIVFishingScheduleViewer
                 }
             }
         }
-
-        string ISettingProvider.CurrentVersionOfApplication => _currentVersionText;
 
         event EventHandler ISettingProvider.NewVersionOfApplicationChanged
         {
@@ -540,6 +579,69 @@ namespace FFXIVFishingScheduleViewer
             }
         }
 
+        string ISettingProvider.ProductName => _productName;
+
         string ISettingProvider.UrlOfDownloadPage => Properties.Settings.Default.UrlOfDownloadPage;
+
+        FishingChanceListTextEffectType ISettingProvider.FishingChanceListTextEffect
+        {
+            get
+            {
+                switch (Properties.Settings.Default.FishingChanceListTextEffect)
+                {
+                    case "effect1":
+                        return FishingChanceListTextEffectType.Effect1;
+                    case "effect2":
+                        return FishingChanceListTextEffectType.Effect2;
+                    case "normal":
+                    default:
+                        return FishingChanceListTextEffectType.Normal;
+                }
+            }
+
+            set
+            {
+                string valueText;
+                switch (value)
+                {
+                    case FishingChanceListTextEffectType.Effect1:
+                        valueText = "effect1";
+                        break;
+                    case FishingChanceListTextEffectType.Effect2:
+                        valueText = "effect2";
+                        break;
+                    case FishingChanceListTextEffectType.Normal:
+                    default:
+                        valueText = "normal";
+                        break;
+                }
+                if (valueText != Properties.Settings.Default.FishingChanceListTextEffect)
+                {
+                    Properties.Settings.Default.FishingChanceListTextEffect = valueText;
+                    Properties.Settings.Default.Save();
+                    try
+                    {
+                        _fishingChanceListTextEffectChanged(this, EventArgs.Empty);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+        }
+
+        event EventHandler ISettingProvider.FishingChanceListTextEffectChanged
+        {
+            add
+            {
+                _fishingChanceListTextEffectChanged += value;
+            }
+
+            remove
+            {
+                _fishingChanceListTextEffectChanged -= value;
+            }
+        }
+
     }
 }

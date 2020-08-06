@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Windows.Media.Effects;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,19 +6,19 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 
 namespace FFXIVFishingScheduleViewer
 {
     /// <summary>
-    /// FishChanceListUserControl.xaml の相互作用ロジック
+    /// FishingChanceListUserControl.xaml の相互作用ロジック
     /// </summary>
-    public partial class FishChanceListUserControl
-        : UserControl, IDisposable
+    internal partial class FishingChanceListUserControl
+        : UserControlBase, IDisposable
     {
         private bool _isDisposed;
-        private DataContext _dataContext;
         private Grid _currentTimeIndicatorGrid;
-        private IList<Action> _dataContextEventHandlerRemovers;
+        private IList<Action> _viewModelEventHandlerRemovers;
         private bool _isPendedUpdatingIndicator;
         private bool _isPendedUpdatingChanceListView;
         private BrushConverter _brushConverter;
@@ -29,16 +27,18 @@ namespace FFXIVFishingScheduleViewer
         private Brush _currentTimeIndicatorColor;
         private Brush _whiteBrush;
         private Brush _transparentBrush;
+        private Color _whiteColor;
 
-        public FishChanceListUserControl()
+        public FishingChanceListUserControl()
         {
             _isDisposed = false;
             _currentTimeIndicatorGrid = null;
-            _dataContextEventHandlerRemovers = new List<Action>();
+            _viewModelEventHandlerRemovers = new List<Action>();
             _isPendedUpdatingIndicator = false;
             _isPendedUpdatingChanceListView = false;
 
             InitializeComponent();
+            InitializeUserControl();
 
             _brushConverter = new BrushConverter();
             _borderColor = (Brush)_brushConverter.ConvertFromString("#222222");
@@ -51,10 +51,8 @@ namespace FFXIVFishingScheduleViewer
             _whiteBrush.Freeze();
             _transparentBrush = new SolidColorBrush(Colors.Transparent);
             _transparentBrush.Freeze();
-
-            SetDataContext(DataContext);
-            if (_dataContext != null)
-                UpdateLateFishChanceListView();
+            _whiteColor = (Color)ColorConverter.ConvertFromString("white");
+            UpdateLateFishingChanceListView();
         }
 
         protected virtual void Dispose(bool disposing)
@@ -64,9 +62,9 @@ namespace FFXIVFishingScheduleViewer
                 if (disposing)
                 {
                 }
-                foreach (var action in _dataContextEventHandlerRemovers)
+                foreach (var action in _viewModelEventHandlerRemovers)
                     action();
-                _dataContextEventHandlerRemovers.Clear();
+                _viewModelEventHandlerRemovers.Clear();
                 _isDisposed = true;
             }
         }
@@ -77,49 +75,38 @@ namespace FFXIVFishingScheduleViewer
             GC.SuppressFinalize(this);
         }
 
-        private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        protected override void ViewModelChanged(object sender, EventArgs e)
         {
-            SetDataContext(e.NewValue);
-            if (_dataContext != null)
-            {
-                UpdateLateFishChanceListView();
-            }
+            UpdateLateFishingChanceListView();
+            base.ViewModelChanged(sender, e);
         }
 
-        private void _dataContext_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void ViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
-                case nameof(_dataContext.CurrentTime):
+                case nameof(TypedViewModel.CurrentTime):
                     UpdateLateCurrentTimeIndicator();
                     break;
-                case nameof(_dataContext.FishChanceList):
-                case nameof(_dataContext.FishChanceTimeList):
-                case nameof(_dataContext.GUIText):
-                    UpdateLateFishChanceListView();
+                case nameof(TypedViewModel.FishingChanceList):
+                case nameof(TypedViewModel.FishingChanceTimeList):
+                case nameof(TypedViewModel.FishingChanceListTextEffect):
+                case nameof(TypedViewModel.GUIText):
+                    UpdateLateFishingChanceListView();
                     break;
                 default:
                     break;
             }
+            base.ViewModelPropertyChanged(sender, e);
         }
 
-        private void SetDataContext(object o)
+        internal MainViewModel TypedViewModel
         {
-            foreach (var action in _dataContextEventHandlerRemovers)
-                action();
-            _dataContextEventHandlerRemovers.Clear();
-            if (o != null && o is DataContext)
-            {
-                if (_dataContext != null)
-                    _dataContext.PropertyChanged -= _dataContext_PropertyChanged;
-                _dataContext = (DataContext)o;
-                _dataContext.PropertyChanged += _dataContext_PropertyChanged;
-            }
-            else
-                _dataContext = null;
+            get => (MainViewModel)ViewModel;
+            set => ViewModel = value;
         }
 
-        private void UpdateLateFishChanceListView()
+        private void UpdateLateFishingChanceListView()
         {
             _isPendedUpdatingChanceListView = true;
             Task.Run(() =>
@@ -128,7 +115,7 @@ namespace FFXIVFishingScheduleViewer
                 {
                     if (_isPendedUpdatingChanceListView)
                     {
-                        UpdateFishChanceListView();
+                        UpdateFishingChanceListView();
                         UpdateCurrentTimeIndicator();
                         _isPendedUpdatingChanceListView = false;
                     }
@@ -152,23 +139,23 @@ namespace FFXIVFishingScheduleViewer
             });
         }
 
-        private void UpdateFishChanceListView()
+        private void UpdateFishingChanceListView()
         {
-            foreach (var action in _dataContextEventHandlerRemovers)
+            foreach (var action in _viewModelEventHandlerRemovers)
                 action();
-            _dataContextEventHandlerRemovers.Clear();
+            _viewModelEventHandlerRemovers.Clear();
 
             FishChanceGrid.Children.Clear();
             FishChanceGrid.ColumnDefinitions.Clear();
             FishChanceGrid.RowDefinitions.Clear();
 
-            if (!_dataContext.FishChanceList.Any())
+            if (!TypedViewModel.FishingChanceList.Any())
             {
                 FishChanceGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 FishChanceGrid.RowDefinitions.Add(new RowDefinition());
                 FishChanceGrid.Children.Add(new TextBlock
                 {
-                    Text = _dataContext.GUIText["Label.NoCheckedFishes"],
+                    Text = TypedViewModel.GUIText["Label.NoCheckedFishes"],
                     Margin = new Thickness(10),
                     HorizontalAlignment = HorizontalAlignment.Center,
                     TextWrapping = TextWrapping.Wrap,
@@ -178,7 +165,7 @@ namespace FFXIVFishingScheduleViewer
             {
                 FishChanceGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 FishChanceGrid.ColumnDefinitions.Add(new ColumnDefinition());
-                var dataColumnCount = _dataContext.ForecastWeatherDays * 24 + 8;
+                var dataColumnCount = TypedViewModel.ForecastWeatherDays * 24 + 8;
                 for (var count = dataColumnCount; count > 0; --count)
                     FishChanceGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(20, GridUnitType.Pixel) });
                 FishChanceGrid.RowDefinitions.Add(new RowDefinition());
@@ -272,7 +259,7 @@ namespace FFXIVFishingScheduleViewer
                         FishChanceGrid.Children.Add(c);
                     }
                     var currentCulumnIndex = 2;
-                    foreach (var time in _dataContext.FishChanceTimeList)
+                    foreach (var time in TypedViewModel.FishingChanceTimeList)
                     {
                         Brush backgroundColor = GetBackgroundColorOfTime(time);
                         {
@@ -294,7 +281,7 @@ namespace FFXIVFishingScheduleViewer
                         }
                         if (time.Hour % 4 == 0)
                         {
-                            var c = CreateFishDetailBox(time.Hour.ToString(), TextAlignment.Center);
+                            var c = CreateTextBoxWithEffect(time.Hour.ToString(), HorizontalAlignment.Center, TextAlignment.Center);
                             c.HorizontalAlignment = HorizontalAlignment.Stretch;
                             c.VerticalAlignment = VerticalAlignment.Center;
                             c.Background = _transparentBrush;
@@ -315,8 +302,8 @@ namespace FFXIVFishingScheduleViewer
                         currentCulumnIndex += 1;
                     }
                     {
-                        var time = _dataContext.FishChanceTimeList.Last() + EorzeaTimeSpan.FromHours(1);
-                        var c = CreateFishDetailBox(time.Hour.ToString(), TextAlignment.Center);
+                        var time = TypedViewModel.FishingChanceTimeList.Last() + EorzeaTimeSpan.FromHours(1);
+                        var c = CreateTextBoxWithEffect(time.Hour.ToString(), HorizontalAlignment.Center, TextAlignment.Center);
                         c.HorizontalAlignment = HorizontalAlignment.Left;
                         c.VerticalAlignment = VerticalAlignment.Center;
                         c.Background = _transparentBrush;
@@ -327,7 +314,7 @@ namespace FFXIVFishingScheduleViewer
                     }
                 }
                 var currentRowIndex = 2;
-                foreach (var chance in _dataContext.FishChanceList)
+                foreach (var chance in TypedViewModel.FishingChanceList)
                 {
                     var contextMenu = BuildFishContextMenu(chance);
                     var backgroundColorOfFish = chance.FishingCondition.Fish.DifficultySymbol.GetBackgroundColor();
@@ -434,7 +421,7 @@ namespace FFXIVFishingScheduleViewer
                         FishChanceGrid.Children.Add(c);
                     }
                     var currentCulumnIndex = 2;
-                    foreach (var time in _dataContext.FishChanceTimeList)
+                    foreach (var time in TypedViewModel.FishingChanceTimeList)
                     {
                         UIElement c;
                         if (chance.Regions.Contains(time))
@@ -492,11 +479,11 @@ namespace FFXIVFishingScheduleViewer
                     FishChanceGrid.Children.Add(_currentTimeIndicatorGrid);
                 }
                 currentRowIndex = 2;
-                foreach (var chance in _dataContext.FishChanceList)
+                foreach (var chance in TypedViewModel.FishingChanceList)
                 {
                     var contextMenu = BuildFishContextMenu(chance);
-                    var now = _dataContext.FishChanceTimeList.Skip(8).First();
-                    var forecastWeatherRegion = new EorzeaDateTimeRegion(now, EorzeaTimeSpan.FromDays(_dataContext.ForecastWeatherDays));
+                    var now = TypedViewModel.FishingChanceTimeList.Skip(8).First();
+                    var forecastWeatherRegion = new EorzeaDateTimeRegion(now, EorzeaTimeSpan.FromDays(TypedViewModel.ForecastWeatherDays));
                     var firstRegionOfChance =
                         chance.Regions
                             .Intersect(new EorzeaDateTimeHourRegions(new[] { forecastWeatherRegion }))
@@ -512,7 +499,7 @@ namespace FFXIVFishingScheduleViewer
                     {
                         var eorzeaTimeRegion = firstRegionOfChance.FormatEorzeaTimeRegion(forecastWeatherRegion);
                         var localTimeRegion = firstRegionOfChance.FormatLocalTimeRegion(forecastWeatherRegion);
-                        var fishMemo = _dataContext.GetFishMemo(chance.FishingCondition.Fish, chance.FishingCondition.FishingSpot);
+                        var fishMemo = TypedViewModel.GetFishMemo(chance.FishingCondition.Fish, chance.FishingCondition.FishingSpot);
                         return string.Format(
                             "{0}{1}: [{2}]{3}",
                             eorzeaTimeRegion != "" || localTimeRegion != ""
@@ -531,7 +518,7 @@ namespace FFXIVFishingScheduleViewer
                                 ? ""
                                 : string.Format("\n{0}\n{1}", GUITextTranslate.Instance["Label.Memo"], fishMemo));
                     };
-                    var detailTextBlockContainer = CreateFishDetailBox(detailTextBlockFormatter());
+                    var detailTextBlockContainer = CreateTextBoxWithEffect(detailTextBlockFormatter());
                     detailTextBlockContainer.HorizontalAlignment = HorizontalAlignment.Left;
                     detailTextBlockContainer.VerticalAlignment = VerticalAlignment.Center;
                     detailTextBlockContainer.Background = _transparentBrush;
@@ -548,8 +535,8 @@ namespace FFXIVFishingScheduleViewer
                             }
                         }
                     });
-                    _dataContext.FishMemoChanged += fishMemoChangedEventHandler;
-                    _dataContextEventHandlerRemovers.Insert(0, () => _dataContext.FishMemoChanged -= fishMemoChangedEventHandler);
+                    TypedViewModel.FishMemoChanged += fishMemoChangedEventHandler;
+                    _viewModelEventHandlerRemovers.Insert(0, () => TypedViewModel.FishMemoChanged -= fishMemoChangedEventHandler);
                     var c = new Border
                     {
                         Child = detailTextBlockContainer,
@@ -568,14 +555,14 @@ namespace FFXIVFishingScheduleViewer
                     currentRowIndex += 2;
                 }
                 currentRowIndex = 2;
-                foreach (var chance in _dataContext.FishChanceList)
+                foreach (var chance in TypedViewModel.FishingChanceList)
                 {
                     var contextMenu = BuildFishContextMenu(chance);
                     var backgroundColorOfFish = chance.FishingCondition.Fish.DifficultySymbol.GetBackgroundColor();
                     var wholeRegion =
                         new EorzeaDateTimeRegion(
-                            _dataContext.FishChanceTimeList.First(),
-                            EorzeaTimeSpan.FromDays(_dataContext.ForecastWeatherDays));
+                            TypedViewModel.FishingChanceTimeList.First(),
+                            EorzeaTimeSpan.FromDays(TypedViewModel.ForecastWeatherDays));
                     foreach (var region in chance.Regions.DateTimeRegions)
                     {
                         var startColumnIndex = (int)(region.Begin - wholeRegion.Begin).EorzeaTimeHours + 2;
@@ -612,44 +599,122 @@ namespace FFXIVFishingScheduleViewer
             UpdateCurrentTimeIndicator();
         }
 
-        private Grid CreateFishDetailBox(string text, TextAlignment textAlignment = TextAlignment.Left)
+        private Panel CreateTextBoxWithEffect(string text, HorizontalAlignment horizontalAlignment = HorizontalAlignment.Left, TextAlignment textAlignment = TextAlignment.Left)
         {
-            var maxOffet = 2.0;
-            var container = new Grid
+            var container = new StackPanel
             {
+                Orientation = Orientation.Vertical,
             };
-            for (var xOffset = -maxOffet; xOffset <= maxOffet; xOffset += 1.0)
+            switch (TypedViewModel.FishingChanceListTextEffect)
             {
-                for (var yOffset = -maxOffet; yOffset <= maxOffet; yOffset += 1.0)
-                {
-                    if (xOffset <= -maxOffet / 2 || xOffset >= maxOffet / 2 || yOffset <= -maxOffet / 2 || yOffset >= maxOffet / 2)
+                case FishingChanceListTextEffectType.Effect1:
+                    return CreateTextBoxWithEffect1(text, horizontalAlignment, textAlignment);
+                case FishingChanceListTextEffectType.Effect2:
+                    return CreateTextBoxWithEffect2(text, horizontalAlignment, textAlignment);
+                case FishingChanceListTextEffectType.Normal:
+                default:
+                    return CreateTextBoxWithEffectNormal(text, horizontalAlignment, textAlignment);
+            }
+        }
+
+
+        private Panel CreateTextBoxWithEffectNormal(string text, HorizontalAlignment horizontalAlignment, TextAlignment textAlignment)
+        {
+            return
+                new Grid { HorizontalAlignment = horizontalAlignment }
+                .AddToChildren(
+                    new[]
                     {
-                        container.Children.Add(new TextBlock
+                        new TextBlock
                         {
                             Text = text,
+                            HorizontalAlignment = horizontalAlignment,
                             TextAlignment = textAlignment,
                             Background = _transparentBrush,
-                            Foreground = _whiteBrush,
-                            RenderTransform = new TranslateTransform { X = xOffset, Y = yOffset },
-                        });
-                    }
-                }
-            }
-            container.Children.Add(new TextBlock
-            {
-                Text = text,
-                TextAlignment = textAlignment,
-                Background = _transparentBrush,
-            });
-            return container;
+                        },
+                    });
+        }
+
+        private Panel CreateTextBoxWithEffect1(string text, HorizontalAlignment horizontalAlignment, TextAlignment textAlignment)
+        {
+            var opacity = 0.5;
+            var maxCount = 3;
+            var scale = 1.0;
+            return 
+                new Grid { HorizontalAlignment = horizontalAlignment }
+                .AddToChildren(
+                    new[]
+                    {
+                        new Grid { HorizontalAlignment = horizontalAlignment, Opacity = opacity }
+                            .AddToChildren(
+                                Enumerable.Range(-maxCount, 2 * maxCount + 1)
+                                .SelectMany(xOffset => Enumerable.Range(-maxCount, 2 * maxCount + 1), (xOffset, yOffset) => new { xOffset, yOffset })
+                                .Where(item => item.xOffset != 0 || item.yOffset != 0)
+                                .Select(item => new TextBlock
+                                {
+                                    Text = text,
+                                    HorizontalAlignment = horizontalAlignment,
+                                    TextAlignment = textAlignment,
+                                    Background = _transparentBrush,
+                                    Foreground = _whiteBrush,
+                                    RenderTransform = new TranslateTransform { X = item.xOffset * scale, Y = item.yOffset * scale },
+                                })) as UIElement,
+                        new TextBlock
+                        {
+                            Text = text,
+                            HorizontalAlignment = horizontalAlignment,
+                            TextAlignment = textAlignment,
+                            Background = _transparentBrush,
+                        }
+                    });
+        }
+
+        private Panel CreateTextBoxWithEffect2(string text, HorizontalAlignment horizontalAlignment, TextAlignment textAlignment)
+        {
+            var opacity = 0.5;
+            var padding = 5.0;
+            return
+                new Grid { HorizontalAlignment = horizontalAlignment }
+                .AddToChildren(
+                    new[]
+                    {
+                        new StackPanel { Orientation = Orientation.Vertical, HorizontalAlignment = horizontalAlignment, Opacity = opacity }
+                            .AddToChildren(
+                                text.Split('\n')
+                                .Select(line => new Border
+                                {
+                                    Padding = new Thickness(padding),
+                                    Margin = new Thickness(-padding),
+                                    Background = _whiteBrush,
+                                    HorizontalAlignment = horizontalAlignment,
+                                    CornerRadius = new CornerRadius(padding),
+                                    Child = new TextBlock
+                                    {
+                                        Text = line,
+                                        HorizontalAlignment = horizontalAlignment,
+                                        TextAlignment = textAlignment,
+                                        Foreground = _whiteBrush,
+                                    }
+                                })),
+                        new StackPanel { Orientation = Orientation.Vertical, HorizontalAlignment = horizontalAlignment }
+                            .AddToChildren(
+                                text.Split('\n')
+                                .Select(line => new TextBlock
+                                {
+                                    Text = line,
+                                    HorizontalAlignment = horizontalAlignment,
+                                    TextAlignment = textAlignment,
+                                    Background = _transparentBrush,
+                                }))
+                    });
         }
 
         private void UpdateCurrentTimeIndicator()
         {
             if (_currentTimeIndicatorGrid != null)
             {
-                var eorzeaTimeNow = _dataContext.CurrentTime.ToEorzeaDateTime();
-                var firstTime = _dataContext.FishChanceTimeList.First();
+                var eorzeaTimeNow = TypedViewModel.CurrentTime.ToEorzeaDateTime();
+                var firstTime = TypedViewModel.FishingChanceTimeList.First();
                 var startOfHour = eorzeaTimeNow.GetStartOfHour();
                 var columnIndex = (int)(eorzeaTimeNow - firstTime).EorzeaTimeHours;
                 var leftWeight = (eorzeaTimeNow - startOfHour).EorzeaTimeSeconds;
@@ -671,23 +736,24 @@ namespace FFXIVFishingScheduleViewer
                 true,
                 () =>
                 {
-                    var viewModel =
-                        _dataContext.GetDetailViewModel(
-                            chance.FishingCondition.Fish,
-                            chance.FishingCondition.FishingSpot);
-                    var dialog = new FishDetailWindow();
-                    viewModel.OKCommand = new SimpleCommand(p =>
+                    var dialog = new FishDetailWindow
                     {
-                        foreach (var fishingSpotModel in viewModel.FishingSpots)
-                            _dataContext.SetFishMemo(fishingSpotModel.Fish, fishingSpotModel.FishingSpot, fishingSpotModel.Memo.Replace("=>", "⇒"));
+                        Owner = Window.GetWindow(this),
+                        TypedViewModel =
+                            TypedViewModel.GetDetailViewModel(
+                                chance.FishingCondition.Fish,
+                                chance.FishingCondition.FishingSpot)
+                    };
+                    dialog.TypedViewModel.OKCommand = new SimpleCommand(p =>
+                    {
+                        foreach (var fishingSpotModel in dialog.TypedViewModel.FishingSpots)
+                            TypedViewModel.SetFishMemo(fishingSpotModel.Fish, fishingSpotModel.FishingSpot, fishingSpotModel.Memo.Replace("=>", "⇒"));
                         dialog.Close();
                     });
-                    viewModel.CancelCommand = new SimpleCommand(p =>
+                    dialog.TypedViewModel.CancelCommand = new SimpleCommand(p =>
                     {
                         dialog.Close();
                     });
-                    dialog.Owner = Window.GetWindow(this);
-                    dialog.DataContext = viewModel;
                     dialog.ShowDialog();
                 });
             contextMenu.Items.Add(new Separator());
@@ -697,7 +763,7 @@ namespace FFXIVFishingScheduleViewer
                 true,
                 () =>
                 {
-                    _dataContext.SetFishFilter(chance.FishingCondition.Fish, false);
+                    TypedViewModel.SetFishFilter(chance.FishingCondition.Fish, false);
                 });
             contextMenu.Items.Add(new Separator());
             {

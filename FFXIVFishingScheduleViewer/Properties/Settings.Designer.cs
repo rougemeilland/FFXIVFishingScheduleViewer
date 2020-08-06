@@ -62,84 +62,12 @@ namespace FFXIVFishingScheduleViewer.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string SelectedTabNames {
-            get {
-                return ((string)(this["SelectedTabNames"]));
-            }
-            set {
-                this["SelectedTabNames"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string FishMemoList {
             get {
                 return ((string)(this["FishMemoList"]));
             }
             set {
                 this["FishMemoList"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NaN")]
-        public double MainWindowLeft {
-            get {
-                return ((double)(this["MainWindowLeft"]));
-            }
-            set {
-                this["MainWindowLeft"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NaN")]
-        public double MainWindowWidth {
-            get {
-                return ((double)(this["MainWindowWidth"]));
-            }
-            set {
-                this["MainWindowWidth"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NaN")]
-        public double MainWindowTop {
-            get {
-                return ((double)(this["MainWindowTop"]));
-            }
-            set {
-                this["MainWindowTop"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("NaN")]
-        public double MainWindowHeight {
-            get {
-                return ((double)(this["MainWindowHeight"]));
-            }
-            set {
-                this["MainWindowHeight"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool MainWindowMaximized {
-            get {
-                return ((bool)(this["MainWindowMaximized"]));
-            }
-            set {
-                this["MainWindowMaximized"] = value;
             }
         }
         
@@ -185,6 +113,162 @@ namespace FFXIVFishingScheduleViewer.Properties {
         public string UrlOfDownloadPage {
             get {
                 return ((string)(this["UrlOfDownloadPage"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MainWindowPosition {
+            get {
+                return ((string)(this["MainWindowPosition"]));
+            }
+            set {
+                this["MainWindowPosition"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MainWindowSize {
+            get {
+                return ((string)(this["MainWindowSize"]));
+            }
+            set {
+                this["MainWindowSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool MainWindwIsMaximized {
+            get {
+                return ((bool)(this["MainWindwIsMaximized"]));
+            }
+            set {
+                this["MainWindwIsMaximized"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0,0")]
+        public string OptionWindowPosition {
+            get {
+                return ((string)(this["OptionWindowPosition"]));
+            }
+            set {
+                this["OptionWindowPosition"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0,0")]
+        public string OptionWindowSize {
+            get {
+                return ((string)(this["OptionWindowSize"]));
+            }
+            set {
+                this["OptionWindowSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool OptionWindwIsMaximized {
+            get {
+                return ((bool)(this["OptionWindwIsMaximized"]));
+            }
+            set {
+                this["OptionWindwIsMaximized"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0,0")]
+        public string DetailWindowPosition {
+            get {
+                return ((string)(this["DetailWindowPosition"]));
+            }
+            set {
+                this["DetailWindowPosition"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0,0")]
+        public string DetailWindowSize {
+            get {
+                return ((string)(this["DetailWindowSize"]));
+            }
+            set {
+                this["DetailWindowSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DetailWindwIsMaximized {
+            get {
+                return ((bool)(this["DetailWindwIsMaximized"]));
+            }
+            set {
+                this["DetailWindwIsMaximized"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FishingChanceListTextEffect {
+            get {
+                return ((string)(this["FishingChanceListTextEffect"]));
+            }
+            set {
+                this["FishingChanceListTextEffect"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int SelectedMainViewTabIndex {
+            get {
+                return ((int)(this["SelectedMainViewTabIndex"]));
+            }
+            set {
+                this["SelectedMainViewTabIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int SelectedOptionCategoryTabIndex {
+            get {
+                return ((int)(this["SelectedOptionCategoryTabIndex"]));
+            }
+            set {
+                this["SelectedOptionCategoryTabIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int SelectedOptionAreaGroupTabIndex {
+            get {
+                return ((int)(this["SelectedOptionAreaGroupTabIndex"]));
+            }
+            set {
+                this["SelectedOptionAreaGroupTabIndex"] = value;
             }
         }
     }

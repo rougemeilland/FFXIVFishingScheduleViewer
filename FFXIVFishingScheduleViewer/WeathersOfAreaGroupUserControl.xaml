@@ -1,12 +1,13 @@
-﻿<UserControl x:Class="FFXIVFishingScheduleViewer.WeathersOfAreaGroupUserControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:FFXIVFishingScheduleViewer"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
+﻿<local:UserControlBase
+        x:Class="FFXIVFishingScheduleViewer.WeathersOfAreaGroupUserControl"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:FFXIVFishingScheduleViewer"
+        mc:Ignorable="d">
+    <local:UserControlBase.Resources>
         <Style TargetType="Border" x:Key="CellBorderStyle">
             <Setter Property="BorderBrush" Value="#222222"/>
             <Setter Property="Background" Value="{Binding Path=Background}"/>
@@ -50,7 +51,7 @@
             <Setter Property="HorizontalAlignment" Value="{Binding Path=HorizontalAlignment}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
-    </UserControl.Resources>
+    </local:UserControlBase.Resources>
     <Expander Header="{Binding Path=AreaGroupName}" IsExpanded="{Binding Path=IsExpanded, Mode=TwoWay}">
         <DockPanel Grid.IsSharedSizeScope="True" Margin="5">
             <Grid DockPanel.Dock="Top">
@@ -159,7 +160,7 @@
                     </ControlTemplate>
                 </ItemsControl.Template>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type local:WeatherOfAreaViewModel}">
+                    <DataTemplate>
                         <Grid >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="AreaName"/>
@@ -261,4 +262,4 @@
             </ItemsControl>
         </DockPanel>
     </Expander>
-</UserControl>
+</local:UserControlBase>

@@ -5,10 +5,14 @@ namespace FFXIVFishingScheduleViewer
 {
     interface ISettingProvider
     {
-        bool GetIsSelectedMainWindowTab(MainWindowTabType tab);
-        void SetIsSelectedMainWindowTab(MainWindowTabType tab, bool value);
-        event EventHandler<MainWindowTabType> MainWindowTabSelected;
-        event EventHandler<MainWindowTabType> MainWindowTabUnselected;
+        int SelectedMainViewTabIndex { get; set; }
+        event EventHandler SelectedMainViewTabIndexChanged;
+
+        int SelectedOptionCategoryTabIndex { get; set; }
+        event EventHandler SelectedOptionCategoryTabIndexChanged;
+
+        int SelectedOptionAreaGroupTabIndex { get; set; }
+        event EventHandler SelectedOptionAreaGroupTabIndexChanged;
 
         bool GetIsExpandedAreaGroupOnForecastWeather(AreaGroup areaGroup);
         void SetIsExpandedAreaGroupOnForecastWeather(AreaGroup areaGroup, bool value);
@@ -36,8 +40,12 @@ namespace FFXIVFishingScheduleViewer
         void CheckNewVersionReleased();
         string NewVersionOfApplication { get; }
         string CurrentVersionOfApplication { get; }
+        string ProductName { get; }
         event EventHandler NewVersionOfApplicationChanged;
 
         string UrlOfDownloadPage { get; }
+
+        FishingChanceListTextEffectType FishingChanceListTextEffect { get; set; }
+        event EventHandler FishingChanceListTextEffectChanged;
     }
 }
