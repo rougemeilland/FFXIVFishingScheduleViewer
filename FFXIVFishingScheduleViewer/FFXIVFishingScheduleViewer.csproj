@@ -75,135 +75,136 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AboutExtensions.cs" />
-    <Compile Include="AboutViewModel.cs" />
-    <Compile Include="AboutWindow.xaml.cs">
+    <Compile Include="Models\AboutExtensions.cs" />
+    <Compile Include="Models\EnumerableExtensions.cs" />
+    <Compile Include="Models\GameData.cs" />
+    <Compile Include="ViewModels\AboutWindowViewModel.cs" />
+    <Compile Include="ViewModels\ComboBoxSelectionItemContentViewModel.cs" />
+    <Compile Include="ViewModels\ComboBoxSelectionItemViewModel.cs" />
+    <Compile Include="ViewModels\FishingChanceListViewModel.cs" />
+    <Compile Include="ViewModels\WindowViewModel.cs" />
+    <Compile Include="Views\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AlwaysTimeCondition.cs" />
-    <Compile Include="AnyWeatherCondition.cs" />
-    <Compile Include="Area.cs" />
-    <Compile Include="AreaCollection.cs" />
-    <Compile Include="AreaGroup.cs" />
-    <Compile Include="AreaGroupCollection.cs" />
-    <Compile Include="ChangedWeatherCondition.cs" />
-    <Compile Include="ControlsExtensions.cs" />
-    <Compile Include="FishingChanceListTextEffectType.cs" />
-    <Compile Include="FishExtensions.Data.cs" />
-    <Compile Include="FishingBaitExtensions.Data.cs" />
-    <Compile Include="FishingSpotExtensions.Data.cs" />
-    <Compile Include="MainViewModel.cs" />
-    <Compile Include="DifficultySymbolExtensions.cs" />
-    <Compile Include="DifficultySymbol.cs" />
-    <Compile Include="FishingChanceListUserControl.xaml.cs">
+    <Compile Include="Models\AlwaysTimeCondition.cs" />
+    <Compile Include="Models\AnyWeatherCondition.cs" />
+    <Compile Include="Models\Area.cs" />
+    <Compile Include="Models\AreaCollection.cs" />
+    <Compile Include="Models\AreaGroup.cs" />
+    <Compile Include="Models\AreaGroupCollection.cs" />
+    <Compile Include="Models\ChangedWeatherCondition.cs" />
+    <Compile Include="Models\ControlsExtensions.cs" />
+    <Compile Include="Models\FishingChanceListTextEffectType.cs" />
+    <Compile Include="Models\FishExtensions.Data.cs" />
+    <Compile Include="Models\FishingBaitExtensions.Data.cs" />
+    <Compile Include="Models\FishingSpotExtensions.Data.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Models\DifficultySymbolExtensions.cs" />
+    <Compile Include="Models\DifficultySymbol.cs" />
+    <Compile Include="Views\FishingChanceListUserControl.xaml.cs">
       <DependentUpon>FishingChanceListUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FishCollection.cs" />
-    <Compile Include="FishDataVerifier.cs" />
-    <Compile Include="FishDataVerifier.Data.cs" />
-    <Compile Include="FishDetailOfFishingSpotViewModel.cs" />
-    <Compile Include="FishDetailViewModel.cs" />
-    <Compile Include="FishDetailWindow.xaml.cs">
+    <Compile Include="Models\FishCollection.cs" />
+    <Compile Include="Models\FishDataVerifier.cs" />
+    <Compile Include="Models\FishDataVerifier.Data.cs" />
+    <Compile Include="ViewModels\FishDetailOfFishingSpotViewModel.cs" />
+    <Compile Include="ViewModels\FishDetailWindowViewModel.cs" />
+    <Compile Include="Views\FishDetailWindow.xaml.cs">
       <DependentUpon>FishDetailWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FishExtensions.cs" />
-    <Compile Include="FishingBaitCollection.cs" />
-    <Compile Include="FishingBaitExtensions.cs" />
-    <Compile Include="FishingSpotCollection.cs" />
-    <Compile Include="FishingSpotExtensions.cs" />
-    <Compile Include="FishMemoChangedEventArgs.cs" />
-    <Compile Include="FishMemoSettingUserControl.xaml.cs">
+    <Compile Include="Models\FishExtensions.cs" />
+    <Compile Include="Models\FishingBaitCollection.cs" />
+    <Compile Include="Models\FishingBaitExtensions.cs" />
+    <Compile Include="Models\FishingSpotCollection.cs" />
+    <Compile Include="Models\FishingSpotExtensions.cs" />
+    <Compile Include="Models\FishMemoChangedEventArgs.cs" />
+    <Compile Include="Views\FishMemoSettingUserControl.xaml.cs">
       <DependentUpon>FishMemoSettingUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FishSettingOfAreaGroupViewModel.cs" />
-    <Compile Include="FishSettingOfAreaUserControl.xaml.cs">
+    <Compile Include="ViewModels\FishSettingOfAreaGroupViewModel.cs" />
+    <Compile Include="Views\FishSettingOfAreaUserControl.xaml.cs">
       <DependentUpon>FishSettingOfAreaUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FishSettingOfAreaViewModel.cs" />
-    <Compile Include="FishSettingOfFishingSpotUserControl.xaml.cs">
+    <Compile Include="ViewModels\FishSettingOfAreaViewModel.cs" />
+    <Compile Include="Views\FishSettingOfFishingSpotUserControl.xaml.cs">
       <DependentUpon>FishSettingOfFishingSpotUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FishSettingOfFishingSpotViewModel.cs" />
-    <Compile Include="FishSettingViewModel.cs" />
-    <Compile Include="GameDataObjectCategory.cs" />
-    <Compile Include="GameDataObjectCategoryExtensions.cs" />
-    <Compile Include="GridHelpers.cs" />
-    <Compile Include="GUITextTranslate.cs" />
-    <Compile Include="IFishingConditionElement.cs" />
-    <Compile Include="IGameDataObject.cs" />
-    <Compile Include="GameDataObjectId.cs" />
-    <Compile Include="MainWindow.Data.cs" />
-    <Compile Include="OptionWindowTabType.cs" />
-    <Compile Include="MainWindowTabType.cs" />
-    <Compile Include="OptionWindowTabTypeExtensions.cs" />
-    <Compile Include="MainWindowTabTypeExtensions.cs" />
-    <Compile Include="MenuItemViewModel.cs" />
-    <Compile Include="OptionViewModel.cs" />
-    <Compile Include="OptionWindow.xaml.cs">
+    <Compile Include="ViewModels\FishSettingOfFishingSpotViewModel.cs" />
+    <Compile Include="ViewModels\FishSettingViewModel.cs" />
+    <Compile Include="Models\GameDataObjectCategory.cs" />
+    <Compile Include="Models\GameDataObjectCategoryExtensions.cs" />
+    <Compile Include="Strings\GUITextTranslate.cs" />
+    <Compile Include="Models\IFishingConditionElement.cs" />
+    <Compile Include="Models\IGameDataObject.cs" />
+    <Compile Include="Models\GameDataObjectId.cs" />
+    <Compile Include="Models\GameData.Data.cs" />
+    <Compile Include="ViewModels\MenuItemViewModel.cs" />
+    <Compile Include="ViewModels\OptionWindowViewModel.cs" />
+    <Compile Include="Views\OptionWindow.xaml.cs">
       <DependentUpon>OptionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ISettingProvider.cs" />
-    <Compile Include="SettingProvider.cs" />
-    <Compile Include="SimpleCommand.cs" />
-    <Compile Include="StringExtensions.cs" />
-    <Compile Include="Translate.Data.cs" />
-    <Compile Include="Translate.cs" />
-    <Compile Include="TranslationCategory.cs" />
-    <Compile Include="TranslationCategoryExtensions.cs" />
-    <Compile Include="TranslationTextId.cs" />
-    <Compile Include="UserControlBase.cs" />
-    <Compile Include="ViewModel.cs" />
-    <Compile Include="DateTimeExtensions.cs" />
-    <Compile Include="EorzeaDateTime.cs" />
-    <Compile Include="EorzeaDateTimeRegion.cs" />
-    <Compile Include="EorzeaDateTimeHourRegions.cs" />
-    <Compile Include="FishChanceTimeRegions.cs" />
-    <Compile Include="EorzeaTimeSpan.cs" />
-    <Compile Include="Fish.cs" />
-    <Compile Include="FishingBait.cs" />
-    <Compile Include="FishingCondition.cs" />
-    <Compile Include="FishingSpot.cs" />
-    <Compile Include="IKeyValueCollection.cs" />
-    <Compile Include="ITimeFishingConditionElement.cs" />
-    <Compile Include="IWeatherFishingConditionElement.cs" />
-    <Compile Include="KeyValueCollection.cs" />
-    <Compile Include="SimpleTimeRegionCondition.cs" />
-    <Compile Include="SimpleWeatherCondition.cs" />
-    <Compile Include="WeatherListCellViewModel.cs" />
-    <Compile Include="WeatherListViewModel.cs" />
-    <Compile Include="WeatherOfAreaViewModel.cs" />
-    <Compile Include="WeatherPercentageOfArea.cs" />
-    <Compile Include="WeathersOfAreaGroupUserControl.xaml.cs">
+    <Compile Include="Models\ISettingProvider.cs" />
+    <Compile Include="Models\SettingProvider.cs" />
+    <Compile Include="ViewModels\SimpleCommand.cs" />
+    <Compile Include="Models\StringExtensions.cs" />
+    <Compile Include="Strings\Translate.Data.cs" />
+    <Compile Include="Strings\Translate.cs" />
+    <Compile Include="Strings\TranslationCategory.cs" />
+    <Compile Include="Strings\TranslationCategoryExtensions.cs" />
+    <Compile Include="Strings\TranslationTextId.cs" />
+    <Compile Include="Views\UserControlBase.cs" />
+    <Compile Include="ViewModels\ViewModel.cs" />
+    <Compile Include="Models\DateTimeExtensions.cs" />
+    <Compile Include="Models\EorzeaDateTime.cs" />
+    <Compile Include="Models\EorzeaDateTimeRegion.cs" />
+    <Compile Include="Models\EorzeaDateTimeHourRegions.cs" />
+    <Compile Include="Models\FishChanceTimeRegions.cs" />
+    <Compile Include="Models\EorzeaTimeSpan.cs" />
+    <Compile Include="Models\Fish.cs" />
+    <Compile Include="Models\FishingBait.cs" />
+    <Compile Include="Models\FishingCondition.cs" />
+    <Compile Include="Models\FishingSpot.cs" />
+    <Compile Include="Models\IKeyValueCollection.cs" />
+    <Compile Include="Models\ITimeFishingConditionElement.cs" />
+    <Compile Include="Models\IWeatherFishingConditionElement.cs" />
+    <Compile Include="Models\KeyValueCollection.cs" />
+    <Compile Include="Models\SimpleTimeRegionCondition.cs" />
+    <Compile Include="Models\SimpleWeatherCondition.cs" />
+    <Compile Include="ViewModels\WeatherListCellViewModel.cs" />
+    <Compile Include="ViewModels\WeatherListViewModel.cs" />
+    <Compile Include="ViewModels\WeatherOfAreaViewModel.cs" />
+    <Compile Include="Models\WeatherPercentageOfArea.cs" />
+    <Compile Include="Views\WeathersOfAreaGroupUserControl.xaml.cs">
       <DependentUpon>WeathersOfAreaGroupUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WeatherTypeExtensions.cs" />
-    <Compile Include="WeatherType.cs" />
-    <Compile Include="WindowBase.cs" />
-    <Page Include="AboutWindow.xaml">
+    <Compile Include="Models\WeatherTypeExtensions.cs" />
+    <Compile Include="Models\WeatherType.cs" />
+    <Compile Include="Views\WindowBase.cs" />
+    <Page Include="Views\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FishingChanceListUserControl.xaml">
+    <Page Include="Views\FishingChanceListUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FishDetailWindow.xaml">
+    <Page Include="Views\FishDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FishMemoSettingUserControl.xaml">
+    <Page Include="Views\FishMemoSettingUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FishSettingOfAreaUserControl.xaml">
+    <Page Include="Views\FishSettingOfAreaUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FishSettingOfFishingSpotUserControl.xaml">
+    <Page Include="Views\FishSettingOfFishingSpotUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -211,15 +212,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="OptionWindow.xaml">
+    <Page Include="Views\OptionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WeathersOfAreaGroupUserControl.xaml">
+    <Page Include="Views\WeathersOfAreaGroupUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -263,5 +264,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

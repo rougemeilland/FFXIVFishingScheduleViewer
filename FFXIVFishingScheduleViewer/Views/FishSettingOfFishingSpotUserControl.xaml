@@ -1,0 +1,161 @@
+﻿<views:UserControlBase
+        x:Class="FFXIVFishingScheduleViewer.Views.FishSettingOfFishingSpotUserControl"
+        x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:FFXIVFishingScheduleViewer"
+        xmlns:views="clr-namespace:FFXIVFishingScheduleViewer.Views"
+        xmlns:viewmodels="clr-namespace:FFXIVFishingScheduleViewer.ViewModels"
+        mc:Ignorable="d" >
+    <views:UserControlBase.Resources>
+        <Style TargetType="Border" x:Key="FishColumnBoderStyle">
+            <Setter Property="BorderBrush" Value="#222222"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=CellPositionType}" Value="Top">
+                    <Setter Property="BorderThickness" Value="2,2,1,2"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=CellPositionType}" Value="">
+                    <Setter Property="BorderThickness" Value="2,0,1,2"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=CellPositionType}" Value="Bottom">
+                    <Setter Property="BorderThickness" Value="2,0,1,2"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Border" x:Key="DetailColumnBoderStyle">
+            <Setter Property="BorderBrush" Value="#222222"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=CellPositionType}" Value="Top">
+                    <Setter Property="BorderThickness" Value="0,2,2,2"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=CellPositionType}" Value="">
+                    <Setter Property="BorderThickness" Value="0,0,2,2"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=CellPositionType}" Value="Bottom">
+                    <Setter Property="BorderThickness" Value="0,0,2,2"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </views:UserControlBase.Resources>
+    <GroupBox Header="{Binding Path=FishingSpotName}" BorderBrush="#222222" Background="Transparent">
+        <GroupBox.ContextMenu>
+            <ContextMenu ItemsSource="{Binding Path=ContextMenuItems}">
+                <ContextMenu.ItemContainerStyle>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Header" Value="{Binding Path=MenuHeader}" />
+                        <Setter Property="Command" Value="{Binding Path=MenuCommand}" />
+                        <Setter Property="IsEnabled" Value="{Binding Path=MenuIsEnabled}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=MenuIsSeparator}" Value="True">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Separator/>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContextMenu.ItemContainerStyle>
+            </ContextMenu>
+        </GroupBox.ContextMenu>
+        <DockPanel Grid.IsSharedSizeScope="True">
+            <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Right" Orientation="Vertical">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=HasManyFish}" Value="false">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=HasManyFish}" Value="true">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <Button Content="{Binding Path=CheckAllFishButtonLabel}" Command="{Binding Path=CheckAllFishCommand}" Margin="5" Padding="5" HorizontalContentAlignment="Stretch" />
+                <Button Content="{Binding Path=UncheckAllFishButtonLabel}" Command="{Binding Path=UncheckAllFishCommand}" Margin="5" Padding="5" HorizontalContentAlignment="Stretch" />
+            </StackPanel>
+            <ItemsControl Focusable="False" ItemsSource="{Binding Fishes}" Margin="25,5,5,5">
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="{x:Type ItemsControl}">
+                        <StackPanel IsItemsHost="True"/>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Background="{Binding Path=Background}">
+                            <Grid.ContextMenu>
+                                <ContextMenu ItemsSource="{Binding Path=ContextMenuItems}">
+                                    <ContextMenu.ItemContainerStyle>
+                                        <Style TargetType="{x:Type MenuItem}">
+                                            <Setter Property="Header" Value="{Binding Path=MenuHeader}" />
+                                            <Setter Property="Command" Value="{Binding Path=MenuCommand}" />
+                                            <Setter Property="IsEnabled" Value="{Binding Path=MenuIsEnabled}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=MenuIsSeparator}" Value="True">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate>
+                                                                <Separator/>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContextMenu.ItemContainerStyle>
+                                </ContextMenu>
+                            </Grid.ContextMenu>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="FishName"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Style="{StaticResource FishColumnBoderStyle}">
+                                <StackPanel Orientation="Vertical">
+                                    <CheckBox Content="{Binding Path=FishName}" IsChecked="{Binding Path=IsEnabledFilter, Mode=TwoWay}" Margin="5" />
+                                    <StackPanel Orientation="Horizontal" Margin="5,0,5,5">
+                                        <TextBlock Text="{Binding Path=GUIText[Label.DiscoveryDifficulty]}"/>
+                                        <TextBlock Text="{Binding Path=DiscoveryDifficulty}" Margin="5, 0, 0, 0"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="5,0,5,5">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=TimeCondition}" Value="">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <TextBlock Text="{Binding Path=GUIText[Label.TimeCondition]}" Margin="0,0,5,0"/>
+                                        <TextBlock Text="{Binding Path=TimeCondition}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="5,0,5,5">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=WeatherCondition}" Value="">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <TextBlock Text="{Binding Path=GUIText[Label.WeatherCondition]}" Margin="0,0,5,0"/>
+                                        <TextBlock Text="{Binding Path=WeatherCondition}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                            <Border Grid.Column="1" Style="{StaticResource DetailColumnBoderStyle}" HorizontalAlignment="Stretch">
+                                <views:FishMemoSettingUserControl/>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DockPanel>
+    </GroupBox>
+</views:UserControlBase>

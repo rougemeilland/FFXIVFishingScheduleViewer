@@ -1,0 +1,128 @@
+﻿<views:WindowBase x:Class="FFXIVFishingScheduleViewer.Views.OptionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        WindowStyle="ToolWindow"
+        ResizeMode="CanResizeWithGrip"
+        xmlns:local="clr-namespace:FFXIVFishingScheduleViewer"
+        xmlns:views="clr-namespace:FFXIVFishingScheduleViewer.Views"
+        xmlns:viewmodels="clr-namespace:FFXIVFishingScheduleViewer.ViewModels"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        Title="{Binding Path=WindowTitleText}"
+        MinWidth="{Binding Path=MinWidth}"
+        MaxWidth="{Binding Path=MaxWidth}"
+        MinHeight="{Binding Path=MinHeight}"
+        MaxHeight="{Binding Path=MaxHeight}">
+    <views:WindowBase.Resources>
+        <Style TargetType="ComboBox">
+            <Setter Property="ComboBox.ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Path=Content.Text}"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </views:WindowBase.Resources>
+    <DockPanel>
+        <Button DockPanel.Dock="Bottom" HorizontalAlignment="Center" Content="{Binding Path=GUIText[ButtonText.Close]}" Command="{Binding Path=CloseWindowCommand}" Margin="10" Padding="10,5,10,5"/>
+        <TabControl DockPanel.Dock="Top" SelectedIndex="{Binding Path=SelectedOptionCategoryTabIndex, Mode=TwoWay}">
+            <TabItem Header="{Binding Path=GUIText[Label.GenericTabItem]}">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Path=GUIText[Label.ForecastPeriod]}" Margin="5" VerticalAlignment="Center"/>
+                        <ComboBox
+                            ItemsSource="{Binding Path=ForecastWeatherDaysSelectionItems}"
+                            SelectedIndex="{Binding Path=SelectedIndexOfForecastWeatherDaysSelectionItems}"
+                            Margin="5"
+                            VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Path=GUIText[Label.Language]}" Margin="5" VerticalAlignment="Center"/>
+                        <ComboBox
+                            ItemsSource="{Binding Path=UserLanguageSelectionItems}"
+                            SelectedIndex="{Binding Path=SelectedIndexOfUserLanguageSelectionItems}"
+                            Margin="5"
+                            VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="{Binding Path=GUIText[Label.FishingChanceListTabItem]}">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Path=GUIText[Label.FishingChanceListTextEffect]}" Margin="5" VerticalAlignment="Center"/>
+                        <ComboBox
+                            ItemsSource="{Binding Path=FishingChanceListTextEffectSelectionItems}"
+                            SelectedIndex="{Binding Path=SelectedIndexOfFishingChanceListTextEffectSelectionItems}"
+                            Margin="5"
+                            VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TabControl ItemsSource="{Binding Path=FishSettingOfWorld}" SelectedIndex="{Binding Path=SelectedOptionAreaGroupTabIndex, Mode=TwoWay}">
+                        <TabControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=AreaGroupName}" />
+                            </DataTemplate>
+                        </TabControl.ItemTemplate>
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <DockPanel>
+                                        <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Right" Orientation="Vertical" Margin="10,10,10,0">
+                                            <StackPanel.Style>
+                                                <Style TargetType="StackPanel">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Path=HasManyFish}" Value="false">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Path=HasManyFish}" Value="true">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </StackPanel.Style>
+                                            <Button Content="{Binding Path=CheckAllFishButtonLabel}" Command="{Binding Path=CheckAllFishCommand}" Margin="5" Padding="5" HorizontalContentAlignment="Stretch"/>
+                                            <Button Content="{Binding Path=UncheckAllFishButtonLabel}" Command="{Binding Path=UncheckAllFishCommand}" Margin="5" Padding="5" HorizontalContentAlignment="Stretch"/>
+                                        </StackPanel>
+                                        <ItemsControl ItemsSource="{Binding Path=Areas}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Vertical"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <views:FishSettingOfAreaUserControl Margin="5"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </DockPanel>
+                                </ScrollViewer>
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                    </TabControl>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="{Binding Path=GUIText[Label.ProgramUpdateTabItem]}">
+                <StackPanel Orientation="Vertical">
+                    <CheckBox Content="{Binding Path=GUIText[Label.IsEnabledToCheckNewVersionReleased]}" IsChecked="{Binding Path=IsEnabledToCheckNewVersionReleased, Mode=TwoWay}" Margin="5"/>
+                    <CheckBox Content="Reset settins on next boot time" IsChecked="{Binding Path=RequestedToClearSettings, Mode=TwoWay}" Margin="5">
+                        <CheckBox.Style>
+                            <Style TargetType="CheckBox">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsDeveloperMode}" Value="true">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=IsDeveloperMode}" Value="false">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </CheckBox.Style>
+                    </CheckBox>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</views:WindowBase>

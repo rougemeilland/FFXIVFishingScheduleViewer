@@ -154,7 +154,7 @@ namespace FFXIVFishingScheduleViewer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0,0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string OptionWindowPosition {
             get {
                 return ((string)(this["OptionWindowPosition"]));
@@ -166,7 +166,7 @@ namespace FFXIVFishingScheduleViewer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0,0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string OptionWindowSize {
             get {
                 return ((string)(this["OptionWindowSize"]));
@@ -190,7 +190,7 @@ namespace FFXIVFishingScheduleViewer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0,0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string DetailWindowPosition {
             get {
                 return ((string)(this["DetailWindowPosition"]));
@@ -202,7 +202,7 @@ namespace FFXIVFishingScheduleViewer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0,0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string DetailWindowSize {
             get {
                 return ((string)(this["DetailWindowSize"]));
@@ -269,6 +269,18 @@ namespace FFXIVFishingScheduleViewer.Properties {
             }
             set {
                 this["SelectedOptionAreaGroupTabIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RequestedToClearSettings {
+            get {
+                return ((bool)(this["RequestedToClearSettings"]));
+            }
+            set {
+                this["RequestedToClearSettings"] = value;
             }
         }
     }
