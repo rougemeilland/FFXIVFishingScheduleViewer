@@ -10252,6 +10252,18 @@ namespace FFXIVFishingScheduleViewer.Strings
                 new { id = "generic.**Separater.Or**.en", text = " or " },
                 new { id = "generic.**Separater.Or**.fr", text = " ou " },
                 new { id = "generic.**Separater.Or**.de", text = " oder " },
+                new { id = "generic.**DateTime.Today**.ja", text = "{0}" },
+                new { id = "generic.**DateTime.Today**.en", text = "{0}" },
+                new { id = "generic.**DateTime.Today**.fr", text = "{0}" },
+                new { id = "generic.**DateTime.Today**.de", text = "{0}" },
+                new { id = "generic.**DateTime.Tomorrow**.ja", text = "明日の{0}" },
+                new { id = "generic.**DateTime.Tomorrow**.en", text = "{0} tomorrow" },
+                new { id = "generic.**DateTime.Tomorrow**.fr", text = "{0} demain" },
+                new { id = "generic.**DateTime.Tomorrow**.de", text = "{0} morgen" },
+                new { id = "generic.**DateTime.DaysAfter**.ja", text = "{0}日後の{1}" },
+                new { id = "generic.**DateTime.DaysAfter**.en", text = "{1} {0} days later" },
+                new { id = "generic.**DateTime.DaysAfter**.fr", text = "{1} {0} jours plus tard" },
+                new { id = "generic.**DateTime.DaysAfter**.de", text = "{1} {0} Tage später" },
 #endregion
             }
             .Select(item => new TranslationElement { id = item.id, text = item.text });

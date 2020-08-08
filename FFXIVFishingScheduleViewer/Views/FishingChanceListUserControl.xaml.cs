@@ -484,8 +484,8 @@ namespace FFXIVFishingScheduleViewer.Views
                 foreach (var chance in TypedViewModel.FishingChanceList)
                 {
                     var contextMenu = BuildFishContextMenu(chance);
-                    var now = TypedViewModel.FishingChanceTimeList.Skip(8).First();
-                    var forecastWeatherRegion = new EorzeaDateTimeRegion(now, EorzeaTimeSpan.FromDays(TypedViewModel.ForecastWeatherDays));
+                    var baseDateTime = TypedViewModel.FishingChanceTimeList.Skip(8).First();
+                    var forecastWeatherRegion = new EorzeaDateTimeRegion(baseDateTime, EorzeaTimeSpan.FromDays(TypedViewModel.ForecastWeatherDays));
                     var firstRegionOfChance =
                         chance.Regions
                             .Intersect(new EorzeaDateTimeHourRegions(new[] { forecastWeatherRegion }))
@@ -499,8 +499,8 @@ namespace FFXIVFishingScheduleViewer.Views
                             .Where(text => !string.IsNullOrEmpty(text)));
                     Func<string> detailTextBlockFormatter = () =>
                     {
-                        var eorzeaTimeRegion = firstRegionOfChance.FormatEorzeaTimeRegion(forecastWeatherRegion);
-                        var localTimeRegion = firstRegionOfChance.FormatLocalTimeRegion(forecastWeatherRegion);
+                        var eorzeaTimeRegion = firstRegionOfChance.FormatEorzeaTimeRegion(forecastWeatherRegion, TypedViewModel.CurrentTime);
+                        var localTimeRegion = firstRegionOfChance.FormatLocalTimeRegion(forecastWeatherRegion, TypedViewModel.CurrentTime);
                         var fishMemo = TypedViewModel.GetFishMemo(chance.FishingCondition.Fish, chance.FishingCondition.FishingSpot);
                         return string.Format(
                             "{0}{1}: [{2}]{3}",
@@ -569,17 +569,17 @@ namespace FFXIVFishingScheduleViewer.Views
                     {
                         var startColumnIndex = (int)(region.Begin - wholeRegion.Begin).EorzeaTimeHours + 2;
                         var columnSpan = (int)region.Span.EorzeaTimeHours;
-                        var eorzeaTimeRegion = region.FormatEorzeaTimeRegion(wholeRegion);
-                        var localTimeRegion = region.FormatLocalTimeRegion(wholeRegion);
+                        var eorzeaTimeRegion = region.FormatEorzeaTimeRegion(wholeRegion, TypedViewModel.CurrentTime);
+                        var localTimeRegion = region.FormatLocalTimeRegion(wholeRegion, TypedViewModel.CurrentTime);
                         var toolTipText =
                             eorzeaTimeRegion != "" && localTimeRegion != ""
                             ? string.Format(
                                 "{0}\n{1} {2}\n{3} {4}",
                                 chance.FishingCondition.Fish.Name,
                                 Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "ET.Short")],
-                                region.FormatEorzeaTimeRegion(wholeRegion),
+                                region.FormatEorzeaTimeRegion(wholeRegion, TypedViewModel.CurrentTime),
                                 Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "LT.Short")],
-                                region.FormatLocalTimeRegion(wholeRegion))
+                                region.FormatLocalTimeRegion(wholeRegion, TypedViewModel.CurrentTime))
                             : null;
                         var c = new Border
                         {

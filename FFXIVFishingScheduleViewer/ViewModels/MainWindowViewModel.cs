@@ -14,6 +14,7 @@ namespace FFXIVFishingScheduleViewer.ViewModels
     class MainWindowViewModel
         : WindowViewModel
     {
+        private static TimeSpan _maxInterval = EorzeaTimeSpan.FromHours(8).ToEarthTimeSpan();
         private bool _isDisposed;
         private Dispatcher _dispatcher;
         private GameData _gameData;
@@ -132,21 +133,22 @@ namespace FFXIVFishingScheduleViewer.ViewModels
                 {
                     var previousTime = _currentTime;
                     _currentTime = value;
-                    if (previousTime == DateTime.MinValue || value - previousTime >= TimeSpan.FromMinutes(70.0 / 3))
+                    if (previousTime == DateTime.MinValue || value - previousTime >= _maxInterval)
                     {
+                        // 初回、または以前に呼び出されたときからETで8時間以上経過している場合
                         UpdateWeatherList(_currentTime);
-                        FishingChanceListViewModel.CurrentTime = _currentTime;
                     }
                     else
                     {
                         var previousEorzeaTime = previousTime.ToEorzeaDateTime();
                         var currentEorzeaTime = _currentTime.ToEorzeaDateTime();
-                        if (previousEorzeaTime.EpochHours / 8 != currentEorzeaTime.EpochHours / 8)
+                        if (previousEorzeaTime.GetStartOf8Hour() != currentEorzeaTime.GetStartOf8Hour())
                         {
+                            // 以前に呼び出された時から、ETで0時/8時/16時の境界を越えている場合
                             UpdateWeatherList(_currentTime);
-                            FishingChanceListViewModel.CurrentTime = _currentTime;
                         }
                     }
+                    FishingChanceListViewModel.CurrentTime = _currentTime;
                     UpdateCurrentDateTimeText(_currentTime);
                     RaisePropertyChangedEvent(nameof(CurrentTime));
                 }

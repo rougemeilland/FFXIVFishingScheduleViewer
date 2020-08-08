@@ -12,10 +12,10 @@
         public WindowViewModel()
         {
             _isDisposed = false;
-            _minWidth = double.NaN;
-            _maxWidth = double.NaN;
-            _minHeight = double.NaN;
-            _maxHeight = double.NaN;
+            _minWidth = 0.0;
+            _maxWidth = double.PositiveInfinity;
+            _minHeight = 0.0;
+            _maxHeight = double.PositiveInfinity;
         }
 
         public abstract string WindowTitleText { get; }
