@@ -50,24 +50,24 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="{Binding Path=GUIText[Label.FishingChanceListTabItem]}">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Orientation="Vertical">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Path=GUIText[Label.FishingChanceListTextEffect]}" Margin="5" VerticalAlignment="Center"/>
-                            <ComboBox
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                        <TextBlock Text="{Binding Path=GUIText[Label.FishingChanceListTextEffect]}" Margin="5" VerticalAlignment="Center"/>
+                        <ComboBox
                                 ItemsSource="{Binding Path=FishingChanceListTextEffectSelectionItems}"
                                 SelectedIndex="{Binding Path=SelectedIndexOfFishingChanceListTextEffectSelectionItems}"
                                 Margin="5"
                                 VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <TabControl ItemsSource="{Binding Path=FishSettingOfWorld}" SelectedIndex="{Binding Path=SelectedOptionAreaGroupTabIndex, Mode=TwoWay}">
-                            <TabControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=AreaGroupName}" />
-                                </DataTemplate>
-                            </TabControl.ItemTemplate>
-                            <TabControl.ContentTemplate>
-                                <DataTemplate>
+                    </StackPanel>
+                    <TabControl ItemsSource="{Binding Path=FishSettingOfWorld}" SelectedIndex="{Binding Path=SelectedOptionAreaGroupTabIndex, Mode=TwoWay}">
+                        <TabControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=AreaGroupName}" />
+                            </DataTemplate>
+                        </TabControl.ItemTemplate>
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
                                     <DockPanel>
                                         <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Right" Orientation="Vertical" Margin="10,10,10,0">
                                             <StackPanel.Style>
@@ -98,11 +98,11 @@
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
                                     </DockPanel>
-                                </DataTemplate>
-                            </TabControl.ContentTemplate>
-                        </TabControl>
-                    </StackPanel>
-                </ScrollViewer>
+                                </ScrollViewer>
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                    </TabControl>
+                </DockPanel>
             </TabItem>
             <TabItem Header="{Binding Path=GUIText[Label.ProgramUpdateTabItem]}">
                 <StackPanel Orientation="Vertical">
