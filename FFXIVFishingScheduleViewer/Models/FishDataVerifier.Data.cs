@@ -7,6 +7,7 @@ namespace FFXIVFishingScheduleViewer.Models
         private static IDictionary<string, string> _魚のアタリ = new Dictionary<string, string>()
         {
             { "ソルター", "!" },
+            { "グレイシャーコア", "!" },
         };
 
         private static IDictionary<string, bool> _使用可能な釣り餌 = new Dictionary<string, bool>()

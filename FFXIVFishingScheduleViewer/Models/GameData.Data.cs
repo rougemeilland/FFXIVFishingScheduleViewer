@@ -965,10 +965,10 @@ namespace FFXIVFishingScheduleViewer.Models
                 // クルザス西部高地
                 new Fish("クルザスパファー", ToFishingSpot("リバーズミート"), ToFishingBait("ブルートリーチ"), WeatherType.雪 | WeatherType.吹雪, "ブルートリーチ⇒(!プレ)"),
                 new Fish("ファットパース", ToFishingSpot("リバーズミート"), ToFishingBait("ブルートリーチ"), "ブルートリーチ⇒(!!!プレ)"),
-                new Fish("グレイシャーコア", ToFishingSpot("グレイテール滝"), ToFishingBait("ジャンボガガンボ"), WeatherType.雪 | WeatherType.吹雪, "ジャンボガガンボ⇒(!!スト); ジャンボガガンボ⇒(!プレ)スカイワームHQ⇒(!!スト)"),
+                new Fish("グレイシャーコア", ToFishingSpot("グレイテール滝"), ToFishingBait("ジャンボガガンボ"), WeatherType.雪 | WeatherType.吹雪, "ジャンボガガンボ⇒(!プレ); ジャンボガガンボ⇒(!プレ)スカイワームHQ⇒(!プレ)"),
                 new Fish("ハイウィンドジェリー", ToFishingSpot("グレイテール滝"), ToFishingBait("ジャンボガガンボ"), WeatherType.晴れ | WeatherType.快晴, "(要フィッシュアイ) ジャンボガガンボ⇒(!プレ)スカイワームHQ⇒(!プレ)"),
-                new Fish("アイスイーター", ToFishingSpot("グレイテール滝"), ToFishingBait("ジャンボガガンボ"), WeatherType.雪 | WeatherType.吹雪, "ジャンボガガンボ⇒(!!スト)グレイシャーコアHQ⇒(!プレ); ジャンボガガンボ⇒(!プレ)スカイワームHQ⇒(!!スト)グレイシャーコアHQ⇒(!プレ)"),
-                new Fish("ヘイルイーター", ToFishingSpot("グレイテール滝"), ToFishingBait("ジャンボガガンボ"), WeatherType.吹雪, "ジャンボガガンボ⇒(!!スト)グレイシャーコアHQ⇒(!!!プレ); ジャンボガガンボ⇒(!プレ)スカイワームHQ⇒(!!スト)グレイシャーコアHQ⇒(!!!プレ)"),
+                new Fish("アイスイーター", ToFishingSpot("グレイテール滝"), ToFishingBait("ジャンボガガンボ"), WeatherType.雪 | WeatherType.吹雪, "ジャンボガガンボ⇒(!プレ)グレイシャーコアHQ⇒(!プレ); ジャンボガガンボ⇒(!プレ)スカイワームHQ⇒(!プレ)グレイシャーコアHQ⇒(!プレ)"),
+                new Fish("ヘイルイーター", ToFishingSpot("グレイテール滝"), ToFishingBait("ジャンボガガンボ"), WeatherType.吹雪, "ジャンボガガンボ⇒(!プレ)グレイシャーコアHQ⇒(!!!プレ); ジャンボガガンボ⇒(!プレ)スカイワームHQ⇒(!プレ)グレイシャーコアHQ⇒(!!!プレ)"),
                 new Fish("ソーサラーフィッシュ", ToFishingSpot("クルザス不凍池"), ToFishingBait("ハナアブ"), 8, 20, "ハナアブ⇒(!プレ)アバラシアスメルトHQ⇒(!!スト)"),
                 new Fish("ホワイトオクトパス", ToFishingSpot("クルザス不凍池"), ToFishingBait("ブルートリーチ"), 8, 18, "ブルートリーチ⇒(!!スト); ブルートリーチ⇒(!プレ)アバラシアスメルトHQ⇒(!!スト); ブルートリーチ⇒(!プレ)ハルオネHQ⇒(!!スト)"),
                 new Fish("クルザスクリオネ", ToFishingSpot("クルザス不凍池"), ToFishingBait("ブルートリーチ"), 0, 4, WeatherType.吹雪, "ブルートリーチ⇒(!プレ); ブルートリーチ⇒(!プレ)アバラシアスメルトHQ⇒(!プレ); ブルートリーチ⇒(!プレ)ハルオネHQ⇒(!プレ)"),

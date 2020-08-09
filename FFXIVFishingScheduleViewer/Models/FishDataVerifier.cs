@@ -76,8 +76,9 @@ namespace FFXIVFishingScheduleViewer.Models
         }
 
         private const double _deltaRate = 0.0001; // 無視可能な確率の閾値
-        private static Regex _atariPattern = new Regex(@"<tr[^>]*>\s*<td[^>]*>\s*</td>\s*<td[^>]*>\s*<a[^>]*>\s*<span[^>]*>\s*<img[^>]*>\s*</span>(?<name>[^<]*)</a>\s*</td>\s*<td[^>]*>\s*<span[^>]*>[^<]*</span>\s*</td>\s*<td[^>]*>\s*<a[^>]*>\s*<canvas[^>]*data-value='{""[0-9]+"":[0-9\.]*,""(?<value>[0-9]+)"":1,""[0-9]+"":[0-9\.]*}'[^>]*>", RegexOptions.Compiled | RegexOptions.Singleline);
+        private static Regex _atariPattern = new Regex(@"<tr[^>]*>\s*<td[^>]*>\s*</td>\s*<td[^>]*>\s*<a[^>]*>\s*<span[^>]*>\s*<img[^>]*>\s*</span>(?<name>[^<]*)</a>\s*</td>\s*<td[^>]*>\s*<span[^>]*>[^<]*</span>\s*</td>\s*<td[^>]*>\s*<a[^>]*>\s*<canvas[^>]*data-value='{(""[0-9]+"":[0-9\.]*,)*""(?<value>[0-9]+)"":1(,""[0-9]+"":[0-9\.]*)*}'[^>]*>", RegexOptions.Compiled | RegexOptions.Singleline);
         private static Regex _ratePattern = new Regex(@"<div[^>]*?title=""(?<fish>[^""]*?)&#10;釣果: *(?<bait>[^&]+)&#10;[0-9\.%]*?\((?<numerator>[0-9]+)/(?<denominator>[0-9]+)\)[^""]*?"".*?>", RegexOptions.Compiled | RegexOptions.Singleline);
+
         /// <summary>
         /// 魚に関するデータを検証するためのコードを生成する。
         /// </summary>
