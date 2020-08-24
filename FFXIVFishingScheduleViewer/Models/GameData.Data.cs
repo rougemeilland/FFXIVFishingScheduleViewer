@@ -1243,17 +1243,20 @@ namespace FFXIVFishingScheduleViewer.Models
                 new Fish("ヒメダカ", ToFishingSpot("シロガネ水路"), ToFishingBait("ドバミミズ"), 4, 6, "ドバミミズ⇒(!!!プレ)"),
 
                 // クリスタリウム
+                new Fish("罪撒き", ToFishingSpot("四学科の座"), ToFishingBait("フルーツワーム"), 22, 0, WeatherType.晴れ | WeatherType.快晴, "フルーツワーム⇒(!!!プレ)"),
                 new Fish("ペンダントヘッド", ToFishingSpot("クリスタリウム居室"), ToFishingBait("蟲箱"), 18, 22, "蟲箱⇒(!!!プレ)"),
 
                 // ユールモア
                 new Fish("グランドデイムバタフライ", ToFishingSpot("廃船街"), ToFishingBait("イカの切り身"), 12, 19, WeatherType.快晴, "イカの切り身⇒(!!!プレ)"),
 
                 // レイクランド
+                new Fish("マンイーター", ToFishingSpot("風化した裂け目"), ToFishingBait("蟲箱"), WeatherType.霧, WeatherType.晴れ | WeatherType.快晴, "蟲箱⇒(!!!スト)"),
                 new Fish("プラチナグッピー", ToFishingSpot("錆ついた貯水池"), ToFishingBait("蟲箱"), WeatherType.快晴, "蟲箱⇒(!プレ)"),
                 new Fish("アンフォーギヴン・クラブ", ToFishingSpot("始まりの湖"), ToFishingBait("蟲箱"), WeatherType.霧, "蟲箱⇒(!!!プレ)"),
                 new Fish("イモータルジョー", ToFishingSpot("ケンの島 (釣り)"), ToFishingBait("蟲箱"), 16, 0, WeatherType.晴れ | WeatherType.快晴, WeatherType.曇り | WeatherType.霧, "蟲箱⇒(!!!スト)"),
 
                 // コルシア島
+                new Fish("ヒモウオ", ToFishingSpot("ワッツリバー上流"), ToFishingBait("蟲箱"), "蟲箱⇒(!!!スト)"),
                 new Fish("ホワイトロンゾ", ToFishingSpot("ワッツリバー下流"), ToFishingBait("蟲箱"), 0, 2, "蟲箱⇒(!!!プレ)"),
                 new Fish("ブロンズソール", ToFishingSpot("シャープタンの泉"), ToFishingBait("マーブルラーヴァ"), WeatherType.雨, "マーブルラーヴァ⇒(!!!スト)"),
                 new Fish("ヘノドゥス", ToFishingSpot("コルシア島沿岸東"), ToFishingBait("ショートビルミノー"), 16, 0, WeatherType.曇り | WeatherType.霧, "ショートビルミノー⇒(!プレ)スピアヘッドHQ⇒(!!!プレ)"),
@@ -1264,14 +1267,17 @@ namespace FFXIVFishingScheduleViewer.Models
                 new Fish("クギトカゲ", ToFishingSpot("アンバーヒル"), ToFishingBait("デザートフロッグ"), 12, 16, WeatherType.快晴, "デザートフロッグ⇒(!プレ)ミズカキスナヤモリHQ⇒(!!!スト)"),
 
                 // イル・メグ
+                new Fish("ラウニスク", ToFishingSpot("手鏡の湖"), ToFishingBait("マーブルラーヴァ"), 6, 8, WeatherType.快晴 | WeatherType.晴れ, WeatherType.雨, "マーブルラーヴァ⇒(!!!プレ)"),
                 new Fish("フューリィベタ", ToFishingSpot("姿見の湖"), ToFishingBait("蟲箱"), 20, 0, WeatherType.快晴 | WeatherType.晴れ, "蟲箱⇒(!!!スト)"),
                 new Fish("ピクシーレインボー", ToFishingSpot("中の子らの流れ"), ToFishingBait("マーブルラーヴァ"), WeatherType.晴れ | WeatherType.快晴, WeatherType.霧, "マーブルラーヴァ⇒(!!!プレ)"),
+                new Fish("ゴールドハマー", ToFishingSpot("聖ファスリクの額"), ToFishingBait("蟲箱"), WeatherType.晴れ | WeatherType.快晴, WeatherType.快晴, "蟲箱⇒(!!!プレ)"),
                 new Fish("水泡眼", ToFishingSpot("コラードの排水溝"), ToFishingBait("蟲箱"), WeatherType.快晴, "蟲箱⇒(!プレ)"),
 
                 // ラケティカ大森林
                 new Fish("ロックワの衛士", ToFishingSpot("トゥシ・メキタ湖"), ToFishingBait("ロバーボール"), 10, 12, "ロバーボール⇒(!プレ)クラウンテトラHQ⇒(!!スト)エリオプスHQ⇒(!!!スト)"),
                 new Fish("ダイヤモンドピピラ", ToFishingSpot("血の酒坏"), ToFishingBait("ロバーボール"), 12, 20, "ロバーボール⇒(!!スト)"),
                 new Fish("ブラックジェットストリーム", ToFishingSpot("ロツァトル川"), ToFishingBait("ロバーボール"), 2, 12, WeatherType.曇り, WeatherType.晴れ, "ロバーボール⇒(!!!プレ)"),
+                new Fish("レコードキラー", ToFishingSpot("ミュリルの郷愁南"), ToFishingBait("蟲箱"), 18, 0, WeatherType.晴れ | WeatherType.快晴, WeatherType.霧, "蟲箱⇒(!!!プレ)"),
                 new Fish("常闇魚", ToFishingSpot("ウォーヴンオウス"), ToFishingBait("蟲箱"), 0, 8, "(要フィッシュアイ) 蟲箱⇒(!プレ)"),
 
                 // テンペスト
@@ -1284,7 +1290,9 @@ namespace FFXIVFishingScheduleViewer.Models
                         new FishingCondition(ToFishingSpot("キャリバン海底谷北西"), new[] { ToFishingBait("ショートビルミノー") }, WeatherType.晴れ, "ショートビルミノー⇒(!!スト)"),
                         new FishingCondition(ToFishingSpot("キャリバンの古巣穴東"), new[] { ToFishingBait("ショートビルミノー") }, WeatherType.晴れ, "ショートビルミノー⇒(!!スト)"),
                     }),
+                new Fish("オヤメンダコ", ToFishingSpot("キャリバンの古巣穴東"), ToFishingBait("イカの切り身"), 0, 3, WeatherType.曇り, WeatherType.快晴, "イカの切り身⇒(!!!プレ)"),
                 new Fish("スターチェイサー", ToFishingSpot("プルプラ洞"), ToFishingBait("イカの切り身"), 6, 10, WeatherType.曇り, "(要フィッシュアイ)イカの切り身⇒(!!!プレ)"),
+                new Fish("オパールシュリンプ", ToFishingSpot("ノルヴラント大陸斜面"), ToFishingBait("イカの切り身"), 18, 20, WeatherType.曇り, "イカの切り身⇒(!!!プレ)"),
             })
             {
                 Fishes.Add(fish);

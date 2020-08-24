@@ -24,14 +24,14 @@ This application predicts in-game weather changes in FINAL FANTASY XIV and gives
 - This application can predict the weather of each area in the game for up to 7 days in Eorzea time, and also display the weather 8 hours before in each area.
 - This application predicts when the conditions (time and weather) for catching fish will be met and displays them in a graph. The user can specify which fish to display in the graph.
 - The fish that can be displayed with this application are as follows.
-   - It is a fish already implemented in FINAL FANTASY XIV patch 5.2, and
+   - It is a fish already implemented in FINAL FANTASY XIV patch 5.3, and
    - "Big fish" or "Living legends" or a fish that cannot be caught depending on the weather or time of day.
 - This application supports multiple languages, and the currently supported languages are Japanese/English/French/German.
 
 
 ## [FINAL FANTASY XIV version]
 
-This application supports FINAL FANTASY XIV patch 5.2.
+This application supports FINAL FANTASY XIV patch 5.3.
 
 ## [Requirement]
 

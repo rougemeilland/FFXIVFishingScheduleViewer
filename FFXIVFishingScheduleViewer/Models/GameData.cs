@@ -128,7 +128,7 @@ namespace FFXIVFishingScheduleViewer.Models
                     .ToArray();
             if (result.Any())
                 throw new Exception(string.Format("Can't translate: {0}", string.Join(", ", result.Select(s => string.Format("'{0}'", s)))));
-            System.Threading.Tasks.Task.Run(() => new FishDataVerifier().GenerateCode(FishingSpots));
+            Task.Run(() => new FishDataVerifier().GenerateCode(FishingSpots));
         }
 #endif
     }

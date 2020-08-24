@@ -302,13 +302,26 @@ namespace FFXIVFishingScheduleViewer.Models
 
         internal static double[] GetPrimitiveCounts(string fishingSpotRawId, string fishRawId)
         {
-            IDictionary<string, ExpectedCountValueElement> value1;
-            if (!_primitiveCountValues.TryGetValue(fishingSpotRawId, out value1))
-                throw new Exception();
-            ExpectedCountValueElement value2;
-            if (!value1.TryGetValue(fishRawId, out value2))
-                throw new Exception();
-            return new[] { value2.ExpectedCountOBait, value2.ExpectedCountOfCasting };
+            try
+            {
+                IDictionary<string, ExpectedCountValueElement> value1;
+                if (!_primitiveCountValues.TryGetValue(fishingSpotRawId, out value1))
+                    throw new Exception();
+                ExpectedCountValueElement value2;
+                if (!value1.TryGetValue(fishRawId, out value2))
+                    throw new Exception();
+                return new[] { value2.ExpectedCountOBait, value2.ExpectedCountOfCasting };
+            }
+            catch (Exception)
+            {
+#if DEBUG
+                if (_isDebugMode)
+                    throw;
+                return new[] { 0.0, 0.0 };
+#else
+                throw;
+#endif
+            }
         }
 
         private static MemoLine TranslateMemoLine(FishingCondition condition, string text, string lang)
@@ -760,7 +773,7 @@ namespace FFXIVFishingScheduleViewer.Models
 
         private static void Report(string text)
         {
-#if true
+#if false
             throw new Exception(text);
 #else
             System.Diagnostics.Debug.WriteLine(text);

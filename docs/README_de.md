@@ -25,14 +25,14 @@ Diese Anwendung sagt Wetteränderungen im Spiel in FINAL FANTASY XIV voraus und 
 - Diese Anwendung sagt voraus, wann die Bedingungen (Zeit und Wetter) für den Fischfang erfüllt sind, und zeigt sie in einer Grafik an. Der Benutzer kann angeben, welche Fische in der Grafik angezeigt werden sollen.
 
 - Die Fische, die mit dieser Anwendung angezeigt werden können, sind wie folgt.
-  - Es ist ein Fisch, der bereits von FINAL FANTASY XIV Patch 5.2 implementiert wurde, und
+  - Es ist ein Fisch, der bereits von FINAL FANTASY XIV Patch 5.3 implementiert wurde, und
   - "Kapitalen Fische" oder "Legendären Kapitalfische" oder ein Fisch, der je nach Wetter oder Tageszeit nicht gefangen werden kann.
 - Diese Anwendung unterstützt mehrere Sprachen und die derzeit unterstützten Sprachen sind Japanisch / Englisch / Französisch / Deutsch.
 
 
 ## [FINAL FANTASY XIV Version]
 
-Diese Anwendung unterstützt FINAL FANTASY XIV Patch 5.2.
+Diese Anwendung unterstützt FINAL FANTASY XIV Patch 5.3.
 
 ## [Bedarf]
 

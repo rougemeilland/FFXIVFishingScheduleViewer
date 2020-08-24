@@ -24,13 +24,13 @@ Cette application prédit les changements météorologiques dans le jeu dans FIN
 - Cette application peut prédire la météo de chaque zone du jeu jusqu'à 7 jours à l'heure d'Éorzéa, et également afficher la météo 8 heures avant dans chaque zone.
 - Cette application prédit quand les conditions (heure et météo) pour la capture du poisson seront réunies et les affiche dans un graphique. L'utilisateur peut spécifier les poissons à afficher dans le graphique.
 - Les poissons qui peuvent être affichés avec cette application sont les suivants.
-   - C'est un poisson déjà implémenté par FINAL FANTASY XIV patch 5.2, et
+   - C'est un poisson déjà implémenté par FINAL FANTASY XIV patch 5.3, et
    - «Poissons légendaires» ou «poissons mythiques» ou poisson qui ne peut pas être pêché selon la météo ou l'heure de la journée.
 - Cette application prend en charge plusieurs langues et les langues actuellement prises en charge sont le japonais / anglais / français / allemand.
 
 ## [Version de Final Fantasy XIV]
 
-Cette application prend en charge FINAL FANTASY XIV patch 5.2.
+Cette application prend en charge FINAL FANTASY XIV patch 5.3.
 
 ## [Exigences]
 
