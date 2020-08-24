@@ -12,13 +12,12 @@ namespace FFXIVFishingScheduleViewer.Models
         private static Regex _locationOfReleasePattern = new Regex(@"^*./releases/tag/v(?<version>[0-9\.]+)$", RegexOptions.Compiled);
         private static Regex _versionTextPattern = new Regex(@"^(?<version>[0-9\.]+)$", RegexOptions.Compiled);
         private string _newVersionOfApplication;
-        private string _currentVersionText;
 
         public GameData(string[] args)
         {
             _newVersionOfApplication = null;
             var m = _versionTextPattern.Match(GetType().Assembly.GetName().Version.ToString());
-            _currentVersionText = m.Success ? m.Groups["version"].Value : null;
+            CurrentVersionOfApplication = m.Success ? m.Groups["version"].Value : null;
             AreaGroups = new AreaGroupCollection();
             FishingSpots = new FishingSpotCollection();
             FishingBaits = new FishingBaitCollection();
@@ -38,7 +37,7 @@ namespace FFXIVFishingScheduleViewer.Models
 
         public void CheckNewVersionReleased()
         {
-            if (Properties.Settings.Default.IsEnabledToCheckNewVersionReleased && _currentVersionText != null)
+            if (Properties.Settings.Default.IsEnabledToCheckNewVersionReleased && CurrentVersionOfApplication != null)
             {
                 Task.Run(async () =>
                 {
@@ -54,7 +53,7 @@ namespace FFXIVFishingScheduleViewer.Models
                             if (m.Success)
                             {
                                 var newVersionText = m.Groups["version"].Value;
-                                NewVersionOfApplication = newVersionText.CompareVersionString(_currentVersionText) > 0 ? newVersionText : null;
+                                NewVersionOfApplication = newVersionText.CompareVersionString(CurrentVersionOfApplication) > 0 ? newVersionText : null;
                             }
                         }
                     }
