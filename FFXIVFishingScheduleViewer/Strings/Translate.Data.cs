@@ -338,10 +338,10 @@ namespace FFXIVFishingScheduleViewer.Strings
                 new { id = "areaGroup.**ディアデム諸島**.en", text = "The Diadem" },
                 new { id = "areaGroup.**ディアデム諸島**.fr", text = "Le Diadème" },
                 new { id = "areaGroup.**ディアデム諸島**.ja", text = "ディアデム諸島" },
-                new { id = "areaGroup.**エウレカ**.de", text = "Eureka Anemos" },
-                new { id = "areaGroup.**エウレカ**.en", text = "Eureka Anemos" },
-                new { id = "areaGroup.**エウレカ**.fr", text = "Eurêka Anemos" },
-                new { id = "areaGroup.**エウレカ**.ja", text = "エウレカ：アネモス帯" },
+                new { id = "areaGroup.**エウレカ**.de", text = "Eureka" },
+                new { id = "areaGroup.**エウレカ**.en", text = "Eureka" },
+                new { id = "areaGroup.**エウレカ**.fr", text = "Eurêka" },
+                new { id = "areaGroup.**エウレカ**.ja", text = "エウレカ" },
 #endregion
            
 #region 釣り場
