@@ -95,11 +95,11 @@ namespace FFXIVFishingScheduleViewer.Models
         public DifficultySymbol DifficultySymbol { get; private set; }
         public IEnumerable<FishingCondition> FishingConditions { get; }
 
-        public IEnumerable<FishChanceTimeRegions> GetFishingChance(EorzeaDateTimeHourRegions wholeRegion)
+        public IEnumerable<FishChanceTimeRegions> GetFishingChance(EorzeaDateTimeHourRegions wholeRegion, bool useFishEye)
         {
             return
                 FishingConditions
-                .Select(condition => new FishChanceTimeRegions(condition, condition.GetFishingChance(wholeRegion)))
+                .Select(condition => new FishChanceTimeRegions(condition, condition.GetFishingChance(wholeRegion, useFishEye)))
                 .ToArray();
         }
 

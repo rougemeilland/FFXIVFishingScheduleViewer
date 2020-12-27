@@ -9,5 +9,27 @@
         xmlns:views="clr-namespace:FFXIVFishingScheduleViewer.Views"
         xmlns:viewmodels="clr-namespace:FFXIVFishingScheduleViewer.ViewModels"
         mc:Ignorable="d">
-    <Grid Name="FishChanceGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <CheckBox Grid.Column="0" Grid.Row="0" Content="{Binding Path=GUIText[Label.UseFishEye]}" IsChecked="{Binding Path=UseFishEye, Mode=TwoWay}" Margin="2"/>
+        <CheckBox Grid.Column="0" Grid.Row="1" Content="{Binding Path=GUIText[Label.ExcludeMooching]}" IsChecked="{Binding Path=ExcludeMooching, Mode=TwoWay}" Margin="2">
+            <CheckBox.Style>
+                <Style TargetType="CheckBox">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=UseFishEye}" Value="true">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=UseFishEye}" Value="false">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </CheckBox.Style>
+        </CheckBox>
+        <Grid Grid.Column="0" Grid.Row="2" Name="FishChanceGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+    </Grid>
 </views:UserControlBase>

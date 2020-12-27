@@ -52,9 +52,11 @@ namespace FFXIVFishingScheduleViewer.Models
             {
                 TranslatedMethodText = null;
                 FishingBaitNameId = null;
+                NeedMooching = null;
             }
             public string TranslatedMethodText { get; set; }
             public TranslationTextId FishingBaitNameId { get; set; }
+            public bool? NeedMooching { get; set; }
         }
 
         private class MemoLine
@@ -65,11 +67,14 @@ namespace FFXIVFishingScheduleViewer.Models
                 TranslationIdOfBait = null;
                 ExpectedCountOBait = 0;
                 ExpectedCountOfCasting = 0;
+                NeedMooching = null;
             }
+
             public string Text { get; set; }
             public TranslationTextId TranslationIdOfBait { get; set; }
             public double ExpectedCountOfCasting { get; set; }
             public double ExpectedCountOBait { get; set; }
+            public bool? NeedMooching { get; set; }
         }
 
         private class BestBaitElement
@@ -127,7 +132,7 @@ namespace FFXIVFishingScheduleViewer.Models
             // そのため、これらの数値については参考程度にとどめること。
             // 特に以下のような魚については数値が信頼できない傾向が顕著であると思われる。
             // ・釣れる条件(時刻/天候)に制限のある魚
-            // ・特殊なスキルが有効な魚(引っ掛け釣り/トレードリリース/フィッシュアイ/サルベージなど)
+            // ・特殊なスキルが有効な魚(引っ掛け釣り/トレードリリース/サルベージなど)
             // ・特殊な状況が必要な魚(漁師の直感/特定のクエストやリーヴの受注など)
 #if DEBUG
             _bestBaitList =
@@ -173,6 +178,7 @@ namespace FFXIVFishingScheduleViewer.Models
 
         public static void TranslateMemo(this FishingCondition condition)
         {
+            var needMooching = false;
             foreach (var lang in Translate.SupportedLanguages)
             {
 #if DEBUG && false
@@ -222,11 +228,24 @@ namespace FFXIVFishingScheduleViewer.Models
 #endif
                 var countOfBait = memoLines.Sum(line => line.ExpectedCountOBait);
                 var countOfCasting = memoLines.Sum(line => line.ExpectedCountOfCasting);
+                needMooching = needMooching || memoLines.Select(memoLine => memoLine.NeedMooching).Aggregate(false, (p1, p2) => p1 || (p2 == true));
                 SetExpectedCountValue(
                     ((IGameDataObject)condition.FishingSpot).InternalId,
                     ((IGameDataObject)condition.Fish).InternalId,
                     memoLines.Sum(line => line.ExpectedCountOBait),
                     memoLines.Sum(line => line.ExpectedCountOfCasting));
+#if DEBUG && false
+                if (((IGameDataObject)condition.Fish).InternalId == "シャリベネ")
+                {
+                    System.Diagnostics.Debug.WriteLine(
+                    string.Format(
+                        "**SetNeedMooching: lang={0}, spot={1}, fish={2}, mooching={3}",
+                        lang,
+                        ((IGameDataObject)condition.FishingSpot).InternalId,
+                        ((IGameDataObject)condition.Fish).InternalId,
+                        needMooching));
+                }
+#endif
 #if DEBUG && false
                 System.Diagnostics.Debug.WriteLine(
                     string.Format(
@@ -241,6 +260,19 @@ namespace FFXIVFishingScheduleViewer.Models
                     string.Join("\n\n", memoLines.Select(line => line.Text));
                 Translate.Instance.Add(condition.DefaultMemoId, lang, translatedMemo);
             }
+#if DEBUG && false
+            //if (((IGameDataObject)condition.Fish).InternalId == "シャリベネ")
+            {
+                System.Diagnostics.Debug.WriteLine(
+                string.Format(
+                    "**SetNeedMooching: spot={0}, fish={1}, mooching={2}",
+                    ((IGameDataObject)condition.FishingSpot).InternalId,
+                    ((IGameDataObject)condition.Fish).InternalId,
+                    needMooching));
+                System.Diagnostics.Debug.WriteLine("----------");
+            }
+#endif
+            condition.SetNeedMooching(needMooching);
         }
 
         public static string GetCBHLink(this Fish fish)
@@ -344,6 +376,19 @@ namespace FFXIVFishingScheduleViewer.Models
                     : null;
                 if (method == null)
                     throw new Exception();
+#if DEBUG && false
+                if (targetFishRawId == "シャリベネ")
+                {
+                    System.Diagnostics.Debug.WriteLine(
+                    string.Format(
+                        "**SetNeedMooching: lang={0}, text='{1}', spot={2}, fish={3}, mooching={4}",
+                        lang,
+                        text,
+                        ((IGameDataObject)condition.FishingSpot).InternalId,
+                        ((IGameDataObject)condition.Fish).InternalId,
+                        method.NeedMooching));
+                }
+#endif
                 var counts = GetPrimitiveCounts(((IGameDataObject)condition.FishingSpot).InternalId, targetFishRawId);
 #if DEBUG && false
                 System.Diagnostics.Debug.WriteLine(
@@ -365,6 +410,7 @@ namespace FFXIVFishingScheduleViewer.Models
                     TranslationIdOfBait = method.FishingBaitNameId,
                     ExpectedCountOBait = counts[0] * requiredFishCount,
                     ExpectedCountOfCasting = counts[1] * requiredFishCount,
+                    NeedMooching = method.NeedMooching,
                 };
             }
             else if ((m = _トレードリリース推奨パターン.Match(text)).Success)
@@ -494,6 +540,10 @@ namespace FFXIVFishingScheduleViewer.Models
                             TranslatedRequirementText = Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "AnyTime"), lang]
                         };
                     else if (s == "要フィッシュアイ")
+                    {
+#if true
+                        throw new Exception("5.4にてフィッシュアイの効果が変更されたため条件への記載を削除しました。");
+#else
                         return new FishingRequirement
                         {
                             TranslatedRequirementText =
@@ -501,6 +551,8 @@ namespace FFXIVFishingScheduleViewer.Models
                                     Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "RequiresAction"), lang],
                                     Translate.Instance[new TranslationTextId(TranslationCategory.Action, "フィッシュアイ"), lang])
                         };
+#endif
+                    }
                     else if (s == "要引っ掛け釣り")
                         return new FishingRequirement
                         {
@@ -510,6 +562,10 @@ namespace FFXIVFishingScheduleViewer.Models
                                     Translate.Instance[new TranslationTextId(TranslationCategory.Action, "引っ掛け釣り"), lang])
                         };
                     else if (s == "フィッシュアイ不要")
+                    {
+#if true
+                        throw new Exception("5.4にてフィッシュアイの効果が変更されたため条件への記載を削除しました。");
+#else
                         return new FishingRequirement
                         {
                             TranslatedRequirementText =
@@ -517,6 +573,8 @@ namespace FFXIVFishingScheduleViewer.Models
                                     Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "NotRequiresAction"), lang],
                                     Translate.Instance[new TranslationTextId(TranslationCategory.Action, "フィッシュアイ"), lang])
                         };
+#endif
+                    }
                     else
                         throw new Exception();
                 });
@@ -609,6 +667,18 @@ namespace FFXIVFishingScheduleViewer.Models
             if (baits.Length != 1)
                 throw new Exception();
             var separater = ", " + Translate.Instance[new TranslationTextId(TranslationCategory.Generic, "Separater.Or"), lang] + "\n  ";
+            var needMooching = result.Select(item => item.NeedMooching).Aggregate(true, (p1, p2) => p1 && p2.Value);
+#if DEBUG && false
+            if (targetFishRawId == "シャリベネ")
+            {
+                System.Diagnostics.Debug.WriteLine(
+                string.Format(
+                    "**SetNeedMooching: lang={0}, text='{1}', mooching={2}",
+                    lang,
+                    sourceText,
+                    needMooching));
+            }
+#endif
             return new FishingMethod
             {
                 FishingBaitNameId = baits[0],
@@ -617,6 +687,7 @@ namespace FFXIVFishingScheduleViewer.Models
                         separater,
                         result.Where(item => !string.IsNullOrEmpty(item.TranslatedMethodText))
                         .Select(item => item.TranslatedMethodText)),
+                NeedMooching = needMooching,
             };
         }
 
@@ -737,6 +808,7 @@ namespace FFXIVFishingScheduleViewer.Models
                 }
             }
 #endif
+            var needMooching = false;
             var sbText = new StringBuilder();
             sbText.Append(baitName);
             if (hooking1 != null && fish1Name != null)
@@ -745,6 +817,7 @@ namespace FFXIVFishingScheduleViewer.Models
                 sbText.Append(hooking1);
                 sbText.Append(") ");
                 sbText.Append(fish1Name);
+                needMooching = true;
             }
             if (hooking2 != null && fish2Name != null)
             {
@@ -752,6 +825,7 @@ namespace FFXIVFishingScheduleViewer.Models
                 sbText.Append(hooking2);
                 sbText.Append(") ");
                 sbText.Append(fish2Name);
+                needMooching = true;
             }
             if (hooking3 != null && fish3Name != null)
             {
@@ -759,15 +833,28 @@ namespace FFXIVFishingScheduleViewer.Models
                 sbText.Append(hooking3);
                 sbText.Append(") ");
                 sbText.Append(fish3Name);
+                needMooching = true;
             }
             sbText.Append("⇒(");
             sbText.Append(hooking4);
             sbText.Append(") ");
             sbText.Append(Translate.Instance[targetFishNameId, lang]);
+#if DEBUG && false
+            if (targetFishRawId == "シャリベネ")
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    string.Format(
+                        "**SetNeedMooching: lang={0}, text='{1}', mooching={2}",
+                        lang,
+                        sourceText,
+                        needMooching));
+            }
+#endif
             return new FishingMethod
             {
                 TranslatedMethodText = sbText.ToString(),
                 FishingBaitNameId = baitNameId,
+                NeedMooching = needMooching,
             };
         }
 

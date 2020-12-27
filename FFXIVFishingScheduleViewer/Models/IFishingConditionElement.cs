@@ -4,6 +4,6 @@
     {
         double DifficultyValue { get; }
         string Description { get; }
-        EorzeaDateTimeHourRegions FindRegions(EorzeaDateTimeHourRegions wholeRange);
+        EorzeaDateTimeHourRegions FindRegions(EorzeaDateTimeHourRegions wholeRange, bool useFishEye);
     }
 }

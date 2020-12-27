@@ -33,7 +33,7 @@ namespace FFXIVFishingScheduleViewer.Models
 
         public string Description => string.Format("{0}⇒{1}", _before.GetText(), _after.GetText());
 
-        public EorzeaDateTimeHourRegions FindRegions(EorzeaDateTimeHourRegions wholeRange)
+        public EorzeaDateTimeHourRegions FindRegions(EorzeaDateTimeHourRegions wholeRange, bool useFishEye)
         {
             var countOfStart = wholeRange.Begin.EpochHours / 8;
             var countOfEnd = (wholeRange.End.EpochHours + 7) / 8;

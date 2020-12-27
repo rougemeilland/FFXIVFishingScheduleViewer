@@ -7,7 +7,7 @@
 
         public string Description => null;
 
-        public EorzeaDateTimeHourRegions FindRegions(EorzeaDateTimeHourRegions wholeRange)
+        public EorzeaDateTimeHourRegions FindRegions(EorzeaDateTimeHourRegions wholeRange, bool useFishEye)
         {
             return wholeRange;
         }

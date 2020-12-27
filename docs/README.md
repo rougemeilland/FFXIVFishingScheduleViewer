@@ -30,7 +30,7 @@
 
 ## 【FINAL FANTASY XIV のバージョンについて】
 
-本アプリケーションは FINAL FANTASY XIV patch 5.3 をサポートしています。
+本アプリケーションは FINAL FANTASY XIV patch 5.4 をサポートしています。
 
 ## 【必要なもの】
 

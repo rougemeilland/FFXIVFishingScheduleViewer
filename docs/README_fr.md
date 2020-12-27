@@ -30,7 +30,7 @@ Cette application prédit les changements météorologiques dans le jeu dans FIN
 
 ## [Version de Final Fantasy XIV]
 
-Cette application prend en charge FINAL FANTASY XIV patch 5.3.
+Cette application prend en charge FINAL FANTASY XIV patch 5.4.
 
 ## [Exigences]
 

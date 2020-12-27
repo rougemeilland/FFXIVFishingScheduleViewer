@@ -32,7 +32,7 @@ Diese Anwendung sagt Wetteränderungen im Spiel in FINAL FANTASY XIV voraus und 
 
 ## [FINAL FANTASY XIV Version]
 
-Diese Anwendung unterstützt FINAL FANTASY XIV Patch 5.3.
+Diese Anwendung unterstützt FINAL FANTASY XIV Patch 5.4.
 
 ## [Bedarf]
 

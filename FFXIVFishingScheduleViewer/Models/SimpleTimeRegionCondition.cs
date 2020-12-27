@@ -32,8 +32,10 @@ namespace FFXIVFishingScheduleViewer.Models
                 _hourOfStart,
                 (_hourOfStart + _hours - 1) % 24);
 
-        public EorzeaDateTimeHourRegions FindRegions(EorzeaDateTimeHourRegions wholeRange)
+        public EorzeaDateTimeHourRegions FindRegions(EorzeaDateTimeHourRegions wholeRange, bool useFishEye)
         {
+            if (useFishEye)
+                return wholeRange;
             var timeOfStart = EorzeaDateTime.FromEpochHours((wholeRange.Begin.EpochDays - 1) * 24 + _hourOfStart);
             var timeOfEnd = wholeRange.End;
             var interval = EorzeaTimeSpan.FromHours(24);

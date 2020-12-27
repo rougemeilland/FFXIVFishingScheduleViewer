@@ -50,10 +50,11 @@ namespace FFXIVFishingScheduleViewer.Models
             ConditionElements = new[]
             {
                 (IFishingConditionElement)_timeCondition,
-                (IFishingConditionElement)_weatherCondition,
+                _weatherCondition,
             };
             DifficultyValue = timeCondition.DifficultyValue * weatherCondition.DifficultyValue;
             RawMemoText = memo;
+            NeedMooching = false;
         }
 
         public Fish Fish => _fish;
@@ -64,11 +65,12 @@ namespace FFXIVFishingScheduleViewer.Models
         public string RawMemoText { get; }
         public string DefaultMemoText => Translate.Instance[DefaultMemoId];
         internal TranslationTextId DefaultMemoId { get; private set; }
+        internal bool NeedMooching { get; private set; }
 
-        public EorzeaDateTimeHourRegions GetFishingChance(EorzeaDateTimeHourRegions wholeRange)
+        public EorzeaDateTimeHourRegions GetFishingChance(EorzeaDateTimeHourRegions wholeRange, bool useFishEye)
         {
-            var region1 = _timeCondition.FindRegions(wholeRange);
-            var region2 = _weatherCondition.FindRegions(wholeRange);
+            var region1 = _timeCondition.FindRegions(wholeRange, useFishEye);
+            var region2 = _weatherCondition.FindRegions(wholeRange, useFishEye);
             var region = region1.Intersect(region2);
             return region;
         }
@@ -78,6 +80,12 @@ namespace FFXIVFishingScheduleViewer.Models
             _fish = fish;
             DefaultMemoId = new TranslationTextId(TranslationCategory.FishMemo, string.Format("{0}**{1}", ((IGameDataObject)fish).InternalId, ((IGameDataObject)FishingSpot).InternalId));
         }
+
+        internal void SetNeedMooching(bool needMooching)
+        {
+            NeedMooching = needMooching;
+        }
+
 
         internal IEnumerable<string> CheckTranslation()
         {

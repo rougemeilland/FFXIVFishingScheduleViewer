@@ -32,6 +32,8 @@ namespace FFXIVFishingScheduleViewer.ViewModels
         private Dispatcher _dispatcher;
         private DateTime _currentTime;
         private bool _isPendingFishFilterChandedEvent;
+        private bool _useFishEye;
+        private bool _excludeMooching;
 
         public FishingChanceListViewModel(GameData gameData, Dispatcher dispatcher)
         {
@@ -96,6 +98,8 @@ namespace FFXIVFishingScheduleViewer.ViewModels
             _gameData.SettingProvider.FishingChanceListTextEffectChanged += _settingProvider_FishingChanceListTextEffectChanged;
 
             _isPendingFishFilterChandedEvent = false;
+            _useFishEye = false;
+            _excludeMooching = false;
         }
 
         public int ForecastWeatherDays => _gameData.SettingProvider.ForecastWeatherDays;
@@ -147,6 +151,36 @@ namespace FFXIVFishingScheduleViewer.ViewModels
 
         public IEnumerable<FishChanceTimeRegions> FishingChanceList { get; private set; }
         public IEnumerable<EorzeaDateTime> FishingChanceTimeList { get; private set; }
+
+        public bool UseFishEye
+        {
+            get => _useFishEye;
+
+            set
+            {
+                if (value != _useFishEye)
+                {
+                    _useFishEye = value;
+                    UpdateFishingChanceList(DateTime.UtcNow);
+                    RaisePropertyChangedEvent(nameof(UseFishEye));
+                }
+            }
+        }
+
+        public bool ExcludeMooching
+        {
+            get => _excludeMooching;
+
+            set
+            {
+                if (value != _excludeMooching)
+                {
+                    _excludeMooching = value;
+                    UpdateFishingChanceList(DateTime.UtcNow);
+                    RaisePropertyChangedEvent(nameof(ExcludeMooching));
+                }
+            }
+        }
 
         public void SetFishFilter(Fish fish, bool isEnabled)
         {
@@ -248,8 +282,9 @@ namespace FFXIVFishingScheduleViewer.ViewModels
                 _gameData.Fishes
                 .Where(fish => _gameData.SettingProvider.GetIsEnabledFishFilter(fish))
                 .OrderByDescending(fish => fish.DifficultyValue)
-                .SelectMany(fish => fish.GetFishingChance(wholePeriod))
+                .SelectMany(fish => fish.GetFishingChance(wholePeriod, UseFishEye))
                 .Where(result => result != null && !result.Regions.Intersect(forecastPeriod).IsEmpty)
+                .Where(result => !UseFishEye || !ExcludeMooching || !result.FishingCondition.NeedMooching)
                 .ToArray();
             var comparer = new FishChanceTimeRegionsComparer();
             FishingChanceTimeList =
